@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ping Pong Leaderboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "gold": "#FFD700",
+              "silver": "#C0C0C0",
+              "bronze": "#CD7F32",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b border-slate-200/80 bg-background-light/80 px-4 backdrop-blur-sm dark:border-slate-800/80 dark:bg-background-dark/80">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">trophy</span>
+<h1 class="text-xl font-bold tracking-tight">Leaderboard</h1>
+</div>
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-slate-600 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined text-2xl">search</span>
+</button>
+</header>
+<main class="flex-1 p-4 pb-24">
+<div class="space-y-3">
+<!-- Player 1 -->
+<div class="relative overflow-hidden rounded-xl border border-gold/50 bg-white shadow-sm dark:border-gold/30 dark:bg-slate-900">
+<div class="absolute -left-8 -top-8 h-16 w-16 rotate-[-45deg] bg-gold pt-11 text-center text-xs font-bold uppercase tracking-wider text-black">
+<span class="material-symbols-outlined text-sm leading-none" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="flex items-center gap-4 p-4">
+<div class="w-8 shrink-0 text-center text-xl font-bold text-slate-400 dark:text-slate-500">1</div>
+<img class="h-14 w-14 shrink-0 rounded-full object-cover" data-alt="Profile picture of Alex Johnson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHkiIj3jiVmUxn4ZVAw4rZU6SPrucOlFEN6RPl7hbuEglseJyYVWzhiXYTPVjemyR-L4S7crrfdtU8uSMn6z_kASXK78qgzVko0vtlNhXPDvc1E0Vp6xNuu91ypFk24Szv7WQ4tjE4hwSiqVXXYsA5hJEDgi8E-Mn9g5WKFLQR5IlIcgLzPtnf3VyLQB8pMUxBJJZnwlfPn97JagaM6NWXzmeDoaiaWKEN8jrQuQy4syQmaQKHguJEGPmcWeCpyCpQkV1ov1-bCaE"/>
+<div class="flex-grow">
+<p class="font-semibold text-slate-800 dark:text-slate-200">Alex Johnson</p>
+<div class="mt-1 flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+<span class="font-mono">15-4 (79%)</span>
+<div class="flex items-center gap-1 text-orange-500">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-semibold">W5</span>
+</div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-xl font-bold text-primary">1580</p>
+<p class="text-xs text-slate-400">ELO</p>
+</div>
+</div>
+</div>
+<!-- Player 2 -->
+<div class="relative overflow-hidden rounded-xl border border-silver/50 bg-white shadow-sm dark:border-silver/30 dark:bg-slate-900">
+<div class="absolute -left-8 -top-8 h-16 w-16 rotate-[-45deg] bg-silver pt-11 text-center text-xs font-bold uppercase tracking-wider text-black">
+<span class="material-symbols-outlined text-sm leading-none" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="flex items-center gap-4 p-4">
+<div class="w-8 shrink-0 text-center text-xl font-bold text-slate-400 dark:text-slate-500">2</div>
+<img class="h-14 w-14 shrink-0 rounded-full object-cover" data-alt="Profile picture of Brenda Smith" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc6S7pVSqa4Iu9SPF63ylsOyLf3q12cIEu2aKKJZ76e5JWNu1xHBXLTTg-V7KqXZxxghr1DgsR62vZw5QgrW6r8wyOaXzb9J1-GEx-Lmx9Egn6MqGzrZFpzPhrN6uuPm9FCPPz8ZP5rmhfMYB-fws03UVOFBEonJWMEItb0fZoSTQ3zK7wm2vDHQQgLgNj3uIvA5Rcma803HgTf3xtwVJTe6kWjBtty_v9xvteyFv2vKPxce8K-Nvq3a8sa8K--lK0ArM6MKx6G2I"/>
+<div class="flex-grow">
+<p class="font-semibold text-slate-800 dark:text-slate-200">Brenda Smith</p>
+<div class="mt-1 flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+<span class="font-mono">12-3 (80%)</span>
+<div class="flex items-center gap-1 text-blue-400">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">ac_unit</span>
+<span class="font-semibold">L1</span>
+</div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-xl font-bold text-primary">1552</p>
+<p class="text-xs text-slate-400">ELO</p>
+</div>
+</div>
+</div>
+<!-- Player 3 -->
+<div class="relative overflow-hidden rounded-xl border border-bronze/50 bg-white shadow-sm dark:border-bronze/30 dark:bg-slate-900">
+<div class="absolute -left-8 -top-8 h-16 w-16 rotate-[-45deg] bg-bronze pt-11 text-center text-xs font-bold uppercase tracking-wider text-white">
+<span class="material-symbols-outlined text-sm leading-none" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="flex items-center gap-4 p-4">
+<div class="w-8 shrink-0 text-center text-xl font-bold text-slate-400 dark:text-slate-500">3</div>
+<img class="h-14 w-14 shrink-0 rounded-full object-cover" data-alt="Profile picture of Carlos Gomez" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXLE7XvxMtd6SjVwyPtwwO7mDyinN1o4q892yxkZ4sMzykTSOar6nfc1Oh42Fnem8kJ9B46sUFXsgicVkAtzY5VYpWBCnBPQ6wlTTfMcBHY1QkSMucpNLqDzv8QNCAm_WTfuEsq6PVCkNRWgt2R2B1AokrfHcpBub99CKh6YO1w8ke9ERLQ2J2f3MelX_wADuuIftw4PeZbevRHHGmnLUFAl6og77Apcl2SFRxY4z48ZOUxV2QmfOhJfbHAHLIflzjlKA9CHK00YU"/>
+<div class="flex-grow">
+<p class="font-semibold text-slate-800 dark:text-slate-200">Carlos Gomez</p>
+<div class="mt-1 flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+<span class="font-mono">10-5 (67%)</span>
+<div class="flex items-center gap-1 text-orange-500">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-semibold">W3</span>
+</div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-xl font-bold text-primary">1510</p>
+<p class="text-xs text-slate-400">ELO</p>
+</div>
+</div>
+</div>
+<!-- Player 4 (You) -->
+<div class="rounded-xl border-2 border-primary bg-primary/10 shadow-sm dark:bg-primary/20">
+<div class="flex items-center gap-4 p-4">
+<div class="w-8 shrink-0 text-center text-xl font-bold text-slate-400 dark:text-slate-500">4</div>
+<img class="h-14 w-14 shrink-0 rounded-full object-cover" data-alt="Profile picture of Diana Prince" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeBbR-SFCeZXLMLb3r-WjXaMD49vH-I-gp3n00xJxyxzIJX-pUBchXv9R-Fc6e3ervaFU3fiRxli1gb12SPIk8I1bScOv5ni5IphsACfVKXRzsY0Xuv8Jf5h6f8KV9WK63XkW7D9XHnLIbBizVXJMDC3bn234aDgg7lGG5K8FocbfeYFEH6RCZybR1d-_1y1AgEVEQJe8I0tEbzmXLj8rCa0DF0rSxC-YEddBx04MGe8Wex4aCwPxdmDDggoEJ_4jpIVfBtcX1whI"/>
+<div class="flex-grow">
+<p class="font-semibold text-slate-800 dark:text-slate-200">Diana Prince (You)</p>
+<div class="mt-1 flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+<span class="font-mono">9-6 (60%)</span>
+<!-- No streak -->
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-xl font-bold text-primary">1495</p>
+<p class="text-xs text-slate-400">ELO</p>
+</div>
+</div>
+</div>
+<!-- Player 5 -->
+<div class="rounded-xl bg-white shadow-sm dark:bg-slate-900">
+<div class="flex items-center gap-4 p-4">
+<div class="w-8 shrink-0 text-center text-xl font-bold text-slate-400 dark:text-slate-500">5</div>
+<img class="h-14 w-14 shrink-0 rounded-full object-cover" data-alt="Profile picture of Eva Rostova" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgt3FFGX-vtk0hUTm5adhVe7hoy8GjvjZSYJFsz3hgt8-sS0I62G0Mlvev4r5UGEZPKlYQi1gHqTvzT2gAbNtwHzvRWAD8temSafr-QjHduutIUz4-cXw863y2-Jq4_FhpqXs0f1AhfFylUifHpiX726sYivEjx5FE5dHt5lgcaaAC8cGLnMsn7RaOkst4Ilys4nlVV0dQ0GNqXzQja_nGDo2kqOR1ksUvycyegpJYDxltKjSSXQ3NBZx9EWafwtWNRiznAAY_u10"/>
+<div class="flex-grow">
+<p class="font-semibold text-slate-800 dark:text-slate-200">Eva Rostova</p>
+<div class="mt-1 flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+<span class="font-mono">8-8 (50%)</span>
+<div class="flex items-center gap-1 text-blue-400">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">ac_unit</span>
+<span class="font-semibold">L2</span>
+</div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-xl font-bold text-primary">1480</p>
+<p class="text-xs text-slate-400">ELO</p>
+</div>
+</div>
+</div>
+<!-- Player 6 -->
+<div class="rounded-xl bg-white shadow-sm dark:bg-slate-900">
+<div class="flex items-center gap-4 p-4">
+<div class="w-8 shrink-0 text-center text-xl font-bold text-slate-400 dark:text-slate-500">6</div>
+<img class="h-14 w-14 shrink-0 rounded-full object-cover" data-alt="Profile picture of Frank Miller" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlbrSXhpHbZiNy_j9qn-jjvnj-S3UOwzRXNc2ptGMmiq6uEcbCRTAaHnb9N3zVD4D-8XpyLfCvOKzkFn43nTK8qKPr2ZZbypcaJwR9HHZd-6Nhv1ZogK8-itO-jOv8OWvB5Nr3vDJpbXKmKKWEzGe8y15uFNvdsdmM4O0hRk4SnDmnf_ww4rmkhXUDqMR1qJdavZi8vKdl6rBPYgx4EYdM3RKT3cT_gMzcKSRBVrFb0mWg7huNcZ4ILdRrM17V2ZT4s13IUY0kQGk"/>
+<div class="flex-grow">
+<p class="font-semibold text-slate-800 dark:text-slate-200">Frank Miller</p>
+<div class="mt-1 flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+<span class="font-mono">7-8 (47%)</span>
+<!-- No streak -->
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-xl font-bold text-primary">1455</p>
+<p class="text-xs text-slate-400">ELO</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

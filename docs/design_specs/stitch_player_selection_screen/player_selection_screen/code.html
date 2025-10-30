@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Select Players</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom checkbox style to match the theme */
+        .themed-checkbox {
+            appearance: none;
+            background-color: transparent;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid #cfdbe7;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            position: relative;
+        }
+        .themed-checkbox:checked {
+            border-color: #137fec;
+            background-color: #137fec;
+        }
+        .themed-checkbox:checked::after {
+            content: '✔';
+            position: absolute;
+            color: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-screen w-full flex-col group/design-root overflow-hidden">
+<!-- Top App Bar -->
+<header class="flex-shrink-0 bg-background-light dark:bg-background-dark/80 backdrop-blur-sm z-10 sticky top-0">
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="flex size-12 shrink-0 items-center justify-start text-zinc-900 dark:text-zinc-50">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-zinc-900 dark:text-zinc-50 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Today's Players</h2>
+<div class="flex size-12 shrink-0 items-center justify-end"></div> <!-- Spacer -->
+</div>
+</header>
+<!-- Search Bar -->
+<div class="px-4 py-3 bg-background-light dark:bg-background-dark flex-shrink-0">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-zinc-500 dark:text-zinc-400 flex border-none bg-zinc-200 dark:bg-zinc-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-zinc-900 dark:text-zinc-50 focus:outline-0 focus:ring-0 border-none bg-zinc-200 dark:bg-zinc-800 focus:border-none h-full placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Search for a player..." value=""/>
+</div>
+</label>
+</div>
+<!-- Player List -->
+<main class="flex-1 overflow-y-auto pb-36"> <!-- Padding bottom to avoid footer overlap -->
+<div class="flex items-center gap-4 px-4 py-2 justify-between">
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-normal">Players (7)</p>
+<button class="text-primary text-sm font-medium">Select all</button>
+</div>
+<!-- List Item 1 -->
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Eleanor Vance" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB9K7hHdI50IMhCrZIB4ts0y04UBCSeoOTsOX9xFx2KluLPmANFl60cHsieZQGUrraXkukqdXVceYB7abYQXqHnn05LgRYnqY4usP8NOyQMKiXI1eCkRju7OLAq1CrsyOPeRssTfW1zWr2yBVO_FH2kc3PJ3hV9qZX5V3KQSDNAuDpXl0ctug21jF0aCCG-7RF4bkj65oga1fr6wgCz4HcXQL220bWMCD5P3xj1g3x7YFmaMPyyfoYj3zCo67TGQ8f8feD3SkPjBDI");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-zinc-900 dark:text-zinc-50 text-base font-medium leading-normal line-clamp-1">Eleanor Vance</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-normal leading-normal line-clamp-2">ELO: 1580</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center">
+<input checked="" class="themed-checkbox" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Marcus Holloway" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAIVL1pQaNw0Yw4CxI7ygPaL_xEtow6gwuOieGJsCD9LkQs1rGZsBNYJHN2HhwI1UCLKjTMZNe5C5q0GZb3SKpwpYc80hZbrgm4HimQ3zyTZPhQAFNeNDNAhWxA3KtIiT9myZ5xd-zys2-ASPFNeV644JUVsPp6fQStRt_Qd_dxdkqzZidW-MzBiiYrqmL9q_uwN3oLymTA_-UbaUcrcEHbWR7z5GBrczsBJOVi8_u2b5A_pyL6pAmTrUlmaFOVMKhGbSpV8ped_CQ");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-zinc-900 dark:text-zinc-50 text-base font-medium leading-normal line-clamp-1">Marcus Holloway</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-normal leading-normal line-clamp-2">ELO: 1550</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center">
+<input class="themed-checkbox" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- List Item 3 -->
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Anya Sharma" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD89J6jERpLpo8C6X73Npdg7RtMEtyTcCyMYMJDyXhlvIDQViVpqyRMG8cfdyb4loM-XGpdTu46uT3RxrxWgFgl90U_o3VHTochvbkflgPjHzEP-4UIt6h8rqS4G4jiyx3OvuElMfABPfJVywpITQf756H1JpQUefojFENyqDI-hcLhEi6722ylnYbndf0NZEnsk3l5zupHbvTPHqisOiK24eDvH1QjzJGzyIbFGOhWhQDVR5QhwTsqbmHC1F_AmYRrPfCt7OUe5aM");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-zinc-900 dark:text-zinc-50 text-base font-medium leading-normal line-clamp-1">Anya Sharma</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-normal leading-normal line-clamp-2">ELO: 1520</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center">
+<input checked="" class="themed-checkbox" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- List Item 4 -->
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Kenji Tanaka" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB6orXo_dEfEb3VbjwTklUlZYI5pp3sWugYBtIiBEsRJUq__xfVEcmdy45zeTmeFN-EwUIAgp-c_shptxB0F7c0F1JNPILAAF6YyzOrARx8wlBx3CVV22j567QzLHx-9wDQY3P4ApDdg--IM4J6fWZQzgYA5GhuNe_1VPMrCFuYo9q2q7lqaPEERCMVhLb7oZKJ9DYUCD8cHftCEMB-O0WIZy1svVZERXc32uc12-5QIUvFMDpXYqfkYCEX5YE_S_OOj-wr_5iQ4P8");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-zinc-900 dark:text-zinc-50 text-base font-medium leading-normal line-clamp-1">Kenji Tanaka</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-normal leading-normal line-clamp-2">ELO: 1490</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center">
+<input checked="" class="themed-checkbox" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- List Item 5 -->
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Chloe Rodriguez" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCl3iG5fYRD-docfVw9Hvf5Hj3BUKxmiifYzS-jpUp-FYXlPEVSApR-UeyKh6mKx4l2dJGQjW2ua84DtWVsE6QGl7SyNoQAKFJiRqOp_MsXJIghn3G0ebL0vv8v48BU_fkYdfMT7JGh4UhI3coEfvNQMDTkB0giakhwmpXFTznQDyThX-eBtWugI0I1xcYSeiVI9WCiLR4WEUV9LJ5CxgVfSxrXDKKqJHjA7T15E50jnI_EJYXoBhetERY9u0UXe9r7W1GBsYnr0rs");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-zinc-900 dark:text-zinc-50 text-base font-medium leading-normal line-clamp-1">Chloe Rodriguez</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-normal leading-normal line-clamp-2">ELO: 1450</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center">
+<input class="themed-checkbox" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- List Item 6 -->
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Ben Carter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB5_I7cgy1GJSy44f-Zdhe1FrouQ8v_Nr7KqNcUeeFJRbmx90s3stz_AgSVzKafDNGstqflsY1mjlV1_23-HBF-HIC8ilm4-Umla9v01HMCyZIfjj-hp7ohzvEZ0X6PxU_0rBl6NCvvTDnNgWfcCQyt_IiIFsCrzOCt4QoPsru1ss6dTx5IV_EPnTg7vfhgMOyoHo_zGYzXgmAy8Q74fWA2_MPTKQXMzHNG1tS0V1Y2KHV_4IOe4TJID9uLCxeGo-5lApSG-bARK5I");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-zinc-900 dark:text-zinc-50 text-base font-medium leading-normal line-clamp-1">Ben Carter</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-normal leading-normal line-clamp-2">ELO: 1410</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center">
+<input class="themed-checkbox" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- List Item 7 -->
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Olivia Chen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBazl9E5_-XPmSgM5jiCNx-4qwuxbjlZzp-ei0Zhl49qICEhqKcbWVzYmNQTxjmklY_DYfSIht8cCTTxOImL2G-lbo-e6mR2aSDTBHsc8dfOji6lyLdTsNYbe10aXq5XNNAmW5dQiZEySXcnHnApj3bfnUvnQt9AaO_9z1Ql2cpaToI_aeZ9esT2ItvEWSrCyP2snCaD2JwPW5nC950yE_NNhSN4AEOPc7Ol2uu5hNKSMLkWwxlXJPLbi_bV68vcnsJimQnSBG1KpQ");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-zinc-900 dark:text-zinc-50 text-base font-medium leading-normal line-clamp-1">Olivia Chen</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm font-normal leading-normal line-clamp-2">ELO: 1380</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center">
+<input checked="" class="themed-checkbox" type="checkbox"/>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Footer Action Bar -->
+<footer class="absolute bottom-0 left-0 right-0 z-10">
+<div class="bg-background-light dark:bg-background-dark border-t border-zinc-200 dark:border-zinc-800 p-4 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] dark:shadow-[0_-2px_10px_rgba(0,0,0,0.2)]">
+<div class="flex justify-between items-center mb-4">
+<p class="text-zinc-900 dark:text-zinc-50 font-medium">4 players selected</p>
+<p class="text-zinc-500 dark:text-zinc-400">Generates 6 matches</p>
+</div>
+<button class="w-full bg-primary text-white font-bold py-3 px-4 rounded-lg text-lg hover:bg-primary/90 transition-colors">
+                    Create Session
+                </button>
+</div>
+</footer>
+</div>
+</body></html>

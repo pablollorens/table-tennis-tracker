@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ping Pong Match Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "card-light": "#ffffff",
+              "card-dark": "#1a2530",
+              "text-light": "#333333",
+              "text-dark": "#e0e0e0",
+              "subtle-light": "#8A8A8A",
+              "subtle-dark": "#a0a0a0",
+              "green-accent": "#28A745",
+              "red-accent": "#DC3545"
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex items-center justify-between bg-background-light/80 p-4 pb-2 backdrop-blur-sm dark:bg-background-dark/80">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-text-light dark:text-text-dark text-3xl">sports_tennis</span>
+<h1 class="text-xl font-bold leading-tight tracking-tight text-text-light dark:text-text-dark">Today, October 26</h1>
+</div>
+</div>
+<main class="flex-1 px-4 pb-24">
+<!-- Pending Matches Section -->
+<div>
+<h2 class="text-lg font-bold leading-tight tracking-tight text-text-light dark:text-text-dark pb-3 pt-4">Pending</h2>
+<!-- Pending Match Card -->
+<div class="flex flex-col gap-4 rounded-xl bg-card-light p-4 shadow-sm dark:bg-card-dark mb-4">
+<div class="flex items-center justify-between gap-4">
+<div class="flex flex-1 items-center gap-3">
+<img class="h-10 w-10 rounded-full object-cover" data-alt="Profile picture of Alex Morgan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL6M8xVOc8uPx4jwpb5H5y2uTARMisyoijDJEVUh-1oYJtBVkrX4uMt4kGyTVeUWv3mRSwzeGYiVqRs6puwBYHOVn_75n4v3xEO4GnefGxUy7dYL22fndFZSiL7KqpshHJZ82sW4UpBgNsxqsj54PHGfyfHt_dAi23Lh120v6Dja9Us-OdtjHFfZCB7VQugdQlfGz8kDPT3gSXz2mCTUBx_rUpWgVIxeudFqDjm8HpozJmrRcGP3Y4yZwL0xJANZuSJQ9L8vd2zIc"/>
+<div class="flex flex-col">
+<p class="text-base font-bold leading-tight text-text-light dark:text-text-dark">Alex Morgan</p>
+<p class="text-sm font-normal leading-normal text-subtle-light dark:text-subtle-dark">ELO: 1520</p>
+</div>
+</div>
+<p class="text-sm font-bold text-subtle-light dark:text-subtle-dark">vs</p>
+<div class="flex flex-1 items-center justify-end gap-3 text-right">
+<div class="flex flex-col">
+<p class="text-base font-bold leading-tight text-text-light dark:text-text-dark">Jordan Smith</p>
+<p class="text-sm font-normal leading-normal text-subtle-light dark:text-subtle-dark">ELO: 1480</p>
+</div>
+<img class="h-10 w-10 rounded-full object-cover" data-alt="Profile picture of Jordan Smith" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADjjzkGgwBLPCIaFTisBn_uy6t3Yo43GFz1w2NdteYmA2KT82Xj48qgKR7hyfAYTdKBXEXblIa-sL5gCBTtwvTduH91oAxNxDl2Hdp-YmzwnRcOD_blFHkr6X4HXqgP7Fj_-4aMHLPmtLyV5sqLlRzDokLIuub_n3wZUnYJeU-NoIQRU8rx80eyS6ngMVslEcbMzqThPJDnxfSTxSUwl6nwqUwna-Zl8V1XnZgnmUxdC5X_kKQko0Ms6HCTnpVzcMuw_kkGQNsWTA"/>
+</div>
+</div>
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-medium leading-normal">
+<span class="truncate">Record Result</span>
+</button>
+</div>
+</div>
+<!-- Completed Matches Section -->
+<div class="mt-4">
+<h2 class="text-lg font-bold leading-tight tracking-tight text-text-light dark:text-text-dark pb-3 pt-4">Completed</h2>
+<!-- Completed Match Card - Winner Highlighted -->
+<div class="flex flex-col gap-4 rounded-xl bg-card-light p-4 shadow-sm dark:bg-card-dark mb-4 border border-green-accent/50 dark:border-green-accent/40">
+<div class="flex flex-col gap-3">
+<!-- Winner -->
+<div class="flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<img class="h-10 w-10 rounded-full object-cover" data-alt="Profile picture of Maya Lee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDV9T1Hybk00Y6-3DNKZIfaIG7q709jvaYF2VRQx2qI3hGjPYXoNTz1dC_dBZ5xLaQI_sV7VStpG6h6f4UVcvweWhHj-XRtaSxJUHO57IT0ht1J4m2w9PIpc2H46wWsMDOouygyJIWhJxPqR7hU8NQVdMbhUBy2QImpjM0ZZQVrvAWa2yYJ4YUHo-_QEuAjdhCPaaMei9YtPZ4tIwUs31HdZWwif8FHvjNQT6uNY8XiaVO2KjlaRzehJJ-9i9qB0xNXjI_HtmK8ho8"/>
+<div class="flex flex-col">
+<p class="text-base font-bold leading-tight text-text-light dark:text-text-dark">Maya Lee</p>
+<p class="text-sm font-normal leading-normal text-subtle-light dark:text-subtle-dark">Score: 11</p>
+</div>
+</div>
+<div class="flex h-6 items-center justify-center rounded-full bg-green-accent/10 px-2.5 text-xs font-semibold text-green-accent">
+                                +8 ELO
+                            </div>
+</div>
+<!-- Loser -->
+<div class="flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<img class="h-10 w-10 rounded-full object-cover" data-alt="Profile picture of Chris Evans" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZlA9G7bhDJI_amZ8mkkHSRhNC9PVP9A_ivpWLfs38gx4wMkOuXSli_xTiJE3C0Ksr3dDlITS58rCCoK1rx02qLGhK0KyI11Oblpmh5tIcCGitZ2WCrPwvFSnXteN5A14_pV5lxfz71_xviYSzn6RbPfQ-crpXB4MOJhCLaIYOKQ73vBnGhLe3iMk7F1QHwF8N6nsmbn1bPPu--QZ3T9wdYXWFsXZ2M20G1ESDeKajbHw73k_VqFZ7_wTq1dtLdprIiTCMugJAmCM"/>
+<div class="flex flex-col">
+<p class="text-base font-bold leading-tight text-text-light dark:text-text-dark">Chris Evans</p>
+<p class="text-sm font-normal leading-normal text-subtle-light dark:text-subtle-dark">Score: 7</p>
+</div>
+</div>
+<div class="flex h-6 items-center justify-center rounded-full bg-red-accent/10 px-2.5 text-xs font-semibold text-red-accent">
+                                -8 ELO
+                            </div>
+</div>
+</div>
+</div>
+<!-- Another Completed Match Card -->
+<div class="flex flex-col gap-4 rounded-xl bg-card-light p-4 shadow-sm dark:bg-card-dark mb-4 border border-green-accent/50 dark:border-green-accent/40">
+<div class="flex flex-col gap-3">
+<!-- Winner -->
+<div class="flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<img class="h-10 w-10 rounded-full object-cover" data-alt="Profile picture of Sarah Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXYSj6nL_5P9hRT-YremyO9zcrpapAIqJICoa18Mw4Yx20kqnbiu0If19QNIHGKWFRC0fMaIDkmq68LSg_9I4mrifYRWnk8i2x_l4CAm-5aEjf7eOwYbrwzc3Hdsz3Tsnj4LoKjGFWpUAkQr55ax_VcSiWh1eI_ZLvGHAd01242zts27SC5mNqAPMpHOFx8TZQE9H09oDGwvHmv4OqMaI_jaQsyQ1S6KkVQzBFZD-NM50iO8EczOHcPvESACOmhRPRdGSngA7uDUg"/>
+<div class="flex flex-col">
+<p class="text-base font-bold leading-tight text-text-light dark:text-text-dark">Sarah Chen</p>
+<p class="text-sm font-normal leading-normal text-subtle-light dark:text-subtle-dark">Score: 12</p>
+</div>
+</div>
+<div class="flex h-6 items-center justify-center rounded-full bg-green-accent/10 px-2.5 text-xs font-semibold text-green-accent">
+                                +10 ELO
+                            </div>
+</div>
+<!-- Loser -->
+<div class="flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<img class="h-10 w-10 rounded-full object-cover" data-alt="Profile picture of Ben Carter" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJFWa6axby2jGlbqbJ5KNWdL0Gds3m3ykodJkJJWUO8NCyTANVcw1MEXUgD-_ubYWLmqb6JIAbQbsdFyM91PUnwQ0QOMhYOwaQrBKG52p1vD4KP1fdk0hxvZOxntIqYE-JcemP2xCovxb0qcLhbgY8HmKJ23P8UiKhkeuPK8AmmBMVK3QV-zA1YiRmEg0QE85aEpiT-bPEL8SSSUed8CvQ1xSzxlKV_Z_VYN2fdZhnwx8GS1NlBuv2zitEF-gC3oHynnWOa6_nk84"/>
+<div class="flex flex-col">
+<p class="text-base font-bold leading-tight text-text-light dark:text-text-dark">Ben Carter</p>
+<p class="text-sm font-normal leading-normal text-subtle-light dark:text-subtle-dark">Score: 10</p>
+</div>
+</div>
+<div class="flex h-6 items-center justify-center rounded-full bg-red-accent/10 px-2.5 text-xs font-semibold text-red-accent">
+                                -10 ELO
+                            </div>
+</div>
+</div>
+</div>
+<!-- Empty State Card (for demonstration) -->
+<div class="mt-8 text-center">
+<span class="material-symbols-outlined text-5xl text-subtle-light dark:text-subtle-dark">sentiment_dissatisfied</span>
+<h3 class="mt-2 text-lg font-semibold text-text-light dark:text-text-dark">No more matches today!</h3>
+<p class="mt-1 text-sm text-subtle-light dark:text-subtle-dark">Start a new game using the button below.</p>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-6 right-6 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-lg">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+</body></html>

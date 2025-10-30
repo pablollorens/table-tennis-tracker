@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ping Pong Tracker Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#137fec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="mx-auto max-w-md w-full">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between bg-background-light dark:bg-background-dark">
+<h1 class="text-xl font-bold text-slate-900 dark:text-slate-50 flex-1">Ping Pong Tracker</h1>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">calendar_today</span>
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium">Tuesday, Oct 26</p>
+</div>
+</div>
+<!-- State 1: Session Active -->
+<div class="p-4">
+<div class="flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+<!-- Headline Text -->
+<h2 class="text-slate-900 dark:text-slate-50 tracking-tight text-2xl font-bold leading-tight text-left">Today's Session</h2>
+<!-- Stats -->
+<div class="flex flex-wrap gap-3">
+<div class="flex min-w-[100px] flex-1 flex-col gap-1 rounded-lg p-4 bg-slate-100 dark:bg-slate-800">
+<p class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal">Total Matches</p>
+<p class="text-slate-900 dark:text-slate-50 tracking-tight text-3xl font-bold leading-tight">12</p>
+</div>
+<div class="flex min-w-[100px] flex-1 flex-col gap-1 rounded-lg p-4 bg-slate-100 dark:bg-slate-800">
+<p class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal">Completed</p>
+<p class="text-slate-900 dark:text-slate-50 tracking-tight text-3xl font-bold leading-tight">8</p>
+</div>
+<div class="flex min-w-[100px] flex-1 flex-col gap-1 rounded-lg p-4 bg-slate-100 dark:bg-slate-800">
+<p class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal">Pending</p>
+<p class="text-slate-900 dark:text-slate-50 tracking-tight text-3xl font-bold leading-tight">4</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="flex flex-col gap-2 pt-2">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-slate-900 dark:text-slate-50 text-base font-medium leading-normal">Completion</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal">8/12</p>
+</div>
+<div class="w-full rounded-full bg-slate-200 dark:bg-slate-700 h-2.5">
+<div class="h-2.5 rounded-full bg-primary" style="width: 66%;"></div>
+</div>
+</div>
+<!-- Single Button -->
+<div class="flex pt-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 flex-1 bg-primary text-slate-50 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 focus:ring-4 focus:ring-primary/30">
+<span class="truncate">View Today's Matches</span>
+</button>
+</div>
+</div>
+</div>
+<!-- State 2: No Session -->
+<div class="p-4">
+<div class="flex flex-col items-center gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm text-center">
+<!-- Illustration/Icon -->
+<div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 dark:bg-primary/20">
+<span class="material-symbols-outlined text-primary text-4xl">sports_tennis</span>
+</div>
+<!-- Informational Text -->
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-slate-50 text-2xl font-bold">Ready to Play?</h2>
+<p class="text-slate-600 dark:text-slate-400">No session has been created for today.</p>
+</div>
+<!-- Single Button -->
+<div class="flex w-full pt-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 flex-1 bg-primary text-slate-50 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 focus:ring-4 focus:ring-primary/30">
+<span class="truncate">Create Today's Session</span>
+</button>
+</div>
+</div>
+</div>
+<div class="h-24"></div> <!-- Spacer for bottom nav -->
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
+<div class="flex h-16 items-center justify-around px-2">
+<a class="flex flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-xs font-medium">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-xs font-medium">Rankings</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-xs font-medium">Profile</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</body></html>

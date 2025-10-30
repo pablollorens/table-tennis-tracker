@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Log Match Result</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<!-- Mock background content -->
+<div class="p-4 space-y-4">
+<h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Dashboard</h1>
+<div class="h-40 rounded-xl bg-gray-200 dark:bg-gray-800"></div>
+<div class="h-20 rounded-xl bg-gray-200 dark:bg-gray-800"></div>
+<div class="h-20 rounded-xl bg-gray-200 dark:bg-gray-800"></div>
+</div>
+<!-- Bottom Sheet Modal -->
+<div class="absolute inset-0 flex h-full w-full flex-col justify-end bg-black/40 dark:bg-black/60">
+<div class="flex w-full flex-col items-stretch rounded-t-xl bg-background-light dark:bg-background-dark">
+<!-- BottomSheetHandle -->
+<button class="flex h-5 w-full items-center justify-center pt-3">
+<div class="h-1 w-9 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+</button>
+<!-- TopAppBar -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="flex size-12 shrink-0 items-center">
+<!-- Placeholder for icon -->
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center text-gray-900 dark:text-gray-50">Log Match Result</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex flex-col gap-4 p-4">
+<!-- Player 1 Section -->
+<div class="flex flex-col gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-4">
+<div class="flex w-full items-center gap-4">
+<!-- ProfileHeader (modified) -->
+<div class="flex flex-1 items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-16 w-16" data-alt="Avatar of Player 1" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDNWgCOuogboJ4bQNr63ANEVp6LrttnARhyD_VZHxnAl-xpAwpXw0_fsD7N6ryiqP8G-5X5fTfzf3-Nv4AloEjwzi0SNlHR_y3vNn6lHKlxg8rgxt8yvzkzeIMughacNnvlBqFlz5RlLsHr_jHVArstvKYN_n0pW-Mx-lltKgVTug4p1UJPZy1-4S4N2w65m_DPs7A4lKhOm1BZwTdZ42dFLKYaCPBg4usJy22v1vWlHLXfUCFlL0gw80FnwsTAtyWHKbO6acaekMU");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-lg font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-gray-50">Alex Martinez</p>
+<p class="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400">ELO: 1500</p>
+</div>
+</div>
+<!-- TextField (modified) -->
+<div class="flex flex-col">
+<label class="text-sm font-medium leading-normal pb-1 text-gray-600 dark:text-gray-300 text-center" for="player1-score">Score</label>
+<input class="form-input w-20 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-2 text-center text-3xl font-bold leading-normal" id="player1-score" placeholder="0" type="number" value="0"/>
+</div>
+</div>
+</div>
+<!-- VS Separator -->
+<div class="flex justify-center">
+<p class="text-base font-bold text-gray-400 dark:text-gray-500">VS</p>
+</div>
+<!-- Player 2 Section -->
+<div class="flex flex-col gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-4">
+<div class="flex w-full items-center gap-4">
+<!-- ProfileHeader (modified) -->
+<div class="flex flex-1 items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-16 w-16" data-alt="Avatar of Player 2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCJxKpMoVVooelLyZvY4hdfKkiLLIV40CvammZLJZaiZE8u6rfZrGKn9II_jn4jCJfhSiMWZqVD-0lXF-cBf6ZOyadxLdiBJ_xO0qDrPNFOEWSPpHzORBNnPMXlrOM-0RKwVUeqy52A4Bvo2eyHwtCPzkR0EaNMvZOWzY2lMmFmHbhJYmTi6XwiLBi37stYk98Qan4aTMNei3Et8dB7nyvAfww64_X8-bh7s9m3aTmEPQ-bysTw1E8rm3-35cLwR5B20t5iuEcQPeo");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-lg font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-gray-50">Samantha Lee</p>
+<p class="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400">ELO: 1450</p>
+</div>
+</div>
+<!-- TextField (modified) -->
+<div class="flex flex-col">
+<label class="text-sm font-medium leading-normal pb-1 text-gray-600 dark:text-gray-300 text-center" for="player2-score">Score</label>
+<input class="form-input w-20 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-2 text-center text-3xl font-bold leading-normal" id="player2-score" placeholder="0" type="number" value="0"/>
+</div>
+</div>
+</div>
+<!-- Save Result Button -->
+<div class="pt-4 pb-2">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 bg-primary text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 disabled:bg-primary/40 disabled:cursor-not-allowed">
+              Save Result
+            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>
