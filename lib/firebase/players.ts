@@ -97,12 +97,24 @@ export async function updatePlayerProfile(
   const playerRef = doc(db, 'players', playerId);
 
   // Generate initials if no avatar provided
-  const initials = data.name
-    .split(' ')
-    .map(n => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
+  let initials = 'NA';
+  try {
+    const nameParts = data.name.trim().split(/\s+/);
+    initials = nameParts
+      .filter(part => part.length > 0)
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+
+    // Fallback if no valid initials
+    if (!initials) {
+      initials = data.name.substring(0, 2).toUpperCase() || 'NA';
+    }
+  } catch (error) {
+    console.error('Error generating initials:', error);
+    initials = 'NA';
+  }
 
   const updates = {
     name: data.name,
