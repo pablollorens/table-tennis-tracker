@@ -1,66 +1,121 @@
-import bcrypt from 'bcryptjs';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from './config';
-
-const APP_PASSWORD_KEY = 'pingpong_auth';
+import bcrypt from 'bcryptjs';
+import { Player } from '@/types';
 
 /**
- * Verify password against stored hash in Firestore
+ * Verify the shared office password
  */
-export async function verifyPassword(password: string): Promise<boolean> {
+export async function verifySharedPassword(password: string): Promise<boolean> {
   try {
-    const storedHash = await getPasswordHashFromFirestore();
-    return bcrypt.compare(password, storedHash);
+    const configRef = collection(db, 'config');
+    const configSnapshot = await getDocs(configRef);
+
+    if (configSnapshot.empty) {
+      throw new Error('Config document not found');
+    }
+
+    const configDoc = configSnapshot.docs[0];
+    const sharedPasswordHash = configDoc.data().sharedPasswordHash || configDoc.data().passwordHash;
+
+    return await bcrypt.compare(password, sharedPasswordHash);
   } catch (error) {
-    console.error('Error verifying password:', error);
+    console.error('Error verifying shared password:', error);
     return false;
   }
 }
 
 /**
- * Save authentication session to localStorage
+ * Check if a nickname is available (case-insensitive)
  */
-export function saveSession(): void {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(APP_PASSWORD_KEY, 'authenticated');
+export async function checkNicknameAvailable(nickname: string): Promise<boolean> {
+  try {
+    const nicknameQuery = query(
+      collection(db, 'players'),
+      where('nickname', '==', nickname.toLowerCase())
+    );
+    const snapshot = await getDocs(nicknameQuery);
+    return snapshot.empty;
+  } catch (error) {
+    console.error('Error checking nickname availability:', error);
+    return false;
   }
 }
 
 /**
- * Check if user has active session
+ * Authenticate a player by nickname and password
+ */
+export async function authenticatePlayer(
+  nickname: string,
+  password: string
+): Promise<Player | null> {
+  try {
+    const playerQuery = query(
+      collection(db, 'players'),
+      where('nickname', '==', nickname.toLowerCase()),
+      limit(1)
+    );
+    const snapshot = await getDocs(playerQuery);
+
+    if (snapshot.empty) {
+      return null;
+    }
+
+    const playerDoc = snapshot.docs[0];
+    const player = { id: playerDoc.id, ...playerDoc.data() } as Player;
+
+    const passwordMatch = await bcrypt.compare(password, player.passwordHash);
+
+    return passwordMatch ? player : null;
+  } catch (error) {
+    console.error('Error authenticating player:', error);
+    return null;
+  }
+}
+
+interface AuthState {
+  authenticated: boolean;
+  playerId?: string;
+  nickname?: string;
+}
+
+/**
+ * Save auth state to localStorage
+ */
+export function saveAuthState(playerId: string, nickname: string): void {
+  const authState: AuthState = {
+    authenticated: true,
+    playerId,
+    nickname
+  };
+  localStorage.setItem('auth', JSON.stringify(authState));
+}
+
+/**
+ * Get auth state from localStorage
+ */
+export function getAuthState(): AuthState {
+  const stored = localStorage.getItem('auth');
+  if (!stored) {
+    return { authenticated: false };
+  }
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return { authenticated: false };
+  }
+}
+
+/**
+ * Clear auth state
+ */
+export function clearAuthState(): void {
+  localStorage.removeItem('auth');
+}
+
+/**
+ * Check if user is authenticated
  */
 export function isAuthenticated(): boolean {
-  if (typeof window === 'undefined') return false;
-  return localStorage.getItem(APP_PASSWORD_KEY) === 'authenticated';
-}
-
-/**
- * Clear authentication session
- */
-export function logout(): void {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem(APP_PASSWORD_KEY);
-  }
-}
-
-/**
- * Get password hash from Firestore config
- */
-async function getPasswordHashFromFirestore(): Promise<string> {
-  const configRef = doc(db, 'config', 'app');
-  const configSnap = await getDoc(configRef);
-
-  if (!configSnap.exists()) {
-    throw new Error('App configuration not found');
-  }
-
-  return configSnap.data()?.passwordHash || '';
-}
-
-/**
- * Admin function to update password (for initial setup)
- * Only use this once to set the initial password hash in Firestore
- */
-export async function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, 10);
+  return getAuthState().authenticated;
 }
