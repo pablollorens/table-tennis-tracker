@@ -1,5 +1,7 @@
 {
-  "projects": {},
+  "projects": {
+    "default": "table-tennis-tracker-edd77"
+  },
   "targets": {},
   "etags": {}
 }
