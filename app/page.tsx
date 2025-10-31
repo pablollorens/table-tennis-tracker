@@ -1,10 +1,18 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { PasswordGate } from '@/components/auth/password-gate';
+import { isAuthenticated } from '@/lib/firebase/auth';
+
 export default function Home() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Table Tennis Tracker</h1>
-        <p className="text-gray-600">Welcome to the ping pong tracker app</p>
-      </div>
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      router.push('/dashboard');
+    }
+  }, [router]);
+
+  return <PasswordGate />;
 }
