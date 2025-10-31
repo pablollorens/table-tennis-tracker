@@ -64,6 +64,9 @@ export function PlayerSelector() {
     );
   }
 
+  // Check if there are enough players
+  const notEnoughPlayers = players.length < 2;
+
   const totalMatches = calculateTotalMatches(selectedPlayers.length);
 
   return (
@@ -82,6 +85,25 @@ export function PlayerSelector() {
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        {/* Not Enough Players Warning */}
+        {notEnoughPlayers && (
+          <Card className="p-6 bg-yellow-50 border-yellow-200">
+            <div className="text-center">
+              <div className="text-4xl mb-3">👥</div>
+              <h3 className="text-lg font-semibold text-yellow-900 mb-2">
+                Need More Players
+              </h3>
+              <p className="text-sm text-yellow-800 mb-4">
+                You need at least 2 active players to create a session.
+                Currently you have {players.length} player{players.length === 1 ? '' : 's'}.
+              </p>
+              <p className="text-xs text-yellow-700">
+                Invite your colleagues to register and activate their profiles!
+              </p>
+            </div>
+          </Card>
+        )}
+
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
