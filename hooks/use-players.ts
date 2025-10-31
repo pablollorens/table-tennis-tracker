@@ -3,7 +3,7 @@ import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestor
 import { db } from '@/lib/firebase/config';
 import { Player } from '@/types';
 
-export function usePlayers(activeOnly: boolean = true) {
+export function usePlayers() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -11,15 +11,12 @@ export function usePlayers(activeOnly: boolean = true) {
   useEffect(() => {
     const playersRef = collection(db, 'players');
 
-    let q = query(playersRef, orderBy('eloRating', 'desc'));
-
-    if (activeOnly) {
-      q = query(
-        playersRef,
-        where('isActive', '==', true),
-        orderBy('eloRating', 'desc')
-      );
-    }
+    // Only return active players
+    const q = query(
+      playersRef,
+      where('isActive', '==', true),
+      orderBy('eloRating', 'desc')
+    );
 
     const unsubscribe = onSnapshot(
       q,
@@ -40,7 +37,7 @@ export function usePlayers(activeOnly: boolean = true) {
     );
 
     return () => unsubscribe();
-  }, [activeOnly]);
+  }, []);
 
   return { players, loading, error };
 }
