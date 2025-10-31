@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation';
 import { isAuthenticated } from '@/lib/firebase/auth';
 import { useCurrentPlayer } from '@/hooks/use-current-player';
 import { ProfileForm } from '@/components/profile/profile-form';
+import { useToast } from '@/hooks/use-toast';
 import { User } from 'lucide-react';
 
 export default function ProfilePage() {
   const router = useRouter();
   const { player, loading } = useCurrentPlayer();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -38,8 +40,12 @@ export default function ProfilePage() {
       // First time activation - redirect to dashboard
       router.push('/dashboard');
     } else {
-      // Just saved changes - show success message
-      alert('Profile updated successfully!');
+      // Just saved changes - show success toast
+      toast({
+        title: "Profile updated!",
+        description: "Your changes have been saved successfully.",
+        duration: 3000,
+      });
     }
   };
 
