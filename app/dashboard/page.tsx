@@ -89,19 +89,19 @@ export default function DashboardPage() {
 
               {/* Stats */}
               <div className="flex flex-wrap gap-3">
-                <div className="flex min-w-[100px] flex-1 flex-col gap-1 rounded-lg p-4 bg-slate-100">
+                <div className="flex min-w-[100px] flex-1 flex-col justify-between gap-1 rounded-lg p-4 bg-slate-100">
                   <p className="text-slate-600 text-sm font-medium leading-normal">Total Matches</p>
                   <p className="text-slate-900 tracking-tight text-3xl font-bold leading-tight">
                     {session.totalMatches}
                   </p>
                 </div>
-                <div className="flex min-w-[100px] flex-1 flex-col gap-1 rounded-lg p-4 bg-slate-100">
+                <div className="flex min-w-[100px] flex-1 flex-col justify-between gap-1 rounded-lg p-4 bg-slate-100">
                   <p className="text-slate-600 text-sm font-medium leading-normal">Completed</p>
                   <p className="text-slate-900 tracking-tight text-3xl font-bold leading-tight">
                     {session.completedMatches}
                   </p>
                 </div>
-                <div className="flex min-w-[100px] flex-1 flex-col gap-1 rounded-lg p-4 bg-slate-100">
+                <div className="flex min-w-[100px] flex-1 flex-col justify-between gap-1 rounded-lg p-4 bg-slate-100">
                   <p className="text-slate-600 text-sm font-medium leading-normal">Pending</p>
                   <p className="text-slate-900 tracking-tight text-3xl font-bold leading-tight">
                     {session.pendingMatches}
