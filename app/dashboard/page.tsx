@@ -43,21 +43,23 @@ export default function DashboardPage() {
     : 0;
 
   return (
-    <div className="relative flex h-auto min-h-screen w-full flex-col bg-gray-50">
-      <div className="mx-auto max-w-md w-full">
-        {/* Header */}
-        <div className="flex items-center p-4 pb-2 justify-between bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200">
+        <div className="max-w-2xl mx-auto flex items-center p-4 pb-2 justify-between">
           <h1 className="text-xl font-bold text-slate-900 flex-1">Ping Pong Tracker</h1>
           <div className="flex items-center gap-2">
             <CalendarDays className="w-5 h-5 text-slate-500" />
             <p className="text-slate-600 text-sm font-medium">{today}</p>
           </div>
         </div>
+      </header>
 
-        {/* Content */}
+      {/* Main Content */}
+      <main className="max-w-2xl mx-auto px-4 py-6 pb-24">
         {!session ? (
           // No Session State
-          <div className="p-4">
+          <div>
             <Card className="flex flex-col items-center gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-center">
               {/* Icon */}
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
@@ -80,7 +82,7 @@ export default function DashboardPage() {
           </div>
         ) : (
           // Session Active State
-          <div className="p-4">
+          <div>
             <Card className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               {/* Headline */}
               <h2 className="text-slate-900 tracking-tight text-2xl font-bold leading-tight text-left">
@@ -136,13 +138,10 @@ export default function DashboardPage() {
             </Card>
           </div>
         )}
+      </main>
 
-        {/* Spacer for bottom nav */}
-        <div className="h-24" />
-
-        {/* Bottom Navigation */}
-        <BottomNav />
-      </div>
+      {/* Bottom Navigation */}
+      <BottomNav />
     </div>
   );
 }

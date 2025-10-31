@@ -71,24 +71,27 @@ export default function TodayMatchesPage() {
   const completedMatches = matches.filter(m => m.status === 'completed');
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col bg-gray-50">
-      {/* Top App Bar */}
-      <div className="sticky top-0 z-10 flex items-center gap-3 bg-gray-50/80 p-4 pb-2 backdrop-blur-sm">
-        <button
-          onClick={() => router.back()}
-          className="touch-target p-2 hover:bg-gray-100 rounded-lg"
-        >
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-        <div className="flex items-center gap-3">
-          <span className="text-3xl">🏓</span>
-          <h1 className="text-xl font-bold leading-tight tracking-tight">
-            Today, {today}
-          </h1>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="sticky top-0 z-10 bg-gray-50/80 border-b border-gray-200 backdrop-blur-sm">
+        <div className="max-w-2xl mx-auto flex items-center gap-3 p-4 pb-2">
+          <button
+            onClick={() => router.back()}
+            className="touch-target p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </button>
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">🏓</span>
+            <h1 className="text-xl font-bold leading-tight tracking-tight">
+              Today, {today}
+            </h1>
+          </div>
         </div>
-      </div>
+      </header>
 
-      <main className="flex-1 px-4 pb-24">
+      {/* Main Content */}
+      <main className="max-w-2xl mx-auto px-4 py-6 pb-24">
         {/* Pending Matches Section */}
         {pendingMatches.length > 0 && (
           <div>
