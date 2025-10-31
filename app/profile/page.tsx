@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { isAuthenticated } from '@/lib/firebase/auth';
 import { useCurrentPlayer } from '@/hooks/use-current-player';
 import { ProfileForm } from '@/components/profile/profile-form';
+import { BottomNav } from '@/components/navigation/bottom-nav';
 import { useToast } from '@/hooks/use-toast';
 import { User } from 'lucide-react';
 
@@ -52,7 +53,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-4">
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-4 safe-top">
         <div className="max-w-2xl mx-auto flex items-center gap-2">
           <User className="w-6 h-6 text-blue-600" />
           <h1 className="text-xl font-bold">
@@ -62,7 +63,7 @@ export default function ProfilePage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-2xl mx-auto px-4 py-6">
+      <main className="max-w-2xl mx-auto px-4 py-6 pb-24">
         {!player.isActive && (
           <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-blue-800">
@@ -73,6 +74,9 @@ export default function ProfilePage() {
 
         <ProfileForm player={player} onSuccess={handleSuccess} />
       </main>
+
+      {/* Bottom Navigation - Only show for active users */}
+      {player.isActive && <BottomNav />}
     </div>
   );
 }
