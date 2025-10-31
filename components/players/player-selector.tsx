@@ -70,7 +70,7 @@ export function PlayerSelector() {
   const totalMatches = calculateTotalMatches(selectedPlayers.length);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="min-h-screen bg-gray-50 pb-32">
       {/* Header */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
@@ -153,8 +153,8 @@ export function PlayerSelector() {
         </div>
       </div>
 
-      {/* Bottom Fixed Action */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg p-4 safe-bottom">
+      {/* Bottom Fixed Action - positioned above bottom nav */}
+      <div className="fixed bottom-16 left-0 right-0 z-40 bg-white border-t shadow-lg p-4">
         <div className="max-w-2xl mx-auto space-y-4">
           {/* Debug info - always show */}
           <div className="text-center p-2 bg-gray-100 rounded text-xs">
@@ -171,7 +171,7 @@ export function PlayerSelector() {
           <Button
             onClick={handleCreateSession}
             disabled={selectedPlayers.length < 2 || creating}
-            className="w-full h-14 text-base"
+            className="w-full h-14 text-base bg-blue-600 hover:bg-blue-700 text-white font-bold"
           >
             {creating ? 'Creating Session...' : 'Create Session'}
           </Button>
