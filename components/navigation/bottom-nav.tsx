@@ -17,7 +17,7 @@ const navItems = [
     icon: Trophy,
   },
   {
-    href: '/dashboard/profile',
+    href: '/profile',
     label: 'Profile',
     icon: User,
   },
