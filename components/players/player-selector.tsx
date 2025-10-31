@@ -154,12 +154,12 @@ export function PlayerSelector() {
       </div>
 
       {/* Bottom Fixed Action */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 safe-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg p-4 safe-bottom">
         <div className="max-w-2xl mx-auto space-y-4">
           {selectedPlayers.length >= 2 && (
             <div className="text-center p-3 bg-blue-50 rounded-lg">
               <p className="text-sm text-blue-800">
-                {selectedPlayers.length} players selected → Generates {totalMatches} matches
+                {selectedPlayers.length} players selected → Generates {totalMatches} match{totalMatches === 1 ? '' : 'es'}
               </p>
             </div>
           )}
