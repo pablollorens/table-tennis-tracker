@@ -119,8 +119,10 @@ export function PasswordGate() {
     setError('');
 
     try {
-      // Clean up old inactive players
-      await cleanupInactivePlayers();
+      // Clean up old inactive players (don't block on this)
+      cleanupInactivePlayers().catch(err => {
+        console.warn('Cleanup failed (non-critical):', err);
+      });
 
       // Final availability check
       const available = await checkNicknameAvailable(nickname);
