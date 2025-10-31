@@ -122,6 +122,11 @@ export async function updatePlayerProfile(
 export async function createPlayer(playerData: PlayerInput): Promise<Player> {
   const playersRef = collection(db, 'players');
 
+  // Legacy function requires name to be provided
+  if (!playerData.name) {
+    throw new Error('Name is required for legacy createPlayer function');
+  }
+
   // Generate initials for avatar
   const initials = playerData.name
     .split(' ')

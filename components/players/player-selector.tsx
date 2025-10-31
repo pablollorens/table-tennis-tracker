@@ -19,8 +19,8 @@ export function PlayerSelector() {
   const router = useRouter();
 
   const filteredPlayers = players.filter(player =>
-    player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    player.nickname?.toLowerCase().includes(searchQuery.toLowerCase())
+    player.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    player.nickname.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleTogglePlayer = (playerId: string) => {
@@ -118,7 +118,7 @@ export function PlayerSelector() {
                 {player.avatar}
               </div>
               <div className="flex-1">
-                <div className="font-medium">{player.name}</div>
+                <div className="font-medium">{player.name || player.nickname}</div>
                 <div className="text-sm text-gray-500">ELO: {player.eloRating}</div>
               </div>
               <Checkbox

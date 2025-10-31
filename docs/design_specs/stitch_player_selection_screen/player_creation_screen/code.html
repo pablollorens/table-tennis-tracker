@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create New Player</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#137fec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL'0, 'wght'400, 'GRAD'0, 'opsz'24;
+      font-size: 24px;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-slate-200/80 bg-background-light/80 px-4 backdrop-blur-sm dark:border-slate-800/80 dark:bg-background-dark/80">
+<button class="flex size-10 items-center justify-center text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h1 class="text-lg font-bold text-slate-800 dark:text-slate-100">Create New Player</h1>
+<div class="flex w-10 items-center justify-end"></div>
+</header>
+<!-- Main Content -->
+<main class="flex flex-1 flex-col px-4 pt-8 pb-6">
+<div class="flex flex-col items-center">
+<!-- Avatar Group -->
+<div class="flex w-24 cursor-pointer items-center justify-center">
+<div class="relative">
+<div class="flex size-24 items-center justify-center rounded-full border-4 border-white bg-slate-200 text-slate-500 dark:border-slate-800 dark:bg-slate-700 dark:text-slate-400" data-alt="Default user avatar placeholder">
+<span class="material-symbols-outlined !text-5xl">person</span>
+</div>
+<div class="absolute bottom-0 right-0 flex size-8 items-center justify-center rounded-full border-2 border-white bg-primary text-white dark:border-slate-800">
+<span class="material-symbols-outlined !text-lg">add_a_photo</span>
+</div>
+</div>
+</div>
+<!-- Meta Text -->
+<p class="pt-3 text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">Tap to add photo</p>
+</div>
+<!-- Form Section -->
+<div class="mt-8 space-y-4">
+<!-- Text Field: Full Name -->
+<label class="flex flex-col">
+<p class="pb-2 text-base font-medium text-slate-800 dark:text-slate-100">Full Name*</p>
+<input class="form-input h-14 w-full flex-1 resize-none overflow-hidden rounded-lg border border-slate-300 bg-background-light p-[15px] text-base font-normal leading-normal text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50 dark:placeholder:text-slate-500 dark:focus:border-primary" placeholder="Enter player's full name" value=""/>
+</label>
+<!-- Text Field: Nickname -->
+<label class="flex flex-col">
+<p class="pb-2 text-base font-medium text-slate-800 dark:text-slate-100">Nickname (Optional)</p>
+<input class="form-input h-14 w-full flex-1 resize-none overflow-hidden rounded-lg border border-slate-300 bg-background-light p-[15px] text-base font-normal leading-normal text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50 dark:placeholder:text-slate-500 dark:focus:border-primary" placeholder="Enter a nickname" value=""/>
+</label>
+<!-- Text Field: Email -->
+<label class="flex flex-col">
+<p class="pb-2 text-base font-medium text-slate-800 dark:text-slate-100">Email (Optional)</p>
+<input class="form-input h-14 w-full flex-1 resize-none overflow-hidden rounded-lg border border-slate-300 bg-background-light p-[15px] text-base font-normal leading-normal text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50 dark:placeholder:text-slate-500 dark:focus:border-primary" placeholder="Enter player's email" type="email" value=""/>
+</label>
+</div>
+<!-- Spacer -->
+<div class="flex-grow"></div>
+<!-- Action Button -->
+<div class="mt-8">
+<button class="flex w-full items-center justify-center rounded-xl bg-primary px-6 py-4 text-base font-bold text-white transition-opacity duration-200 hover:opacity-90 disabled:cursor-not-allowed disabled:bg-primary/40 dark:disabled:bg-primary/50" disabled="">Create Player</button>
+</div>
+</main>
+</div>
+</body></html>

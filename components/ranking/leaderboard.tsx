@@ -8,12 +8,12 @@ import { Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function Leaderboard() {
-  const { players, loading } = usePlayers(true);
+  const { players, loading } = usePlayers();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredPlayers = players.filter(player =>
-    player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    player.nickname?.toLowerCase().includes(searchQuery.toLowerCase())
+    player.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    player.nickname.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (loading) {

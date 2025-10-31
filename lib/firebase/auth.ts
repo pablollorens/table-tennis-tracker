@@ -83,6 +83,8 @@ interface AuthState {
  * Save auth state to localStorage
  */
 export function saveAuthState(playerId: string, nickname: string): void {
+  if (typeof window === 'undefined') return;
+
   const authState: AuthState = {
     authenticated: true,
     playerId,
@@ -95,6 +97,10 @@ export function saveAuthState(playerId: string, nickname: string): void {
  * Get auth state from localStorage
  */
 export function getAuthState(): AuthState {
+  if (typeof window === 'undefined') {
+    return { authenticated: false };
+  }
+
   const stored = localStorage.getItem('auth');
   if (!stored) {
     return { authenticated: false };
@@ -110,6 +116,8 @@ export function getAuthState(): AuthState {
  * Clear auth state
  */
 export function clearAuthState(): void {
+  if (typeof window === 'undefined') return;
+
   localStorage.removeItem('auth');
 }
 
