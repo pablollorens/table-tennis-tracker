@@ -1881,12 +1881,767 @@ git commit -m "feat: implement match result recording with ELO updates"
 
 ---
 
-Due to length constraints, I'll provide the implementation plan structure. The plan should continue with:
+## Phase 6: Rankings & Leaderboard
 
-## Phase 6: Rankings & Leaderboard (Tasks 6.1-6.2)
-## Phase 7: PWA Configuration (Tasks 7.1-7.3)
+### Task 6.1: Create Dashboard and Bottom Navigation
+
+**Files:**
+- Create: `app/dashboard/layout.tsx`
+- Create: `app/dashboard/page.tsx`
+- Create: `components/navigation/bottom-nav.tsx`
+
+**Step 1: Create dashboard layout with bottom navigation**
+
+File: `app/dashboard/layout.tsx`
+
+```typescript
+import { BottomNav } from '@/components/navigation/bottom-nav';
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="min-h-screen bg-gray-50 pb-20">
+      {children}
+      <BottomNav />
+    </div>
+  );
+}
+```
+
+**Step 2: Create bottom navigation component**
+
+File: `components/navigation/bottom-nav.tsx`
+
+```typescript
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { LayoutDashboard, Trophy, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+const navItems = [
+  {
+    href: '/dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+  },
+  {
+    href: '/dashboard/ranking',
+    label: 'Rankings',
+    icon: Trophy,
+  },
+  {
+    href: '/dashboard/profile',
+    label: 'Profile',
+    icon: User,
+  },
+];
+
+export function BottomNav() {
+  const pathname = usePathname();
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white safe-bottom">
+      <div className="flex justify-around">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                'flex flex-col items-center gap-1 py-3 px-4 min-w-touch touch-target',
+                'transition-colors duration-200',
+                isActive
+                  ? 'text-blue-600'
+                  : 'text-gray-600 hover:text-gray-900'
+              )}
+            >
+              <Icon className={cn('w-6 h-6', isActive && 'fill-current')} />
+              <span className="text-xs font-medium">{item.label}</span>
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
+```
+
+**Step 3: Create dashboard page (placeholder)**
+
+File: `app/dashboard/page.tsx`
+
+```typescript
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { isAuthenticated } from '@/lib/firebase/auth';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { format } from 'date-fns';
+
+export default function DashboardPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push('/');
+    }
+  }, [router]);
+
+  const today = format(new Date(), 'EEEE, MMM d');
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Ping Pong Tracker</h1>
+          <p className="text-sm text-gray-600">{today}</p>
+        </div>
+      </div>
+
+      {/* Today's Session Card */}
+      <Card className="p-6">
+        <h2 className="text-xl font-bold mb-4">Today's Session</h2>
+        <div className="text-center py-8">
+          <div className="text-6xl mb-4">🏓</div>
+          <h3 className="text-lg font-semibold mb-2">Ready to Play?</h3>
+          <p className="text-gray-600 mb-6">
+            No session has been created for today.
+          </p>
+          <Link href="/dashboard/player-selection">
+            <Button className="w-full h-12 text-base">
+              Create Today's Session
+            </Button>
+          </Link>
+        </div>
+      </Card>
+    </div>
+  );
+}
+```
+
+**Step 4: Test dashboard renders**
+
+```bash
+npm run dev
+```
+
+Navigate to http://localhost:3000/dashboard
+
+Expected: See dashboard with bottom navigation
+
+**Step 5: Commit**
+
+```bash
+git add app/dashboard/layout.tsx app/dashboard/page.tsx components/navigation/bottom-nav.tsx
+git commit -m "feat: create dashboard layout with bottom navigation"
+```
+
+---
+
+### Task 6.2: Create Leaderboard Component
+
+**Files:**
+- Create: `app/dashboard/ranking/page.tsx`
+- Create: `components/ranking/leaderboard.tsx`
+- Create: `components/ranking/player-rank-card.tsx`
+
+**Step 1: Create player rank card component**
+
+File: `components/ranking/player-rank-card.tsx`
+
+```typescript
+import { Player } from '@/types';
+import { cn } from '@/lib/utils';
+import { Flame, Snowflake, Medal } from 'lucide-react';
+
+interface PlayerRankCardProps {
+  player: Player;
+  rank: number;
+  isCurrentUser?: boolean;
+}
+
+function getRankColor(rank: number): string {
+  if (rank === 1) return 'border-yellow-400';
+  if (rank === 2) return 'border-gray-400';
+  if (rank === 3) return 'border-orange-400';
+  return 'border-gray-200';
+}
+
+function getRankBadge(rank: number) {
+  if (rank === 1) return <Medal className="w-4 h-4 text-yellow-500 fill-yellow-500" />;
+  if (rank === 2) return <Medal className="w-4 h-4 text-gray-400 fill-gray-400" />;
+  if (rank === 3) return <Medal className="w-4 h-4 text-orange-500 fill-orange-500" />;
+  return null;
+}
+
+function getStreakDisplay(streak: number) {
+  if (streak === 0) return null;
+
+  const isWinStreak = streak > 0;
+  const absStreak = Math.abs(streak);
+
+  return (
+    <div className={cn(
+      'flex items-center gap-1 text-sm',
+      isWinStreak ? 'text-orange-500' : 'text-blue-400'
+    )}>
+      {isWinStreak ? (
+        <Flame className="w-4 h-4 fill-current" />
+      ) : (
+        <Snowflake className="w-4 h-4 fill-current" />
+      )}
+      <span className="font-semibold">
+        {isWinStreak ? 'W' : 'L'}{absStreak}
+      </span>
+    </div>
+  );
+}
+
+export function PlayerRankCard({ player, rank, isCurrentUser }: PlayerRankCardProps) {
+  const winRate = player.stats.totalMatches > 0
+    ? Math.round((player.stats.wins / player.stats.totalMatches) * 100)
+    : 0;
+
+  return (
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-xl border-2 bg-white shadow-sm',
+        getRankColor(rank),
+        isCurrentUser && 'border-blue-500 bg-blue-50/50'
+      )}
+    >
+      {/* Rank Badge for Top 3 */}
+      {rank <= 3 && (
+        <div className={cn(
+          'absolute -left-8 -top-8 h-16 w-16 rotate-[-45deg] pt-11 text-center',
+          rank === 1 && 'bg-yellow-400',
+          rank === 2 && 'bg-gray-400',
+          rank === 3 && 'bg-orange-400'
+        )}>
+          {getRankBadge(rank)}
+        </div>
+      )}
+
+      <div className="flex items-center gap-4 p-4">
+        {/* Rank Number */}
+        <div className="w-8 shrink-0 text-center text-xl font-bold text-gray-400">
+          {rank}
+        </div>
+
+        {/* Avatar */}
+        <div className="w-14 h-14 shrink-0 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-lg">
+          {player.avatar}
+        </div>
+
+        {/* Player Info */}
+        <div className="flex-grow min-w-0">
+          <p className="font-semibold text-gray-800 truncate">
+            {player.name}
+            {isCurrentUser && (
+              <span className="ml-2 text-sm text-blue-600">(You)</span>
+            )}
+          </p>
+          <div className="mt-1 flex items-center gap-4 text-sm text-gray-500">
+            <span className="font-mono">
+              {player.stats.wins}-{player.stats.losses} ({winRate}%)
+            </span>
+            {getStreakDisplay(player.stats.currentStreak)}
+          </div>
+        </div>
+
+        {/* ELO Rating */}
+        <div className="shrink-0 text-right">
+          <p className="text-xl font-bold text-blue-600">{player.eloRating}</p>
+          <p className="text-xs text-gray-400">ELO</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+**Step 2: Create leaderboard component**
+
+File: `components/ranking/leaderboard.tsx`
+
+```typescript
+'use client';
+
+import { useState } from 'react';
+import { usePlayers } from '@/hooks/use-players';
+import { PlayerRankCard } from './player-rank-card';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+
+export function Leaderboard() {
+  const { players, loading } = usePlayers(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredPlayers = players.filter(player =>
+    player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    player.nickname?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (loading) {
+    return (
+      <div className="space-y-3">
+        {[1, 2, 3, 4, 5].map(i => (
+          <Skeleton key={i} className="h-24 rounded-xl" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <Input
+          type="text"
+          placeholder="Search players..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-10 h-12"
+        />
+      </div>
+
+      {/* Players List */}
+      <div className="space-y-3">
+        {filteredPlayers.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            No players found
+          </div>
+        ) : (
+          filteredPlayers.map((player, index) => (
+            <PlayerRankCard
+              key={player.id}
+              player={player}
+              rank={index + 1}
+              isCurrentUser={false} // TODO: Implement user detection
+            />
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+**Step 3: Create ranking page**
+
+File: `app/dashboard/ranking/page.tsx`
+
+```typescript
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { isAuthenticated } from '@/lib/firebase/auth';
+import { Leaderboard } from '@/components/ranking/leaderboard';
+import { Trophy } from 'lucide-react';
+
+export default function RankingPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push('/');
+    }
+  }, [router]);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-4 safe-top">
+        <div className="max-w-2xl mx-auto flex items-center gap-2">
+          <Trophy className="w-6 h-6 text-blue-600" />
+          <h1 className="text-xl font-bold">Leaderboard</h1>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-2xl mx-auto px-4 py-6">
+        <Leaderboard />
+      </main>
+    </div>
+  );
+}
+```
+
+**Step 4: Test ranking page renders**
+
+```bash
+npm run dev
+```
+
+Navigate to http://localhost:3000/dashboard/ranking
+
+Expected: See leaderboard with ranked players
+
+**Step 5: Commit**
+
+```bash
+git add app/dashboard/ranking/ components/ranking/
+git commit -m "feat: create leaderboard with player rankings and search"
+```
+
+---
+
+## Phase 7: PWA Configuration
+
+### Task 7.1: Install and Configure next-pwa
+
+**Files:**
+- Modify: `next.config.js`
+- Create: `public/manifest.json`
+- Modify: `app/layout.tsx`
+
+**Step 1: Install next-pwa**
+
+```bash
+npm install next-pwa
+npm install -D webpack
+```
+
+Expected: Dependencies installed successfully
+
+**Step 2: Update Next.js config with PWA**
+
+File: `next.config.js`
+
+```javascript
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+  runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'google-fonts-webfonts',
+        expiration: {
+          maxEntries: 4,
+          maxAgeSeconds: 365 * 24 * 60 * 60 // 1 year
+        }
+      }
+    },
+    {
+      urlPattern: /^https:\/\/firebasestorage\.googleapis\.com\/.*/i,
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'firebase-storage',
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
+        }
+      }
+    },
+    {
+      urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'images',
+        expiration: {
+          maxEntries: 60,
+          maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
+        }
+      }
+    },
+    {
+      urlPattern: /^https:\/\/firestore\.googleapis\.com\/.*/i,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'firestore-data',
+        networkTimeoutSeconds: 10,
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 5 * 60 // 5 minutes
+        }
+      }
+    }
+  ]
+});
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+};
+
+module.exports = withPWA(nextConfig);
+```
+
+**Step 3: Create PWA manifest**
+
+File: `public/manifest.json`
+
+```json
+{
+  "name": "Office Ping Pong Tracker",
+  "short_name": "Ping Pong",
+  "description": "Track your office ping pong matches and rankings",
+  "theme_color": "#2563eb",
+  "background_color": "#f3f4f6",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/dashboard",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+```
+
+**Step 4: Update layout with PWA meta tags**
+
+File: `app/layout.tsx`
+
+Add to the `<head>` section:
+
+```typescript
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#2563eb" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Ping Pong" />
+```
+
+**Step 5: Verify build works with PWA**
+
+```bash
+npm run build
+```
+
+Expected: Build succeeds, service worker generated in public/
+
+**Step 6: Commit**
+
+```bash
+git add next.config.js public/manifest.json app/layout.tsx
+git commit -m "feat: configure PWA with next-pwa and manifest"
+```
+
+---
+
+### Task 7.2: Generate PWA Icons
+
+**Files:**
+- Create: `public/icon-192x192.png`
+- Create: `public/icon-512x512.png`
+
+**Step 1: Create a simple ping pong icon**
+
+Use an online tool or create programmatically. For now, we can use a placeholder.
+
+You can use https://favicon.io/favicon-generator/ or similar to create icons with a ping pong emoji.
+
+**Step 2: Add icons to public folder**
+
+Place the generated icons:
+- `public/icon-192x192.png` (192x192 pixels)
+- `public/icon-512x512.png` (512x512 pixels)
+
+**Step 3: Verify icons exist**
+
+```bash
+ls -la public/*.png
+```
+
+Expected: Both icon files present
+
+**Step 4: Commit**
+
+```bash
+git add public/*.png
+git commit -m "feat: add PWA icons for installable app"
+```
+
+---
+
+### Task 7.3: Add Install Prompt Hook
+
+**Files:**
+- Create: `hooks/use-install-prompt.ts`
+- Create: `components/pwa/install-banner.tsx`
+
+**Step 1: Create install prompt hook**
+
+File: `hooks/use-install-prompt.ts`
+
+```typescript
+import { useEffect, useState } from 'react';
+
+export function useInstallPrompt() {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+
+      // Check if we should show prompt
+      const visits = parseInt(localStorage.getItem('app_visits') || '0');
+      const lastPrompt = localStorage.getItem('last_install_prompt');
+      const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+      if (visits >= 2 && (!lastPrompt || parseInt(lastPrompt) < weekAgo)) {
+        setShowPrompt(true);
+      }
+    };
+
+    window.addEventListener('beforeinstallprompt', handler as EventListener);
+
+    // Track visits
+    const visits = parseInt(localStorage.getItem('app_visits') || '0');
+    localStorage.setItem('app_visits', String(visits + 1));
+
+    return () => window.removeEventListener('beforeinstallprompt', handler as EventListener);
+  }, []);
+
+  const install = async () => {
+    if (!deferredPrompt) return false;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    localStorage.setItem('last_install_prompt', String(Date.now()));
+    setDeferredPrompt(null);
+    setShowPrompt(false);
+
+    return outcome === 'accepted';
+  };
+
+  const dismiss = () => {
+    localStorage.setItem('last_install_prompt', String(Date.now()));
+    setShowPrompt(false);
+  };
+
+  return { showPrompt, install, dismiss };
+}
+```
+
+**Step 2: Create install banner component**
+
+File: `components/pwa/install-banner.tsx`
+
+```typescript
+'use client';
+
+import { useInstallPrompt } from '@/hooks/use-install-prompt';
+import { Button } from '@/components/ui/button';
+import { X, Download } from 'lucide-react';
+
+export function InstallBanner() {
+  const { showPrompt, install, dismiss } = useInstallPrompt();
+
+  if (!showPrompt) return null;
+
+  return (
+    <div className="fixed bottom-20 left-4 right-4 z-50 bg-blue-600 text-white rounded-lg shadow-lg p-4">
+      <button
+        onClick={dismiss}
+        className="absolute top-2 right-2 text-white/80 hover:text-white"
+      >
+        <X className="w-5 h-5" />
+      </button>
+
+      <div className="pr-8">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="text-3xl">🏓</div>
+          <div>
+            <p className="font-semibold">Install App</p>
+            <p className="text-sm text-blue-100">Add to your home screen for quick access</p>
+          </div>
+        </div>
+
+        <Button
+          onClick={install}
+          variant="secondary"
+          className="w-full"
+        >
+          <Download className="w-4 h-4 mr-2" />
+          Install
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
+**Step 3: Add install banner to dashboard layout**
+
+File: `app/dashboard/layout.tsx`
+
+```typescript
+import { BottomNav } from '@/components/navigation/bottom-nav';
+import { InstallBanner } from '@/components/pwa/install-banner';
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="min-h-screen bg-gray-50 pb-20">
+      {children}
+      <BottomNav />
+      <InstallBanner />
+    </div>
+  );
+}
+```
+
+**Step 4: Test install prompt**
+
+```bash
+npm run build
+npm start
+```
+
+Open in Chrome, visit dashboard twice, should see install prompt
+
+**Step 5: Commit**
+
+```bash
+git add hooks/use-install-prompt.ts components/pwa/install-banner.tsx app/dashboard/layout.tsx
+git commit -m "feat: add PWA install prompt with visit tracking"
+```
+
+---
+
 ## Phase 8: Offline Support (Tasks 8.1-8.2)
 ## Phase 9: Polish & Optimization (Tasks 9.1-9.3)
 ## Phase 10: Deployment (Tasks 10.1-10.2)
 
-Would you like me to continue with the remaining phases in detail, or is this level of granularity sufficient for the implementation plan?
+**Status:** Phases 8-10 tasks to be detailed in future iterations.
+
+---
+
+**End of Detailed Implementation Plan**
