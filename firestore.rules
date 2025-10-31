@@ -3,8 +3,9 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // Players collection
     match /players/{playerId} {
-      // Allow reading individual active players
-      allow get: if resource.data.isActive == true;
+      // Allow reading any individual player document
+      // (Users need to read their own profile even when inactive)
+      allow get: if true;
 
       // Allow listing/querying players for:
       // 1. Active players (leaderboard, player selection)
