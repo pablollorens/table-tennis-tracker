@@ -23,6 +23,13 @@ export function ProfileForm({ player, onSuccess }: ProfileFormProps) {
   const isValid = name.trim().length >= 2 && email.includes('@');
   const buttonText = player.isActive ? 'Save Changes' : 'Save & Activate';
 
+  // For now, photo upload is disabled - we'll use emoji/initials
+  // TODO: Implement photo upload functionality
+  const handlePhotoClick = () => {
+    // Placeholder for future photo upload
+    console.log('Photo upload not yet implemented');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -35,12 +42,13 @@ export function ProfileForm({ player, onSuccess }: ProfileFormProps) {
       await updatePlayerProfile(player.id, {
         name: name.trim(),
         email: email.trim(),
-        avatar
+        avatar: avatar || undefined
       });
 
       onSuccess?.();
     } catch (err) {
-      setError('Failed to save profile. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(`Failed to save profile: ${errorMessage}`);
       console.error('Profile save error:', err);
     } finally {
       setSaving(false);
@@ -63,6 +71,7 @@ export function ProfileForm({ player, onSuccess }: ProfileFormProps) {
           </div>
           <button
             type="button"
+            onClick={handlePhotoClick}
             className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center border-2 border-white"
           >
             <Camera className="w-4 h-4" />
