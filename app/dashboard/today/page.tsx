@@ -1,12 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated } from '@/lib/firebase/auth';
 import { useCurrentPlayer } from '@/hooks/use-current-player';
 import { useTodayMatches } from '@/hooks/use-matches';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { MatchResultModal } from '@/components/matches/match-result-modal';
+import { recordMatchResult } from '@/lib/firebase/matches';
+import { Match } from '@/types';
 import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
 
@@ -14,6 +17,8 @@ export default function TodayMatchesPage() {
   const router = useRouter();
   const { player, loading: playerLoading } = useCurrentPlayer();
   const { matches, loading: matchesLoading } = useTodayMatches();
+  const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -26,6 +31,32 @@ export default function TodayMatchesPage() {
       router.push('/profile');
     }
   }, [router, playerLoading, player]);
+
+  const handleRecordResult = (match: Match) => {
+    setSelectedMatch(match);
+    setModalOpen(true);
+  };
+
+  const handleSubmitResult = async (
+    matchId: string,
+    player1Score: number,
+    player2Score: number
+  ) => {
+    const sessionDate = format(new Date(), 'yyyy-MM-dd');
+    const winnerId = player1Score > player2Score
+      ? selectedMatch?.player1.id
+      : selectedMatch?.player2.id;
+
+    if (!winnerId) {
+      throw new Error('Could not determine winner');
+    }
+
+    await recordMatchResult(sessionDate, matchId, {
+      player1Score,
+      player2Score,
+      winnerId,
+    });
+  };
 
   if (playerLoading || matchesLoading) {
     return (
@@ -100,7 +131,10 @@ export default function TodayMatchesPage() {
                   </div>
                 </div>
 
-                <Button className="w-full h-10 text-sm font-medium bg-blue-600 hover:bg-blue-700">
+                <Button
+                  onClick={() => handleRecordResult(match)}
+                  className="w-full h-10 text-sm font-medium bg-blue-600 hover:bg-blue-700"
+                >
                   Record Result
                 </Button>
               </Card>
@@ -204,6 +238,14 @@ export default function TodayMatchesPage() {
           </div>
         )}
       </main>
+
+      {/* Match Result Modal */}
+      <MatchResultModal
+        match={selectedMatch}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleSubmitResult}
+      />
     </div>
   );
 }
