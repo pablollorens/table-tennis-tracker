@@ -171,6 +171,7 @@ export function MatchResultModal({ match, open, onClose, onSubmit }: MatchResult
               {submitting ? 'Saving...' : 'Save Result'}
             </Button>
           </div>
+        </div>
         </DialogPrimitive.Content>
       </DialogPortal>
     </Dialog>
