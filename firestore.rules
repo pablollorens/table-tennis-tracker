@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Players collection
+    match /players/{playerId} {
+      // Anyone can read active players
+      allow read: if resource.data.isActive == true;
+
+      // Allow creation of inactive players (for self-registration)
+      allow create: if request.resource.data.isActive == false;
+
+      // Players can update their own document (profile completion)
+      // Note: Since we don't use Firebase Auth, we can't verify identity
+      // This is a known limitation - document in security notes
+      allow update: if true;
+    }
+
+    // Config collection (read-only for clients)
+    match /config/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Sessions collection
+    match /sessions/{sessionId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+    }
+
+    // Matches collection
+    match /matches/{matchId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+    }
+  }
+}
