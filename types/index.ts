@@ -15,13 +15,14 @@ export interface PlayerStats {
 
 export interface Player {
   id: string;
-  name: string;
-  nickname?: string;
-  email?: string;
+  nickname: string;          // NEW - unique identifier for login
+  passwordHash: string;       // NEW - bcrypt hash of personal password
+  name: string | null;        // MODIFIED - nullable until profile complete
+  email: string | null;       // MODIFIED - nullable until profile complete
   avatar: string;
   eloRating: number;
   stats: PlayerStats;
-  isActive: boolean;
+  isActive: boolean;          // false until profile completed
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
@@ -97,8 +98,9 @@ export interface MatchResultInput {
 }
 
 export interface PlayerInput {
-  name: string;
-  nickname?: string;
+  nickname: string;           // NEW - required for creation
+  password: string;           // NEW - plain password (will be hashed)
+  name?: string;
   email?: string;
   avatar?: string;
 }
