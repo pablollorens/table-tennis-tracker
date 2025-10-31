@@ -31,7 +31,7 @@ export default function DashboardPage() {
 
       {/* Today's Session Card */}
       <Card className="p-6">
-        <h2 className="text-xl font-bold mb-4">Today's Session</h2>
+        <h2 className="text-xl font-bold mb-4">Today&apos;s Session</h2>
         <div className="text-center py-8">
           <div className="text-6xl mb-4">🏓</div>
           <h3 className="text-lg font-semibold mb-2">Ready to Play?</h3>
@@ -40,7 +40,7 @@ export default function DashboardPage() {
           </p>
           <Link href="/dashboard/player-selection">
             <Button className="w-full h-12 text-base">
-              Create Today's Session
+              Create Today&apos;s Session
             </Button>
           </Link>
         </div>

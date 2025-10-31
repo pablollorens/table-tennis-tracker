@@ -77,7 +77,7 @@ export function PlayerSelector() {
           >
             <ArrowLeft className="w-6 h-6" />
           </button>
-          <h1 className="text-xl font-bold flex-1">Today's Players</h1>
+          <h1 className="text-xl font-bold flex-1">Today&apos;s Players</h1>
         </div>
       </div>
 
