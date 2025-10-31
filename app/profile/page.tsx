@@ -2,12 +2,13 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { isAuthenticated } from '@/lib/firebase/auth';
+import { isAuthenticated, clearAuthState } from '@/lib/firebase/auth';
 import { useCurrentPlayer } from '@/hooks/use-current-player';
 import { ProfileForm } from '@/components/profile/profile-form';
 import { BottomNav } from '@/components/navigation/bottom-nav';
+import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { User } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -50,6 +51,16 @@ export default function ProfilePage() {
     }
   };
 
+  const handleLogout = () => {
+    clearAuthState();
+    toast({
+      title: "Logged out",
+      description: "You have been logged out successfully.",
+      duration: 2000,
+    });
+    router.push('/');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -73,6 +84,18 @@ export default function ProfilePage() {
         )}
 
         <ProfileForm player={player} onSuccess={handleSuccess} />
+
+        {/* Logout Button */}
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            className="w-full h-12 text-red-600 hover:text-red-700 hover:bg-red-50"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Log Out
+          </Button>
+        </div>
       </main>
 
       {/* Bottom Navigation - Only show for active users */}
