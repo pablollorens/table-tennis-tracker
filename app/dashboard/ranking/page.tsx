@@ -3,17 +3,33 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated } from '@/lib/firebase/auth';
+import { useCurrentPlayer } from '@/hooks/use-current-player';
 import { Leaderboard } from '@/components/ranking/leaderboard';
 import { Trophy } from 'lucide-react';
 
 export default function RankingPage() {
   const router = useRouter();
+  const { player, loading: playerLoading } = useCurrentPlayer();
 
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push('/');
+      return;
     }
-  }, [router]);
+
+    // Redirect inactive users to profile
+    if (!playerLoading && player && !player.isActive) {
+      router.push('/profile');
+    }
+  }, [router, playerLoading, player]);
+
+  if (playerLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-500">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
