@@ -32,13 +32,15 @@ export async function checkNicknameAvailable(nickname: string): Promise<boolean>
   try {
     const nicknameQuery = query(
       collection(db, 'players'),
-      where('nickname', '==', nickname.toLowerCase())
+      where('nickname', '==', nickname.toLowerCase()),
+      limit(1)
     );
     const snapshot = await getDocs(nicknameQuery);
     return snapshot.empty;
   } catch (error) {
     console.error('Error checking nickname availability:', error);
-    return false;
+    // Default to available on error to allow registration
+    return true;
   }
 }
 

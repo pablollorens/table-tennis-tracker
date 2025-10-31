@@ -3,8 +3,14 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // Players collection
     match /players/{playerId} {
-      // Anyone can read active players
-      allow read: if resource.data.isActive == true;
+      // Allow reading individual active players
+      allow get: if resource.data.isActive == true;
+
+      // Allow listing/querying players for:
+      // 1. Active players (leaderboard, player selection)
+      // 2. Nickname availability checking (includes inactive players)
+      allow list: if resource.data.isActive == true ||
+                     request.query.limit == 1;  // Nickname availability check uses limit 1
 
       // Allow creation of inactive players (for self-registration)
       allow create: if request.resource.data.isActive == false;
