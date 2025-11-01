@@ -77,7 +77,97 @@ export function SessionCalendarModal({ open, onClose, currentDate = new Date() }
         className="top-0 translate-y-0 rounded-b-xl rounded-t-none max-w-md h-[70vh] p-0 gap-0"
         aria-labelledby="calendar-heading"
       >
-        {/* Content will be added in next steps */}
+        <div className="flex flex-col h-full">
+          {/* Month Navigation */}
+          <div className="flex items-center p-2 justify-between">
+            <button
+              onClick={handlePrevMonth}
+              aria-label="Previous month"
+              className="flex size-12 items-center justify-center text-[#007AFF] hover:bg-slate-100 rounded-full"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <h2
+              id="calendar-heading"
+              className="text-[#333333] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center"
+            >
+              {format(viewDate, 'MMMM yyyy')}
+            </h2>
+            <button
+              onClick={handleNextMonth}
+              aria-label="Next month"
+              className="flex size-12 items-center justify-center text-[#007AFF] hover:bg-slate-100 rounded-full"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Calendar Grid */}
+          <div className="flex-1 p-4 flex flex-col">
+            <div className="flex flex-col items-center justify-start pt-4">
+              <div className="grid grid-cols-7 w-full max-w-sm">
+                {/* Day Headers */}
+                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+                  <p
+                    key={i}
+                    aria-hidden="true"
+                    className="text-[#8E8E93] dark:text-gray-400 text-xs font-bold leading-normal flex h-10 w-full items-center justify-center"
+                  >
+                    {day}
+                  </p>
+                ))}
+
+                {/* Date Cells */}
+                {calendarDays.map((day, i) => {
+                  const dateString = format(day, 'yyyy-MM-dd');
+                  const hasSession = sessionDates.includes(dateString);
+                  const isToday = dateString === todayString;
+                  const isSelected = isSameDay(day, currentDate);
+                  const isCurrentMonth = isSameMonth(day, viewDate);
+
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => isCurrentMonth && handleDateClick(day)}
+                      disabled={!isCurrentMonth}
+                      aria-label={`${format(day, 'MMMM d, yyyy')}${hasSession ? ', has sessions' : ''}${isToday ? ', today' : ''}${isSelected ? ', selected' : ''}`}
+                      className={`h-12 w-full text-sm font-medium leading-normal relative ${
+                        !isCurrentMonth
+                          ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                          : 'text-[#333333] dark:text-white'
+                      }`}
+                    >
+                      <div
+                        className={`flex size-full items-center justify-center rounded-full ${
+                          isSelected
+                            ? 'bg-blue-600 text-white'
+                            : isToday
+                            ? 'border-2 border-[#007AFF] text-[#007AFF]'
+                            : ''
+                        }`}
+                      >
+                        {format(day, 'd')}
+                      </div>
+                      {hasSession && !isSelected && (
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-[#007AFF]" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Today Button */}
+          <div className="p-4 w-full">
+            <Button
+              onClick={handleToday}
+              className="w-full h-12 bg-[#007AFF] hover:bg-blue-600 text-white text-base font-bold"
+            >
+              Today
+            </Button>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
