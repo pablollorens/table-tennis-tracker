@@ -1,11 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isSameMonth, startOfWeek, endOfWeek } from 'date-fns';
-import {
-  Dialog,
-  DialogContent,
-} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSessionCalendar } from '@/hooks/use-session-calendar';
@@ -25,6 +21,17 @@ export function SessionCalendarModal({ open, onClose, currentDate = new Date() }
 
   const yearMonth = format(viewDate, 'yyyy-MM');
   const { sessionDates, loading } = useSessionCalendar(yearMonth);
+
+  // Close on escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && open) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [open, onClose]);
 
   const handlePrevMonth = () => {
     const newDate = subMonths(viewDate, 1);
@@ -71,11 +78,19 @@ export function SessionCalendarModal({ open, onClose, currentDate = new Date() }
   const today = new Date();
   const todayString = format(today, 'yyyy-MM-dd');
 
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent
-        className="top-0 translate-y-0 rounded-b-xl rounded-t-none max-w-md h-[70vh] p-0 gap-0"
+    <div className="fixed inset-0 z-50 flex items-start justify-center">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/40" onClick={onClose}></div>
+
+      {/* Calendar Modal */}
+      <div
         aria-labelledby="calendar-heading"
+        aria-modal="true"
+        className="relative w-full max-w-md h-[70vh] flex flex-col bg-[#F7F7F7] dark:bg-background-dark rounded-b-xl shadow-lg"
+        role="dialog"
       >
         <div className="flex flex-col h-full">
           {/* Month Navigation */}
@@ -83,7 +98,7 @@ export function SessionCalendarModal({ open, onClose, currentDate = new Date() }
             <button
               onClick={handlePrevMonth}
               aria-label="Previous month"
-              className="flex size-12 items-center justify-center text-[#007AFF] hover:bg-slate-100 rounded-full"
+              className="flex size-12 items-center justify-center text-[#007AFF]"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -96,7 +111,7 @@ export function SessionCalendarModal({ open, onClose, currentDate = new Date() }
             <button
               onClick={handleNextMonth}
               aria-label="Next month"
-              className="flex size-12 items-center justify-center text-[#007AFF] hover:bg-slate-100 rounded-full"
+              className="flex size-12 items-center justify-center text-[#007AFF]"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -168,7 +183,7 @@ export function SessionCalendarModal({ open, onClose, currentDate = new Date() }
             </Button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }
