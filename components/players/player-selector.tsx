@@ -80,11 +80,11 @@ export function PlayerSelector({ mode = 'create' }: PlayerSelectorProps) {
   return (
     <div className="min-h-screen bg-gray-50 pb-32">
       {/* Header */}
-      <div className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 pt-6 pb-4">
+        <div className="max-w-2xl mx-auto flex items-center gap-3">
           <button
             onClick={() => router.back()}
-            className="touch-target p-2 hover:bg-gray-100 rounded-lg"
+            className="touch-target p-2 hover:bg-gray-100 rounded-lg -ml-2"
           >
             <ArrowLeft className="w-6 h-6" />
           </button>
@@ -92,7 +92,7 @@ export function PlayerSelector({ mode = 'create' }: PlayerSelectorProps) {
             {mode === 'add' ? 'Add More Matches' : "Today's Players"}
           </h1>
         </div>
-      </div>
+      </header>
 
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
         {/* Not Enough Players Warning */}

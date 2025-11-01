@@ -81,17 +81,18 @@ export function SessionCalendarModal({ open, onClose, currentDate = new Date() }
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40" onClick={onClose}></div>
+    <div className="fixed inset-0 z-50">
+      <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+        {/* Backdrop */}
+        <div className="absolute inset-0 bg-black/40 z-10" onClick={onClose}></div>
 
-      {/* Calendar Modal */}
-      <div
-        aria-labelledby="calendar-heading"
-        aria-modal="true"
-        className="relative w-full max-w-md h-[70vh] flex flex-col bg-[#F7F7F7] dark:bg-background-dark rounded-b-xl shadow-lg"
-        role="dialog"
-      >
+        {/* Calendar Modal */}
+        <div
+          aria-labelledby="calendar-heading"
+          aria-modal="true"
+          className="absolute top-0 left-0 right-0 z-20 h-[70vh] flex flex-col bg-[#F7F7F7] dark:bg-background-dark rounded-b-xl"
+          role="dialog"
+        >
         <div className="flex flex-col h-full">
           {/* Month Navigation */}
           <div className="flex items-center p-2 justify-between">
@@ -184,6 +185,7 @@ export function SessionCalendarModal({ open, onClose, currentDate = new Date() }
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

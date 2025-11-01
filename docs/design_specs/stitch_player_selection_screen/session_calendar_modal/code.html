@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ping Pong Session History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#007AFF",
+            "background-light": "#F7F7F7",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+    body {
+      min-height: 100dvh;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-gray-200 dark:bg-gray-800 font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-hidden">
+<div class="absolute inset-0 bg-black/40 z-10"></div>
+<div aria-labelledby="calendar-heading" aria-modal="true" class="absolute top-0 left-0 right-0 z-20 h-[70vh] flex flex-col bg-background-light dark:bg-background-dark rounded-b-xl" role="dialog">
+<div class="flex flex-col h-full">
+<div class="flex-1 p-4 flex flex-col">
+<div class="flex items-center p-2 justify-between">
+<button aria-label="Previous month" class="flex size-12 items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">chevron_left</span>
+</button>
+<button aria-label="Select date, October 2025" class="text-[#333333] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center" id="calendar-heading">October 2025</button>
+<button aria-label="Next month" class="flex size-12 items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</button>
+</div>
+<div class="flex flex-1 flex-col items-center justify-start pt-4">
+<div class="grid grid-cols-7 w-full max-w-sm">
+<p aria-hidden="true" class="text-[#8E8E93] dark:text-gray-400 text-xs font-bold leading-normal flex h-10 w-full items-center justify-center">S</p>
+<p aria-hidden="true" class="text-[#8E8E93] dark:text-gray-400 text-xs font-bold leading-normal flex h-10 w-full items-center justify-center">M</p>
+<p aria-hidden="true" class="text-[#8E8E93] dark:text-gray-400 text-xs font-bold leading-normal flex h-10 w-full items-center justify-center">T</p>
+<p aria-hidden="true" class="text-[#8E8E93] dark:text-gray-400 text-xs font-bold leading-normal flex h-10 w-full items-center justify-center">W</p>
+<p aria-hidden="true" class="text-[#8E8E93] dark:text-gray-400 text-xs font-bold leading-normal flex h-10 w-full items-center justify-center">T</p>
+<p aria-hidden="true" class="text-[#8E8E93] dark:text-gray-400 text-xs font-bold leading-normal flex h-10 w-full items-center justify-center">F</p>
+<p aria-hidden="true" class="text-[#8E8E93] dark:text-gray-400 text-xs font-bold leading-normal flex h-10 w-full items-center justify-center">S</p>
+<button aria-label="September 29, 2025" class="h-12 w-full text-gray-400 dark:text-gray-600 col-start-3 text-sm font-medium leading-normal cursor-not-allowed" disabled="">
+<div class="flex size-full items-center justify-center rounded-full">29</div>
+</button>
+<button aria-label="September 30, 2025" class="h-12 w-full text-gray-400 dark:text-gray-600 text-sm font-medium leading-normal cursor-not-allowed" disabled="">
+<div class="flex size-full items-center justify-center rounded-full">30</div>
+</button>
+<button aria-label="October 1, 2025, has sessions" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal relative">
+<div class="flex size-full items-center justify-center rounded-full">1</div>
+<div class="absolute bottom-2 h-1.5 w-1.5 rounded-full bg-primary"></div>
+</button>
+<button aria-label="October 2, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">2</div>
+</button>
+<button aria-current="date" aria-label="October 3, 2025, selected" class="h-12 w-full text-white dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full bg-blue-600">3</div>
+</button>
+<button aria-label="October 4, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">4</div>
+</button>
+<button aria-label="October 5, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">5</div>
+</button>
+<button aria-label="October 6, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">6</div>
+</button>
+<button aria-label="October 7, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">7</div>
+</button>
+<button aria-label="October 8, 2025, has sessions" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal relative">
+<div class="flex size-full items-center justify-center rounded-full">8</div>
+<div class="absolute bottom-2 h-1.5 w-1.5 rounded-full bg-primary"></div>
+</button>
+<button aria-label="October 9, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">9</div>
+</button>
+<button aria-label="October 10, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">10</div>
+</button>
+<button aria-label="October 11, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">11</div>
+</button>
+<button aria-label="October 12, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">12</div>
+</button>
+<button aria-label="October 13, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">13</div>
+</button>
+<button aria-label="October 14, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">14</div>
+</button>
+<button aria-label="October 15, 2025, today" class="h-12 w-full text-primary dark:text-primary text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full border-2 border-primary">15</div>
+</button>
+<button aria-label="October 16, 2025, has sessions" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal relative">
+<div class="flex size-full items-center justify-center rounded-full">16</div>
+<div class="absolute bottom-2 h-1.5 w-1.5 rounded-full bg-primary"></div>
+</button>
+<button aria-label="October 17, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">17</div>
+</button>
+<button aria-label="October 18, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">18</div>
+</button>
+<button aria-label="October 19, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">19</div>
+</button>
+<button aria-label="October 20, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">20</div>
+</button>
+<button aria-label="October 21, 2025, has sessions" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal relative">
+<div class="flex size-full items-center justify-center rounded-full">21</div>
+<div class="absolute bottom-2 h-1.5 w-1.5 rounded-full bg-primary"></div>
+</button>
+<button aria-label="October 22, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">22</div>
+</button>
+<button aria-label="October 23, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">23</div>
+</button>
+<button aria-label="October 24, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">24</div>
+</button>
+<button aria-label="October 25, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">25</div>
+</button>
+<button aria-label="October 26, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">26</div>
+</button>
+<button aria-label="October 27, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">27</div>
+</button>
+<button aria-label="October 28, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">28</div>
+</button>
+<button aria-label="October 29, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">29</div>
+</button>
+<button aria-label="October 30, 2025, has sessions" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal relative">
+<div class="flex size-full items-center justify-center rounded-full">30</div>
+<div class="absolute bottom-2 h-1.5 w-1.5 rounded-full bg-primary"></div>
+</button>
+<button aria-label="October 31, 2025" class="h-12 w-full text-[#333333] dark:text-white text-sm font-medium leading-normal">
+<div class="flex size-full items-center justify-center rounded-full">31</div>
+</button>
+</div>
+</div>
+</div>
+<div class="p-4 w-full">
+<button class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 flex-1 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Today</span>
+</button>
+</div>
+</div>
+</div>
+<div class="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 bg-gray-800 text-white text-sm py-2 px-4 rounded-full">
+      No session on this date
+    </div>
+</div>
+
+</body></html>

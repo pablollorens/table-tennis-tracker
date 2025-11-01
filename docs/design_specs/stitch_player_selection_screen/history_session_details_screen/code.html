@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ping Pong Session Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "elo-gain": "#28a745",
+              "elo-loss": "#dc3545",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800">
+<button aria-label="Back to dashboard" class="text-slate-800 dark:text-slate-200 flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<button aria-label="Select date" class="flex items-center gap-2 flex-1 justify-center pr-12 group">
+<h2 class="text-slate-900 dark:text-slate-50 text-lg font-bold leading-tight tracking-[-0.015em]">October 25, 2025</h2>
+<span class="material-symbols-outlined text-primary text-xl transition-transform group-hover:translate-y-0.5">expand_more</span>
+</button>
+</div>
+<div class="flex flex-col gap-6 p-4">
+<!-- Stats Section -->
+<div class="flex flex-wrap gap-4">
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-6 border border-slate-200 dark:border-slate-700">
+<p class="text-slate-800 dark:text-slate-300 text-base font-medium leading-normal">Total Matches</p>
+<p class="text-slate-900 dark:text-slate-50 tracking-light text-2xl font-bold leading-tight">8</p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-6 border border-slate-200 dark:border-slate-700">
+<p class="text-slate-800 dark:text-slate-300 text-base font-medium leading-normal">Completed</p>
+<p class="text-slate-900 dark:text-slate-50 tracking-light text-2xl font-bold leading-tight">5</p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-6 border border-slate-200 dark:border-slate-700">
+<p class="text-slate-800 dark:text-slate-300 text-base font-medium leading-normal">Pending</p>
+<p class="text-slate-900 dark:text-slate-50 tracking-light text-2xl font-bold leading-tight">3</p>
+</div>
+</div>
+<!-- Match List -->
+<div class="flex flex-col gap-4">
+<!-- Completed Section -->
+<div>
+<h3 class="text-slate-900 dark:text-slate-50 text-lg font-bold leading-tight tracking-[-0.015em] px-0 pb-2 pt-4">Completed</h3>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 px-4 py-3 min-h-[72px] justify-between rounded-xl border border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-4">
+<div class="relative h-12 w-12 shrink-0">
+<img class="h-full w-full rounded-full object-cover" data-alt="Portrait of Alex Ray" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDILH-c244P7R2oKMQL_rx1D02nvdGXI2XcKX0rCQO8IVV7J0xZBs0YsiS4CpGgW5dzF9hb-CPu3T7xrIq3IOxtdL_b4jc--ug0Fvmq3u4y3H_KGKIGJZCaLIu889Kx0rRJ2Ex9oAcYyKJ7GilAvF53jaCN-fRJbgk-52Bith5C9LNtBhdyQk_A9_IfqgVkW3RasDZymNFEy7kzRmkGysm3ONBWdLsIVKUuybCbg-BT1ORPw2vSidF8Pr7mWCFoI-4THL56dDmHy4o"/>
+<img class="absolute -right-2 bottom-0 h-6 w-6 rounded-full object-cover border-2 border-white dark:border-slate-800" data-alt="Portrait of Jordan Lee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCahhwwrhDst69P8UQUc31taIb7kMgEcoOMzyoXBXf4yuEa9FZxQRpcwfBwXxx3eTERvtSeiLcfIfpWbnlX-NSyuHAt6qOu273WRAyLOghW-8G1USVb4b6I2W9rTtr09yj54uE3uIBkSg_5V-YBUa8E1L1lb23pDKFi7Wv7VCViXEVsPuaPTr4V1cE6TevzRpQxLvm1Qt5Hjwxi9XhnRfwQF3PXr6ZBRowweCxRhJ_gATBxs8Hx1lZACt9_O3K37fFp97jYSTB_38Y"/>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal line-clamp-1">Alex Ray vs. Jordan Lee</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">Final Score: 11 - 5</p>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-elo-gain text-sm font-semibold leading-normal">+12</p>
+<p class="text-elo-loss text-sm font-semibold leading-normal">-12</p>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 px-4 py-3 min-h-[72px] justify-between rounded-xl border border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-4">
+<div class="relative h-12 w-12 shrink-0">
+<img class="h-full w-full rounded-full object-cover" data-alt="Portrait of Casey Garcia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8jt7O2GypV87pXme2lVdkfwgYjOYvIs-DWO1DfUdmy3Ei88G2XvW33_BZ64caIgs_5SmfXOiwQJKv23lzNcBpfuCoF_k0HR-DH33HYaqeiOV1yAN1JhPNajs8IVkMmmEY9t2Qrc6Hf3WQKZR0cbGbhyy74mvA9DTjuyFFLAHi4a-317gOujZu9OJeuRUzgi6Bg6XYBKQpnkYSbPfAZ6hZueVeCUGW389QsF1uqu-Fege0VKu9gdFX0ywVWXkYrfqwTJbFWLDdn34"/>
+<img class="absolute -right-2 bottom-0 h-6 w-6 rounded-full object-cover border-2 border-white dark:border-slate-800" data-alt="Portrait of Morgan Pat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9wXqIVgo3UuVvXtZ3B3BD9dpmID2ebWGc8hWhmQIpMFhJE_ZfLtwEMYO8RJ-n4NdYtTvGYZ5NQ-y_-WfKMTJRDq7DicacJ1E9QY21YB0f-z-_a51DBG6ZL9QMhXNwwMKlWCtQ2vyZcjbZN0pMR8d_KQDCQtkIEhhAOwn6TrMPjDdhAcWOhrDpGxcjgj1RnN6IIobDE2YKxOXnLK85T1EM8uUCxdVC5zOvveSp5TP7CrKi8oFS8ptBruOGlnDx9KTwU98akvo3Eew"/>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal line-clamp-1">Casey Garcia vs. Morgan Pat</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">Final Score: 7 - 11</p>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-elo-loss text-sm font-semibold leading-normal">-8</p>
+<p class="text-elo-gain text-sm font-semibold leading-normal">+8</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Pending Section -->
+<div>
+<h3 class="text-slate-900 dark:text-slate-50 text-lg font-bold leading-tight tracking-[-0.015em] px-0 pb-2 pt-4">Pending</h3>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 px-4 py-3 min-h-[72px] justify-between rounded-xl border border-dashed border-slate-300 dark:border-slate-600 opacity-70">
+<div class="flex items-center gap-4">
+<div class="relative h-12 w-12 shrink-0">
+<img class="h-full w-full rounded-full object-cover" data-alt="Portrait of Taylor Kim" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-TD-KRjmhMPt18rDpx1B6KtjXFJ8LB9jVP6B4u_iRcFGWguos_0cLRp6fbY7PxTDvcanuSbn3Tgfe2W9kdJkY9MQvX15ElRl9O7uiPO1AK28Qx6DO4aRtV6ICDrwkKM7-YlOVkjGn4R9qS1oIlGsAoRmnRQfoUCOhsJy3rgVsDpV-5f3TNRjqNxcGQR8p4XqrEacfE7mipA3IoMlonvSXDtYa8z3yWzvIRtrLP4X4-IvqovZ5ijEllnRp3OICKOP2hZuoiGlM7lE"/>
+<img class="absolute -right-2 bottom-0 h-6 w-6 rounded-full object-cover border-2 border-white dark:border-slate-800" data-alt="Portrait of Drew Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZrQ46yM-ElJyjVXMZFy7ueA0fRZieOHcotlLKJdA751_tsttleqNZzLBL1wS9shJmqFKcqxAgFLS3gCS5ec3XEYj_ZT-CUB_52jT1oj4OXO_dRjX-6lhPWi4NWsauPgv6oCDQI-faZR6RrSBZPw-pTdqmhypc42S3i2lZ_uJYna6TJreicUB3Ln86_q57E_0BR8MDLPwpd1D-CBDoiy-w4aaHfjEoEuhwcdstPzXXclPe-20HB9pi3_4QJtq91fgyTYbdwkOxkBw"/>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal line-clamp-1">Taylor Kim vs. Drew Chen</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">ELO: 1250 vs 1180</p>
+</div>
+</div>
+<div class="shrink-0 rounded-full bg-amber-500/10 px-3 py-1">
+<p class="text-amber-600 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider">Pending</p>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 px-4 py-3 min-h-[72px] justify-between rounded-xl border border-dashed border-slate-300 dark:border-slate-600 opacity-70">
+<div class="flex items-center gap-4">
+<div class="relative h-12 w-12 shrink-0">
+<img class="h-full w-full rounded-full object-cover" data-alt="Portrait of Alex Ray" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5vhr-8OS4b6gdGIBUljdfr3WJWf7V52ZBR8xPGSoDsv7KX7ZGxC3viMBWfdNQ1ioFh2yfzObjdO9p9owwZQzI4sTTrMPwQ8XqCEha6pI7ScRScwYGkuwTv5EWqIxHC0-KE9T0tXq6bpXQRtjph3NYjNFDG4cjOuNKWtSC1Dc6PPopVCA0a89tJ5zlhQkYz3xRoSrH8xTPD6XE9mbAGXXs_G0zk-yYJ7cNChrX_XjYlQ5fuNu1nBZdNv0JbLm7hqHy32Kg3VLQRfM"/>
+<img class="absolute -right-2 bottom-0 h-6 w-6 rounded-full object-cover border-2 border-white dark:border-slate-800" data-alt="Portrait of Casey Garcia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB83ThZEPEV047A5VHmbVK0hNfisZPnkQdPf8KTMhfr4thHJTUU7bWwhhxcoNGu-XaNiAmhHeSbcO-Fb84sn6paG1Nc-2mXUNxJYOPiAN0tUb4yx6Vun-j00zY16gT7ubsvPtvV2NagHBaFnNT7BuEH0EGfSEKvDZTrKfviojQm33EoPq8WrI7eZ_X0Qu7gX6kkKWDWb4tgvuzEKzCGFBq4MWG9LlFI3Ty7fT7n6wyOXAGou-gympjiE5XPtketO16dFuTSP1k_oh4"/>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal line-clamp-1">Alex Ray vs. Casey Garcia</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">ELO: 1312 vs 1292</p>
+</div>
+</div>
+<div class="shrink-0 rounded-full bg-amber-500/10 px-3 py-1">
+<p class="text-amber-600 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider">Pending</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Example -->
+<div class="flex flex-col items-center justify-center text-center p-8 mt-8 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-5xl text-slate-400 dark:text-slate-500 mb-4">calendar_month</span>
+<h4 class="text-slate-800 dark:text-slate-200 text-lg font-semibold">No Matches Scheduled</h4>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">No matches were played on this day.</p>
+</div>
+</div>
+</div>
+</div>
+</body></html>

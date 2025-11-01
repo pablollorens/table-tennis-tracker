@@ -2,6 +2,7 @@ const { initializeApp } = require('firebase/app');
 const { getFirestore, collection, addDoc, serverTimestamp } = require('firebase/firestore');
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const readline = require('readline');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env.local') });
 
 // Initialize Firebase
@@ -17,16 +18,31 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function setupSharedPassword() {
-  const password = process.env.NEXT_PUBLIC_SHARED_PASSWORD;
+function promptPassword() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
 
-  if (!password) {
-    console.error('❌ Error: NEXT_PUBLIC_SHARED_PASSWORD not found in environment variables');
-    console.log('Please add it to your .env.local file');
+  return new Promise((resolve) => {
+    rl.question('Enter the shared office password: ', (password) => {
+      rl.close();
+      resolve(password);
+    });
+  });
+}
+
+async function setupSharedPassword() {
+  console.log('🔐 Setting up shared office password...\n');
+
+  const password = await promptPassword();
+
+  if (!password || password.trim() === '') {
+    console.error('❌ Error: Password cannot be empty');
     process.exit(1);
   }
 
-  console.log('🔐 Setting up shared office password...\n');
+  console.log('\n⏳ Hashing password and storing in Firebase...');
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -39,6 +55,7 @@ async function setupSharedPassword() {
   console.log('✅ Shared password configured successfully!');
   console.log(`📝 Password set to: "${password}"`);
   console.log('\n🎉 Users can now register with this password!');
+  console.log('⚠️  Make sure to communicate this password securely to your team.');
   process.exit(0);
 }
 
