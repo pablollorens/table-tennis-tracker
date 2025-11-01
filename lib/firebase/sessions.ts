@@ -6,6 +6,9 @@ import {
   serverTimestamp,
   writeBatch,
   increment,
+  query,
+  where,
+  getDocs,
 } from 'firebase/firestore';
 import { db } from './config';
 import { getPlayerData } from './players';
@@ -170,4 +173,24 @@ export async function updateSessionCounters(
     pendingMatches: increment(-completedChange),
     updatedAt: serverTimestamp()
   });
+}
+
+/**
+ * Get all session dates that have matches for a given month
+ */
+export async function getSessionsByMonth(yearMonth: string): Promise<string[]> {
+  // yearMonth format: "2025-10"
+  const startDate = `${yearMonth}-01`;
+  const endDate = `${yearMonth}-31`;
+
+  const sessionsRef = collection(db, 'sessions');
+  const q = query(
+    sessionsRef,
+    where('date', '>=', startDate),
+    where('date', '<=', endDate),
+    where('totalMatches', '>', 0)
+  );
+
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => doc.data().date as string);
 }
