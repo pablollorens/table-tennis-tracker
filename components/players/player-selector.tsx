@@ -8,10 +8,14 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { usePlayers } from '@/hooks/use-players';
 import { calculateTotalMatches } from '@/lib/utils/round-robin';
-import { createDailySession } from '@/lib/firebase/sessions';
+import { createDailySession, addMoreMatches } from '@/lib/firebase/sessions';
 import { Search, ArrowLeft } from 'lucide-react';
 
-export function PlayerSelector() {
+interface PlayerSelectorProps {
+  mode?: 'create' | 'add';
+}
+
+export function PlayerSelector({ mode = 'create' }: PlayerSelectorProps) {
   const { players, loading } = usePlayers();
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,7 +51,11 @@ export function PlayerSelector() {
 
     setCreating(true);
     try {
-      await createDailySession(selectedPlayers);
+      if (mode === 'add') {
+        await addMoreMatches(selectedPlayers);
+      } else {
+        await createDailySession(selectedPlayers);
+      }
       router.push('/dashboard');
     } catch (error) {
       alert('Error creating session: ' + (error as Error).message);
@@ -80,7 +88,9 @@ export function PlayerSelector() {
           >
             <ArrowLeft className="w-6 h-6" />
           </button>
-          <h1 className="text-xl font-bold flex-1">Today&apos;s Players</h1>
+          <h1 className="text-xl font-bold flex-1">
+            {mode === 'add' ? 'Add More Matches' : "Today's Players"}
+          </h1>
         </div>
       </div>
 
@@ -173,7 +183,10 @@ export function PlayerSelector() {
             disabled={selectedPlayers.length < 2 || creating}
             className="w-full h-14 text-base bg-blue-600 hover:bg-blue-700 text-white font-bold"
           >
-            {creating ? 'Creating Session...' : 'Create Session'}
+            {creating
+              ? (mode === 'add' ? 'Adding Matches...' : 'Creating Session...')
+              : (mode === 'add' ? 'Add Matches' : 'Create Session')
+            }
           </Button>
         </div>
       </div>

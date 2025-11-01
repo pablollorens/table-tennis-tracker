@@ -127,11 +127,16 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Button */}
-              <div className="flex pt-2">
+              {/* Buttons */}
+              <div className="flex flex-col gap-3 pt-2">
                 <Link href="/dashboard/today" className="w-full">
                   <Button className="w-full h-12 text-base bg-blue-600 hover:bg-blue-700 font-bold">
                     View Today&apos;s Matches
+                  </Button>
+                </Link>
+                <Link href="/dashboard/add-matches" className="w-full">
+                  <Button variant="outline" className="w-full h-12 text-base font-bold border-2 border-blue-600 text-blue-600 hover:bg-blue-50">
+                    Add More Matches
                   </Button>
                 </Link>
               </div>
