@@ -88,6 +88,21 @@ export async function cleanupInactivePlayers(): Promise<number> {
 }
 
 /**
+ * Update only player avatar
+ */
+export async function updatePlayerAvatar(
+  playerId: string,
+  avatarUrl: string
+): Promise<void> {
+  const playerRef = doc(db, 'players', playerId);
+
+  await updateDoc(playerRef, {
+    avatar: avatarUrl,
+    updatedAt: serverTimestamp()
+  });
+}
+
+/**
  * Update player profile and activate
  */
 export async function updatePlayerProfile(

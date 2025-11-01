@@ -1,0 +1,33 @@
+name: Cleanup Inactive Users
+
+on:
+  # Run daily at 3:00 AM UTC
+  schedule:
+    - cron: '0 3 * * *'
+
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call Firebase Cloud Function
+        run: |
+          response=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.CLEANUP_SECRET }}" \
+            https://us-central1-table-tennis-tracker-edd77.cloudfunctions.net/cleanupInactiveUsers)
+
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n-1)
+
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+
+          if [ "$http_code" != "200" ]; then
+            echo "❌ Cleanup failed with status $http_code"
+            exit 1
+          fi
+
+          echo "✅ Cleanup completed successfully"

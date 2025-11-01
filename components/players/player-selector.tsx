@@ -10,6 +10,7 @@ import { usePlayers } from '@/hooks/use-players';
 import { calculateTotalMatches } from '@/lib/utils/round-robin';
 import { createDailySession, addMoreMatches } from '@/lib/firebase/sessions';
 import { Search, ArrowLeft } from 'lucide-react';
+import { PlayerAvatar } from '@/components/ui/player-avatar';
 
 interface PlayerSelectorProps {
   mode?: 'create' | 'add';
@@ -146,12 +147,14 @@ export function PlayerSelector({ mode = 'create' }: PlayerSelectorProps) {
               key={player.id}
               className="flex items-center gap-4 p-4 bg-white rounded-lg border"
             >
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                {player.avatar}
-              </div>
+              <PlayerAvatar
+                avatar={player.avatar}
+                name={player.name || player.nickname}
+                size="sm"
+              />
               <div className="flex-1">
                 <div className="font-medium">{player.name || player.nickname}</div>
-                <div className="text-sm text-gray-500">ELO: {player.eloRating}</div>
+                <div className="text-sm text-gray-500">Points: {player.eloRating}</div>
               </div>
               <Checkbox
                 checked={selectedPlayers.includes(player.id)}
@@ -166,11 +169,6 @@ export function PlayerSelector({ mode = 'create' }: PlayerSelectorProps) {
       {/* Bottom Fixed Action - positioned above bottom nav */}
       <div className="fixed bottom-16 left-0 right-0 z-40 bg-white border-t shadow-lg p-4">
         <div className="max-w-2xl mx-auto space-y-4">
-          {/* Debug info - always show */}
-          <div className="text-center p-2 bg-gray-100 rounded text-xs">
-            Selected: {selectedPlayers.length} | Total players: {players.length}
-          </div>
-
           {selectedPlayers.length >= 2 && (
             <div className="text-center p-3 bg-blue-50 rounded-lg">
               <p className="text-sm text-blue-800">

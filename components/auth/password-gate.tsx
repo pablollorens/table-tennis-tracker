@@ -14,7 +14,7 @@ import {
   authenticatePlayer,
   clearAuthState
 } from '@/lib/firebase/auth';
-import { createInactivePlayer, cleanupInactivePlayers } from '@/lib/firebase/players';
+import { createInactivePlayer } from '@/lib/firebase/players';
 import { trackLogin } from '@/lib/firebase/analytics';
 import { EyeOff, Eye } from 'lucide-react';
 import debounce from 'lodash/debounce';
@@ -119,10 +119,8 @@ export function PasswordGate() {
     setError('');
 
     try {
-      // Clean up old inactive players (don't block on this)
-      cleanupInactivePlayers().catch(err => {
-        console.warn('Cleanup failed (non-critical):', err);
-      });
+      // Note: Cleanup of inactive players should be done server-side via Cloud Function
+      // Client-side cleanup removed due to security concerns (no authentication)
 
       // Final availability check
       const available = await checkNicknameAvailable(nickname);

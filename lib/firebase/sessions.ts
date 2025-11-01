@@ -62,6 +62,7 @@ export async function createDailySession(playerIds: string[]): Promise<void> {
       player1: {
         id: player1.id,
         name: player1.name,
+        avatar: player1.avatar || '',
         score: null,
         eloBefore: player1.eloRating,
         eloAfter: null,
@@ -70,6 +71,7 @@ export async function createDailySession(playerIds: string[]): Promise<void> {
       player2: {
         id: player2.id,
         name: player2.name,
+        avatar: player2.avatar || '',
         score: null,
         eloBefore: player2.eloRating,
         eloAfter: null,
@@ -132,6 +134,7 @@ export async function addMoreMatches(playerIds: string[]): Promise<void> {
       player1: {
         id: player1.id,
         name: player1.name,
+        avatar: player1.avatar || '',
         score: null,
         eloBefore: player1.eloRating,
         eloAfter: null,
@@ -140,6 +143,7 @@ export async function addMoreMatches(playerIds: string[]): Promise<void> {
       player2: {
         id: player2.id,
         name: player2.name,
+        avatar: player2.avatar || '',
         score: null,
         eloBefore: player2.eloRating,
         eloAfter: null,

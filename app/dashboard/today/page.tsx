@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated } from '@/lib/firebase/auth';
 import { useCurrentPlayer } from '@/hooks/use-current-player';
-import { useTodayMatches } from '@/hooks/use-matches';
+import { useEnrichedMatches } from '@/hooks/use-enriched-matches';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { MatchResultModal } from '@/components/matches/match-result-modal';
@@ -14,11 +14,12 @@ import { recordMatchResult } from '@/lib/firebase/matches';
 import { Match } from '@/types';
 import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
+import { PlayerAvatar } from '@/components/ui/player-avatar';
 
 export default function TodayMatchesPage() {
   const router = useRouter();
   const { player, loading: playerLoading } = useCurrentPlayer();
-  const { matches, loading: matchesLoading } = useTodayMatches();
+  const { matches, loading: matchesLoading } = useEnrichedMatches();
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
@@ -104,15 +105,17 @@ export default function TodayMatchesPage() {
                 <div className="flex items-center justify-between gap-4">
                   {/* Player 1 */}
                   <div className="flex flex-1 items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                      {match.player1.name?.substring(0, 2).toUpperCase() || 'NA'}
-                    </div>
+                    <PlayerAvatar
+                      avatar={match.player1.avatar}
+                      name={match.player1.name}
+                      size="sm"
+                    />
                     <div className="flex flex-col">
                       <p className="text-base font-bold leading-tight">
                         {match.player1.name}
                       </p>
                       <p className="text-sm font-normal leading-normal text-slate-600">
-                        ELO: {match.player1.eloBefore}
+                        Points: {match.player1.eloBefore}
                       </p>
                     </div>
                   </div>
@@ -126,12 +129,14 @@ export default function TodayMatchesPage() {
                         {match.player2.name}
                       </p>
                       <p className="text-sm font-normal leading-normal text-slate-600">
-                        ELO: {match.player2.eloBefore}
+                        Points: {match.player2.eloBefore}
                       </p>
                     </div>
-                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                      {match.player2.name?.substring(0, 2).toUpperCase() || 'NA'}
-                    </div>
+                    <PlayerAvatar
+                      avatar={match.player2.avatar}
+                      name={match.player2.name}
+                      size="sm"
+                    />
                   </div>
                 </div>
 
@@ -165,9 +170,11 @@ export default function TodayMatchesPage() {
                     {/* Player 1 */}
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                          {match.player1.name?.substring(0, 2).toUpperCase() || 'NA'}
-                        </div>
+                        <PlayerAvatar
+                          avatar={match.player1.avatar}
+                          name={match.player1.name}
+                          size="sm"
+                        />
                         <div className="flex flex-col">
                           <p className={`text-base font-bold leading-tight ${player1Won ? 'text-green-600' : ''}`}>
                             {match.player1.name}
@@ -183,7 +190,7 @@ export default function TodayMatchesPage() {
                             ? 'bg-green-500/10 text-green-600'
                             : 'bg-red-500/10 text-red-600'
                         }`}>
-                          {match.player1.eloChange >= 0 ? '+' : ''}{match.player1.eloChange} ELO
+                          {match.player1.eloChange >= 0 ? '+' : ''}{match.player1.eloChange} Points
                         </div>
                       )}
                     </div>
@@ -191,9 +198,11 @@ export default function TodayMatchesPage() {
                     {/* Player 2 */}
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                          {match.player2.name?.substring(0, 2).toUpperCase() || 'NA'}
-                        </div>
+                        <PlayerAvatar
+                          avatar={match.player2.avatar}
+                          name={match.player2.name}
+                          size="sm"
+                        />
                         <div className="flex flex-col">
                           <p className={`text-base font-bold leading-tight ${player2Won ? 'text-green-600' : ''}`}>
                             {match.player2.name}
@@ -209,7 +218,7 @@ export default function TodayMatchesPage() {
                             ? 'bg-green-500/10 text-green-600'
                             : 'bg-red-500/10 text-red-600'
                         }`}>
-                          {match.player2.eloChange >= 0 ? '+' : ''}{match.player2.eloChange} ELO
+                          {match.player2.eloChange >= 0 ? '+' : ''}{match.player2.eloChange} Points
                         </div>
                       )}
                     </div>

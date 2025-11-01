@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Player } from '@/types';
-import { updatePlayerProfile } from '@/lib/firebase/players';
-import { Camera } from 'lucide-react';
+import { updatePlayerProfile, updatePlayerAvatar } from '@/lib/firebase/players';
+import { ImageUpload } from '@/components/ui/image-upload';
+import toast from 'react-hot-toast';
 
 interface ProfileFormProps {
   player: Player;
@@ -18,16 +19,29 @@ export function ProfileForm({ player, onSuccess }: ProfileFormProps) {
   const [email, setEmail] = useState(player.email || '');
   const [avatar, setAvatar] = useState(player.avatar);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const isValid = name.trim().length >= 2 && email.includes('@');
   const buttonText = player.isActive ? 'Save Changes' : 'Save & Activate';
 
-  // For now, photo upload is disabled - we'll use emoji/initials
-  // TODO: Implement photo upload functionality
-  const handlePhotoClick = () => {
-    // Placeholder for future photo upload
-    console.log('Photo upload not yet implemented');
+  const handleImageUpload = async (url: string) => {
+    setAvatar(url);
+
+    // Auto-save avatar to Firestore
+    try {
+      await updatePlayerAvatar(player.id, url);
+      console.log('[ProfileForm] Avatar auto-saved to Firestore:', url);
+    } catch (err) {
+      console.error('[ProfileForm] Failed to auto-save avatar:', err);
+      toast.error('Avatar uploaded but failed to save to profile', {
+        duration: 4000,
+        position: 'top-center',
+      });
+    }
+  };
+
+  const handleImageError = (error: Error) => {
+    // Error is already shown by ImageUpload component via toast
+    console.error('Image upload error:', error);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,7 +50,6 @@ export function ProfileForm({ player, onSuccess }: ProfileFormProps) {
     if (!isValid) return;
 
     setSaving(true);
-    setError(null);
 
     try {
       await updatePlayerProfile(player.id, {
@@ -45,10 +58,18 @@ export function ProfileForm({ player, onSuccess }: ProfileFormProps) {
         avatar: avatar || undefined
       });
 
+      toast.success('Profile saved successfully!', {
+        duration: 3000,
+        position: 'top-center',
+      });
+
       onSuccess?.();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      setError(`Failed to save profile: ${errorMessage}`);
+      toast.error(`Failed to save profile: ${errorMessage}`, {
+        duration: 5000,
+        position: 'top-center',
+      });
       console.error('Profile save error:', err);
     } finally {
       setSaving(false);
@@ -57,28 +78,13 @@ export function ProfileForm({ player, onSuccess }: ProfileFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
-          {error}
-        </div>
-      )}
-
       {/* Avatar Section */}
-      <div className="flex flex-col items-center">
-        <div className="relative">
-          <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-2xl">
-            {avatar}
-          </div>
-          <button
-            type="button"
-            onClick={handlePhotoClick}
-            className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center border-2 border-white"
-          >
-            <Camera className="w-4 h-4" />
-          </button>
-        </div>
-        <p className="mt-2 text-sm text-gray-500">Tap to add photo</p>
-      </div>
+      <ImageUpload
+        playerId={player.id}
+        currentImageUrl={avatar}
+        onUploadComplete={handleImageUpload}
+        onUploadError={handleImageError}
+      />
 
       {/* Nickname (Read-only) */}
       <div className="space-y-2">

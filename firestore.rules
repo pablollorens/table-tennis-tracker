@@ -33,12 +33,14 @@ service cloud.firestore {
       allow read: if true;
       allow create: if true;
       allow update: if true;
+      allow delete: if true;
 
       // Matches subcollection under sessions
       match /matches/{matchId} {
         allow read: if true;
         allow create: if true;
         allow update: if true;
+        allow delete: if true;
       }
     }
 

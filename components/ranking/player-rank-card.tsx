@@ -1,6 +1,7 @@
 import { Player } from '@/types';
 import { cn } from '@/lib/utils';
 import { Flame, Snowflake, Medal } from 'lucide-react';
+import { PlayerAvatar } from '@/components/ui/player-avatar';
 
 interface PlayerRankCardProps {
   player: Player;
@@ -77,9 +78,12 @@ export function PlayerRankCard({ player, rank, isCurrentUser }: PlayerRankCardPr
         </div>
 
         {/* Avatar */}
-        <div className="w-14 h-14 shrink-0 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-lg">
-          {player.avatar}
-        </div>
+        <PlayerAvatar
+          avatar={player.avatar}
+          name={player.name || undefined}
+          size="md"
+          className="shrink-0"
+        />
 
         {/* Player Info */}
         <div className="flex-grow min-w-0">
@@ -97,10 +101,10 @@ export function PlayerRankCard({ player, rank, isCurrentUser }: PlayerRankCardPr
           </div>
         </div>
 
-        {/* ELO Rating */}
+        {/* Points Rating */}
         <div className="shrink-0 text-right">
           <p className="text-xl font-bold text-blue-600">{player.eloRating}</p>
-          <p className="text-xs text-gray-400">ELO</p>
+          <p className="text-xs text-gray-400">Points</p>
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Match } from '@/types';
 import { X } from 'lucide-react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { PlayerAvatar } from '@/components/ui/player-avatar';
 
 interface MatchResultModalProps {
   match: Match | null;
@@ -95,15 +96,17 @@ export function MatchResultModal({ match, open, onClose, onSubmit }: MatchResult
               <div className="flex w-full items-center gap-4">
                 {/* Profile */}
                 <div className="flex flex-1 items-center gap-4">
-                  <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
-                    {match.player1.name?.substring(0, 2).toUpperCase() || 'NA'}
-                  </div>
+                  <PlayerAvatar
+                    avatar={match.player1.avatar}
+                    name={match.player1.name}
+                    size="lg"
+                  />
                   <div className="flex flex-col justify-center">
                     <p className="text-lg font-bold leading-tight tracking-tight text-gray-900">
                       {match.player1.name}
                     </p>
                     <p className="text-sm font-normal leading-normal text-gray-500">
-                      ELO: {match.player1.eloBefore}
+                      Points: {match.player1.eloBefore}
                     </p>
                   </div>
                 </div>
@@ -131,15 +134,17 @@ export function MatchResultModal({ match, open, onClose, onSubmit }: MatchResult
               <div className="flex w-full items-center gap-4">
                 {/* Profile */}
                 <div className="flex flex-1 items-center gap-4">
-                  <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
-                    {match.player2.name?.substring(0, 2).toUpperCase() || 'NA'}
-                  </div>
+                  <PlayerAvatar
+                    avatar={match.player2.avatar}
+                    name={match.player2.name}
+                    size="lg"
+                  />
                   <div className="flex flex-col justify-center">
                     <p className="text-lg font-bold leading-tight tracking-tight text-gray-900">
                       {match.player2.name}
                     </p>
                     <p className="text-sm font-normal leading-normal text-gray-500">
-                      ELO: {match.player2.eloBefore}
+                      Points: {match.player2.eloBefore}
                     </p>
                   </div>
                 </div>

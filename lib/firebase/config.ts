@@ -1,5 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,6 +15,7 @@ const firebaseConfig = {
 // Initialize Firebase only if not already initialized
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 // Enable offline persistence (only in browser)
 if (typeof window !== 'undefined') {
@@ -26,4 +28,4 @@ if (typeof window !== 'undefined') {
   });
 }
 
-export { app, db };
+export { app, db, storage };

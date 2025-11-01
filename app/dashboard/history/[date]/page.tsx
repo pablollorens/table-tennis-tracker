@@ -5,12 +5,13 @@ import { useRouter, useParams } from 'next/navigation';
 import { isAuthenticated } from '@/lib/firebase/auth';
 import { useCurrentPlayer } from '@/hooks/use-current-player';
 import { useCurrentSession } from '@/hooks/use-session';
-import { useTodayMatches } from '@/hooks/use-matches';
+import { useEnrichedMatches } from '@/hooks/use-enriched-matches';
 import { Card } from '@/components/ui/card';
 import { DateSelector } from '@/components/calendar/date-selector';
 import { SessionCalendarModal } from '@/components/calendar/session-calendar-modal';
 import { format, parse, isValid } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
+import { PlayerAvatar } from '@/components/ui/player-avatar';
 
 export default function HistoryPage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function HistoryPage() {
   }, [dateParam, router]);
 
   const { session, loading: sessionLoading } = useCurrentSession(dateParam);
-  const { matches, loading: matchesLoading } = useTodayMatches(dateParam);
+  const { matches, loading: matchesLoading } = useEnrichedMatches(dateParam);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -68,8 +69,8 @@ export default function HistoryPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-slate-800">
-        <div className="max-w-2xl mx-auto flex items-center p-4 pb-2 justify-between">
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 pt-6 pb-4">
+        <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
           <button
             onClick={() => router.push('/dashboard')}
             aria-label="Back to dashboard"
@@ -105,7 +106,7 @@ export default function HistoryPage() {
                 <p className="text-slate-800 dark:text-slate-300 text-base font-medium leading-normal">
                   Total Matches
                 </p>
-                <p className="text-slate-900 dark:text-slate-50 tracking-light text-2xl font-bold leading-tight">
+                <p className="text-slate-900 dark:text-slate-50 tracking-tight text-3xl font-bold leading-tight">
                   {session.totalMatches}
                 </p>
               </div>
@@ -113,7 +114,7 @@ export default function HistoryPage() {
                 <p className="text-slate-800 dark:text-slate-300 text-base font-medium leading-normal">
                   Completed
                 </p>
-                <p className="text-slate-900 dark:text-slate-50 tracking-light text-2xl font-bold leading-tight">
+                <p className="text-slate-900 dark:text-slate-50 tracking-tight text-3xl font-bold leading-tight">
                   {session.completedMatches}
                 </p>
               </div>
@@ -121,7 +122,7 @@ export default function HistoryPage() {
                 <p className="text-slate-800 dark:text-slate-300 text-base font-medium leading-normal">
                   Pending
                 </p>
-                <p className="text-slate-900 dark:text-slate-50 tracking-light text-2xl font-bold leading-tight">
+                <p className="text-slate-900 dark:text-slate-50 tracking-tight text-3xl font-bold leading-tight">
                   {session.pendingMatches}
                 </p>
               </div>
@@ -146,9 +147,11 @@ export default function HistoryPage() {
                         {/* Player 1 */}
                         <div className="flex items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                              {match.player1.name?.substring(0, 2).toUpperCase() || 'NA'}
-                            </div>
+                            <PlayerAvatar
+                              avatar={match.player1.avatar}
+                              name={match.player1.name}
+                              size="sm"
+                            />
                             <div className="flex flex-col">
                               <p className={`text-base font-bold leading-tight ${player1Won ? 'text-green-600' : ''}`}>
                                 {match.player1.name}
@@ -161,10 +164,10 @@ export default function HistoryPage() {
                           {match.player1.eloChange !== null && (
                             <div className={`flex h-6 items-center justify-center rounded-full px-2.5 text-xs font-semibold ${
                               match.player1.eloChange >= 0
-                                ? 'text-[#28a745]'
-                                : 'text-[#dc3545]'
+                                ? 'bg-green-500/10 text-green-600'
+                                : 'bg-red-500/10 text-red-600'
                             }`}>
-                              {match.player1.eloChange >= 0 ? '+' : ''}{match.player1.eloChange}
+                              {match.player1.eloChange >= 0 ? '+' : ''}{match.player1.eloChange} Points
                             </div>
                           )}
                         </div>
@@ -172,9 +175,11 @@ export default function HistoryPage() {
                         {/* Player 2 */}
                         <div className="flex items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                              {match.player2.name?.substring(0, 2).toUpperCase() || 'NA'}
-                            </div>
+                            <PlayerAvatar
+                              avatar={match.player2.avatar}
+                              name={match.player2.name}
+                              size="sm"
+                            />
                             <div className="flex flex-col">
                               <p className={`text-base font-bold leading-tight ${player2Won ? 'text-green-600' : ''}`}>
                                 {match.player2.name}
@@ -187,10 +192,10 @@ export default function HistoryPage() {
                           {match.player2.eloChange !== null && (
                             <div className={`flex h-6 items-center justify-center rounded-full px-2.5 text-xs font-semibold ${
                               match.player2.eloChange >= 0
-                                ? 'text-[#28a745]'
-                                : 'text-[#dc3545]'
+                                ? 'bg-green-500/10 text-green-600'
+                                : 'bg-red-500/10 text-red-600'
                             }`}>
-                              {match.player2.eloChange >= 0 ? '+' : ''}{match.player2.eloChange}
+                              {match.player2.eloChange >= 0 ? '+' : ''}{match.player2.eloChange} Points
                             </div>
                           )}
                         </div>
@@ -213,27 +218,28 @@ export default function HistoryPage() {
                       key={match.id}
                       className="flex items-center gap-4 bg-white dark:bg-slate-800 px-4 py-3 min-h-[72px] justify-between rounded-xl border border-dashed border-slate-300 dark:border-slate-600 opacity-70"
                     >
-                      <div className="flex items-center gap-4">
-                        <div className="relative h-12 w-12 shrink-0">
-                          <div className="h-full w-full rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                            {match.player1.name?.substring(0, 2).toUpperCase() || 'NA'}
+                        <div className="flex items-center gap-4">
+                          <PlayerAvatar
+                            avatar={match.player1.avatar}
+                            name={match.player1.name}
+                            size="sm"
+                            className="shrink-0"
+                          />
+                          <div className="flex flex-col justify-center">
+                            <p className="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal line-clamp-1">
+                              {match.player1.name} vs. {match.player2.name}
+                            </p>
+                            <p className="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">
+                              Points: {match.player1.eloBefore} vs {match.player2.eloBefore}
+                            </p>
                           </div>
                         </div>
-                        <div className="flex flex-col justify-center">
-                          <p className="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal line-clamp-1">
-                            {match.player1.name} vs. {match.player2.name}
-                          </p>
-                          <p className="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">
-                            ELO: {match.player1.eloBefore} vs {match.player2.eloBefore}
+                        <div className="shrink-0 rounded-full bg-amber-500/10 px-3 py-1">
+                          <p className="text-amber-600 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider">
+                            Pending
                           </p>
                         </div>
-                      </div>
-                      <div className="shrink-0 rounded-full bg-amber-500/10 px-3 py-1">
-                        <p className="text-amber-600 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider">
-                          Pending
-                        </p>
-                      </div>
-                    </Card>
+                      </Card>
                   ))}
                 </div>
               </div>

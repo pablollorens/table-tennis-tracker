@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AnalyticsProvider } from "./analytics-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as HotToaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Table Tennis Tracker",
@@ -37,6 +38,7 @@ export default function RootLayout({
           {children}
         </AnalyticsProvider>
         <Toaster />
+        <HotToaster />
       </body>
     </html>
   );

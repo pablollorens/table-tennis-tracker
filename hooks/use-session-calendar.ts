@@ -15,30 +15,42 @@ export function useSessionCalendar(initialMonth: string): UseSessionCalendarResu
   const [cache, setCache] = useState<Map<string, string[]>>(new Map());
 
   const loadMonth = useCallback(async (yearMonth: string) => {
-    // Check cache first
-    if (cache.has(yearMonth)) {
-      setSessionDates(cache.get(yearMonth)!);
-      setLoading(false);
-      setError(null);
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
-    try {
-      const dates = await getSessionsByMonth(yearMonth);
+    // Check cache using functional update to avoid dependency
+    setCache(currentCache => {
+      if (currentCache.has(yearMonth)) {
+        setSessionDates(currentCache.get(yearMonth)!);
+        setLoading(false);
+        return currentCache;
+      }
+      return currentCache;
+    });
 
-      // Update cache
-      setCache(prev => new Map(prev).set(yearMonth, dates));
-      setSessionDates(dates);
-    } catch (err) {
-      console.error('Error fetching session dates:', err);
-      setError(err as Error);
-    } finally {
-      setLoading(false);
-    }
-  }, [cache]);
+    // If we already had it cached, the above would have returned
+    // So only fetch if we need to
+    setCache(currentCache => {
+      if (currentCache.has(yearMonth)) {
+        return currentCache;
+      }
+
+      // Fetch in the background
+      getSessionsByMonth(yearMonth)
+        .then(dates => {
+          setCache(prev => new Map(prev).set(yearMonth, dates));
+          setSessionDates(dates);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Error fetching session dates:', err);
+          setError(err as Error);
+          setLoading(false);
+        });
+
+      return currentCache;
+    });
+  }, []);
 
   useEffect(() => {
     loadMonth(initialMonth);
