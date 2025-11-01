@@ -8,6 +8,8 @@ import { useTodayMatches } from '@/hooks/use-matches';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { MatchResultModal } from '@/components/matches/match-result-modal';
+import { DateSelector } from '@/components/calendar/date-selector';
+import { SessionCalendarModal } from '@/components/calendar/session-calendar-modal';
 import { recordMatchResult } from '@/lib/firebase/matches';
 import { Match } from '@/types';
 import { format } from 'date-fns';
@@ -19,6 +21,7 @@ export default function TodayMatchesPage() {
   const { matches, loading: matchesLoading } = useTodayMatches();
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -73,7 +76,7 @@ export default function TodayMatchesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-gray-50/80 border-b border-gray-200 backdrop-blur-sm">
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 pt-6 pb-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3 p-4 pb-2">
           <button
             onClick={() => router.back()}
@@ -81,12 +84,10 @@ export default function TodayMatchesPage() {
           >
             <ArrowLeft className="w-6 h-6" />
           </button>
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">🏓</span>
-            <h1 className="text-xl font-bold leading-tight tracking-tight">
-              Today, {today}
-            </h1>
-          </div>
+          <h1 className="text-xl font-bold leading-tight tracking-tight flex-1">
+            Today&apos;s Matches
+          </h1>
+          <DateSelector onClick={() => setCalendarOpen(true)} />
         </div>
       </header>
 
@@ -248,6 +249,12 @@ export default function TodayMatchesPage() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={handleSubmitResult}
+      />
+
+      {/* Calendar Modal */}
+      <SessionCalendarModal
+        open={calendarOpen}
+        onClose={() => setCalendarOpen(false)}
       />
     </div>
   );
