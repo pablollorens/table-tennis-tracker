@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated } from '@/lib/firebase/auth';
 import { useCurrentPlayer } from '@/hooks/use-current-player';
@@ -8,14 +8,16 @@ import { useCurrentSession } from '@/hooks/use-session';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BottomNav } from '@/components/navigation/bottom-nav';
+import { DateSelector } from '@/components/calendar/date-selector';
+import { SessionCalendarModal } from '@/components/calendar/session-calendar-modal';
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { CalendarDays } from 'lucide-react';
 
 export default function DashboardPage() {
   const router = useRouter();
   const { player, loading: playerLoading } = useCurrentPlayer();
   const { session, loading: sessionLoading } = useCurrentSession();
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -45,13 +47,10 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200">
-        <div className="max-w-2xl mx-auto flex items-center p-4 pb-2 justify-between">
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 pt-6 pb-4">
+        <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
           <h1 className="text-xl font-bold text-slate-900 flex-1">Ping Pong Tracker</h1>
-          <div className="flex items-center gap-2">
-            <CalendarDays className="w-5 h-5 text-slate-500" />
-            <p className="text-slate-600 text-sm font-medium">{today}</p>
-          </div>
+          <DateSelector onClick={() => setCalendarOpen(true)} />
         </div>
       </header>
 
@@ -147,6 +146,12 @@ export default function DashboardPage() {
 
       {/* Bottom Navigation */}
       <BottomNav />
+
+      {/* Calendar Modal */}
+      <SessionCalendarModal
+        open={calendarOpen}
+        onClose={() => setCalendarOpen(false)}
+      />
     </div>
   );
 }
