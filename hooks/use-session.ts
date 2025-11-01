@@ -4,20 +4,20 @@ import { db } from '@/lib/firebase/config';
 import { Session } from '@/types';
 import { format } from 'date-fns';
 
-export function useCurrentSession() {
+export function useCurrentSession(date?: string) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const today = format(new Date(), 'yyyy-MM-dd');
-    const sessionRef = doc(db, 'sessions', today);
+    const sessionDate = date || format(new Date(), 'yyyy-MM-dd');
+    const sessionRef = doc(db, 'sessions', sessionDate);
 
     const unsubscribe = onSnapshot(
       sessionRef,
       (snapshot) => {
         if (snapshot.exists()) {
-          setSession({ date: today, ...snapshot.data() } as Session);
+          setSession({ date: sessionDate, ...snapshot.data() } as Session);
         } else {
           setSession(null);
         }
@@ -31,7 +31,7 @@ export function useCurrentSession() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [date]);
 
   return { session, loading, error };
 }
