@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Dialog, DialogPortal } from '@/components/ui/dialog';
+import { Dialog, DialogPortal, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -63,9 +63,9 @@ export function MatchResultModal({ match, open, onClose, onSubmit }: MatchResult
         {/* Header */}
         <div className="flex items-center p-4 pb-2 justify-between">
           <div className="flex w-12 shrink-0 items-center" />
-          <h2 className="text-lg font-bold leading-tight tracking-tight flex-1 text-center text-gray-900">
+          <DialogTitle className="text-lg font-bold leading-tight tracking-tight flex-1 text-center text-gray-900">
             Log Match Result
-          </h2>
+          </DialogTitle>
           <div className="flex w-12 items-center justify-end">
             <button
               onClick={onClose}
