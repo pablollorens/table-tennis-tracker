@@ -46,6 +46,7 @@ export interface MatchPlayer {
   eloBefore: number;
   eloAfter: number | null;
   eloChange: number | null;
+  avatar?: string; // Optional - enriched by useEnrichedMatches hook
 }
 
 export type MatchStatus = 'pending' | 'completed' | 'skipped';
