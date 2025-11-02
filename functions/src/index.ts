@@ -26,6 +26,10 @@ export const cleanupInactiveUsers = onRequest(
   {
     region: "us-central1",
     cors: true,
+    secrets: ["CLEANUP_SECRET"],
+    invoker: "public",
+    timeoutSeconds: 300, // 5 minutes timeout
+    memory: "512MiB", // More memory for faster execution
   },
   async (req, res) => {
     // Simple authentication using secret
@@ -33,6 +37,8 @@ export const cleanupInactiveUsers = onRequest(
                    req.query.secret as string;
 
     const expectedSecret = process.env.CLEANUP_SECRET;
+
+    logger.info(`Cleanup request received. Has secret: ${!!secret}, Expected configured: ${!!expectedSecret}`);
 
     if (!expectedSecret || secret !== expectedSecret) {
       logger.warn("Unauthorized cleanup attempt");
@@ -57,6 +63,12 @@ export const cleanupInactiveUsers = onRequest(
 
       if (playersSnapshot.empty) {
         logger.info("No inactive players found to delete.");
+        res.status(200).json({
+          success: true,
+          deletedCount: 0,
+          message: "No inactive players to delete",
+          timestamp: new Date().toISOString(),
+        });
         return;
       }
 
