@@ -229,13 +229,6 @@ export function PasswordGate() {
           <div>
             {newUserStep === 'shared-password' ? (
               <>
-                <h2 className="text-2xl font-bold text-center mb-2">
-                  Welcome to Office Ping Pong 🏓
-                </h2>
-                <p className="text-center text-gray-600 mb-6">
-                  Enter the office password to get started
-                </p>
-
                 <form onSubmit={handleSharedPasswordSubmit} className="space-y-4">
                   <div>
                     <Label htmlFor="shared-password">Office Password</Label>
