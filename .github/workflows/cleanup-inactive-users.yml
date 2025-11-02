@@ -15,19 +15,38 @@ jobs:
     steps:
       - name: Call Firebase Cloud Function
         run: |
-          response=$(curl -s -w "\n%{http_code}" \
-            -H "Authorization: Bearer ${{ secrets.CLEANUP_SECRET }}" \
-            https://us-central1-table-tennis-tracker-edd77.cloudfunctions.net/cleanupInactiveUsers)
+          max_attempts=3
+          attempt=1
 
-          http_code=$(echo "$response" | tail -n1)
-          body=$(echo "$response" | head -n-1)
+          while [ $attempt -le $max_attempts ]; do
+            echo "Attempt $attempt of $max_attempts..."
 
-          echo "HTTP Status: $http_code"
-          echo "Response: $body"
+            response=$(curl -s -w "\n%{http_code}" \
+              --max-time 300 \
+              --connect-timeout 30 \
+              --retry 2 \
+              --retry-delay 5 \
+              -H "Authorization: Bearer ${{ secrets.CLEANUP_SECRET }}" \
+              https://us-central1-table-tennis-tracker-edd77.cloudfunctions.net/cleanupInactiveUsers)
 
-          if [ "$http_code" != "200" ]; then
-            echo "❌ Cleanup failed with status $http_code"
-            exit 1
-          fi
+            http_code=$(echo "$response" | tail -n1)
+            body=$(echo "$response" | head -n-1)
 
-          echo "✅ Cleanup completed successfully"
+            echo "HTTP Status: $http_code"
+            echo "Response: $body"
+
+            if [ "$http_code" = "200" ] || [ "$http_code" = "202" ]; then
+              echo "✅ Cleanup job started successfully"
+              exit 0
+            elif [ "$http_code" = "504" ] && [ $attempt -lt $max_attempts ]; then
+              echo "⏳ Timeout occurred, retrying in 10 seconds..."
+              sleep 10
+              attempt=$((attempt + 1))
+            else
+              echo "❌ Cleanup failed with status $http_code"
+              exit 1
+            fi
+          done
+
+          echo "❌ All retry attempts exhausted"
+          exit 1

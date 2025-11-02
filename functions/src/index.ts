@@ -45,6 +45,15 @@ export const cleanupInactiveUsers = onRequest(
       res.status(401).json({error: "Unauthorized"});
       return;
     }
+
+    // Respond immediately with 202 Accepted to avoid timeout issues
+    res.status(202).json({
+      success: true,
+      message: "Cleanup job started",
+      timestamp: new Date().toISOString(),
+    });
+
+    // Continue processing in background
     try {
       logger.info("Starting cleanup of inactive users...");
 
@@ -63,12 +72,6 @@ export const cleanupInactiveUsers = onRequest(
 
       if (playersSnapshot.empty) {
         logger.info("No inactive players found to delete.");
-        res.status(200).json({
-          success: true,
-          deletedCount: 0,
-          message: "No inactive players to delete",
-          timestamp: new Date().toISOString(),
-        });
         return;
       }
 
@@ -108,19 +111,8 @@ export const cleanupInactiveUsers = onRequest(
       logger.info(
         `Cleanup complete. Deleted ${playersSnapshot.size} inactive players.`
       );
-
-      res.status(200).json({
-        success: true,
-        deletedCount: playersSnapshot.size,
-        timestamp: new Date().toISOString(),
-      });
     } catch (error) {
       logger.error("Error during cleanup:", error);
-      res.status(500).json({
-        success: false,
-        error: "Cleanup failed",
-        timestamp: new Date().toISOString(),
-      });
     }
   });
 
