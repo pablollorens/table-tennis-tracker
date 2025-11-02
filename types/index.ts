@@ -25,6 +25,10 @@ export interface Player {
   isActive: boolean;          // false until profile completed
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  // Notification fields
+  notificationEnabled?: boolean;  // undefined = not set, false = disabled, true = enabled
+  fcmToken?: string;              // Firebase Cloud Messaging token
+  fcmTokenUpdatedAt?: Timestamp;  // Track token freshness
 }
 
 // Session Types
