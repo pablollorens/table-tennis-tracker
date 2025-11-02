@@ -49,7 +49,10 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 pt-6 pb-4">
         <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
-          <h1 className="text-xl font-bold text-slate-900 flex-1">Ping Pong Tracker</h1>
+          <h1 className="text-xl font-bold text-slate-900 flex-1 flex items-center gap-2">
+            <span className="text-2xl">🏓</span>
+            Office Pong
+          </h1>
           <DateSelector onClick={() => setCalendarOpen(true)} />
         </div>
       </header>
