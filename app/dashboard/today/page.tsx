@@ -15,6 +15,7 @@ import { Match } from '@/types';
 import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
 import { PlayerAvatar } from '@/components/ui/player-avatar';
+import { WinProbabilityBadge } from '@/components/match/win-probability-badge';
 
 export default function TodayMatchesPage() {
   const router = useRouter();
@@ -110,13 +111,17 @@ export default function TodayMatchesPage() {
                       name={match.player1.name}
                       size="sm"
                     />
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-1">
                       <p className="text-base font-bold leading-tight">
                         {match.player1.name}
                       </p>
-                      <p className="text-sm font-normal leading-normal text-slate-600">
-                        Points: {match.player1.eloBefore}
-                      </p>
+                      {match.player1.winProbability !== undefined ? (
+                        <WinProbabilityBadge probability={match.player1.winProbability} />
+                      ) : (
+                        <p className="text-sm font-normal leading-normal text-slate-600">
+                          Points: {match.player1.eloBefore}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -124,13 +129,17 @@ export default function TodayMatchesPage() {
 
                   {/* Player 2 */}
                   <div className="flex flex-1 items-center justify-end gap-3 text-right">
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-1">
                       <p className="text-base font-bold leading-tight">
                         {match.player2.name}
                       </p>
-                      <p className="text-sm font-normal leading-normal text-slate-600">
-                        Points: {match.player2.eloBefore}
-                      </p>
+                      {match.player2.winProbability !== undefined ? (
+                        <WinProbabilityBadge probability={match.player2.winProbability} />
+                      ) : (
+                        <p className="text-sm font-normal leading-normal text-slate-600">
+                          Points: {match.player2.eloBefore}
+                        </p>
+                      )}
                     </div>
                     <PlayerAvatar
                       avatar={match.player2.avatar}
