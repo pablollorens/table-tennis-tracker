@@ -25,18 +25,19 @@ export function NotificationToggle({ playerId, initialEnabled }: NotificationTog
     try {
       if (checked) {
         // Request permission and get FCM token
-        const token = await requestNotificationPermission();
+        const result = await requestNotificationPermission();
 
-        if (!token) {
-          toast.error('Please enable notifications in your browser settings', {
-            duration: 5000,
+        if (!result.token) {
+          // Show specific error message from the messaging module
+          toast.error(result.error || 'Please enable notifications in your browser settings', {
+            duration: 6000,
             position: 'top-center',
           });
           return;
         }
 
         // Save to Firestore
-        await enablePlayerNotifications(playerId, token);
+        await enablePlayerNotifications(playerId, result.token);
         setEnabled(true);
 
         toast.success("You'll receive daily reminders at 12:40", {
