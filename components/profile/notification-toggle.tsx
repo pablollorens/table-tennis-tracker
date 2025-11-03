@@ -17,7 +17,9 @@ export function NotificationToggle({ playerId, initialEnabled }: NotificationTog
   const [enabled, setEnabled] = useState(initialEnabled);
   const [loading, setLoading] = useState(false);
 
-  const handleToggle = async (checked: boolean) => {
+  const handleToggle = async (checked: boolean | 'indeterminate') => {
+    if (checked === 'indeterminate') return;
+
     setLoading(true);
 
     try {
@@ -30,7 +32,6 @@ export function NotificationToggle({ playerId, initialEnabled }: NotificationTog
             duration: 5000,
             position: 'top-center',
           });
-          setLoading(false);
           return;
         }
 
