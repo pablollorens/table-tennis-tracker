@@ -240,64 +240,105 @@ export const sendDailyNotification = onRequest(
 
       logger.info(`Sending notifications to ${tokensWithUsers.length} users`);
 
-      // Build FCM message
-      const tokens = tokensWithUsers.map((t) => t.token);
-      const message = {
-        notification: {
-          title: "Time for Table Tennis! 🏓",
-          body: "Ready for your daily match?",
-        },
-        webpush: {
-          fcmOptions: {
-            link: "/",
-          },
-          notification: {
-            icon: "/icon-192x192.png",
-            badge: "/favicon-32x32.png",
-          },
-        },
-        tokens: tokens,
-      };
+      // FCM has a limit of 500 tokens per multicast request
+      const BATCH_SIZE = 500;
 
-      // Send multicast message
-      const response = await admin.messaging().sendEachForMulticast(message);
-
-      logger.info(`Sent: ${response.successCount}, Failed: ${response.failureCount}`);
-
-      // Clean up invalid tokens
-      let cleanedCount = 0;
-      if (response.failureCount > 0) {
-        const invalidTokenPromises: Promise<FirebaseFirestore.WriteResult>[] = [];
-
-        response.responses.forEach((resp, idx) => {
-          if (!resp.success) {
-            const errorCode = resp.error?.code;
-            if (
-              errorCode === "messaging/invalid-registration-token" ||
-              errorCode === "messaging/registration-token-not-registered"
-            ) {
-              const userId = tokensWithUsers[idx].userId;
-              logger.info(`Cleaning invalid token for user: ${userId}`);
-
-              invalidTokenPromises.push(
-                db.collection("players").doc(userId).update({
-                  fcmToken: null,
-                  fcmTokenUpdatedAt: null,
-                  updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-                })
-              );
-              cleanedCount++;
-            }
-          }
-        });
-
-        await Promise.all(invalidTokenPromises);
+      // Split tokens into batches
+      const batches: Array<Array<{token: string; userId: string}>> = [];
+      for (let i = 0; i < tokensWithUsers.length; i += BATCH_SIZE) {
+        batches.push(tokensWithUsers.slice(i, i + BATCH_SIZE));
       }
+
+      logger.info(`Split into ${batches.length} batch(es) for FCM send`);
+
+      // Send notifications in batches and collect all responses
+      const allResponses: Array<{
+        response: admin.messaging.BatchResponse;
+        batch: Array<{token: string; userId: string}>;
+      }> = [];
+
+      for (let i = 0; i < batches.length; i++) {
+        const batch = batches[i];
+        const tokens = batch.map((t) => t.token);
+
+        logger.info(`Sending batch ${i + 1}/${batches.length} with ${tokens.length} tokens`);
+
+        // Build FCM message for this batch
+        const message = {
+          notification: {
+            title: "Time for Table Tennis! 🏓",
+            body: "Ready for your daily match?",
+          },
+          webpush: {
+            fcmOptions: {
+              link: "/",
+            },
+            notification: {
+              icon: "/icon-192x192.png",
+              badge: "/favicon-32x32.png",
+            },
+          },
+          tokens: tokens,
+        };
+
+        // Send multicast message for this batch
+        const response = await admin.messaging().sendEachForMulticast(message);
+        allResponses.push({response, batch});
+
+        logger.info(
+          `Batch ${i + 1} - Sent: ${response.successCount}, Failed: ${response.failureCount}`
+        );
+      }
+
+      // Aggregate results from all batches
+      let totalSuccessCount = 0;
+      let totalFailureCount = 0;
+
+      for (const {response} of allResponses) {
+        totalSuccessCount += response.successCount;
+        totalFailureCount += response.failureCount;
+      }
+
+      logger.info(
+        `Total - Sent: ${totalSuccessCount}, Failed: ${totalFailureCount}`
+      );
+
+      // Clean up invalid tokens from all batch responses
+      let cleanedCount = 0;
+      const invalidTokenPromises: Promise<FirebaseFirestore.WriteResult>[] = [];
+
+      for (const {response, batch} of allResponses) {
+        if (response.failureCount > 0) {
+          response.responses.forEach((resp, idx) => {
+            if (!resp.success) {
+              const errorCode = resp.error?.code;
+              if (
+                errorCode === "messaging/invalid-registration-token" ||
+                errorCode === "messaging/registration-token-not-registered"
+              ) {
+                const userId = batch[idx].userId;
+                logger.info(`Cleaning invalid token for user: ${userId}`);
+
+                invalidTokenPromises.push(
+                  db.collection("players").doc(userId).update({
+                    fcmToken: null,
+                    fcmTokenUpdatedAt: null,
+                    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+                  })
+                );
+                cleanedCount++;
+              }
+            }
+          });
+        }
+      }
+
+      await Promise.all(invalidTokenPromises);
 
       res.status(200).json({
         success: true,
-        sent: response.successCount,
-        failed: response.failureCount,
+        sent: totalSuccessCount,
+        failed: totalFailureCount,
         cleaned: cleanedCount,
         timestamp: new Date().toISOString(),
       });
