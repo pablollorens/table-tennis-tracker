@@ -180,7 +180,7 @@ export async function updateSessionCounters(
 }
 
 /**
- * Get all session dates that have matches for a given month
+ * Get all session dates that have completed matches for a given month
  */
 export async function getSessionsByMonth(yearMonth: string): Promise<string[]> {
   // yearMonth format: "2025-10"
@@ -192,7 +192,7 @@ export async function getSessionsByMonth(yearMonth: string): Promise<string[]> {
     sessionsRef,
     where('date', '>=', startDate),
     where('date', '<=', endDate),
-    where('totalMatches', '>', 0)
+    where('completedMatches', '>', 0)
   );
 
   const snapshot = await getDocs(q);

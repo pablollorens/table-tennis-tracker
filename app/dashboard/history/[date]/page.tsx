@@ -64,7 +64,6 @@ export default function HistoryPage() {
   }
 
   const completedMatches = matches.filter(m => m.status === 'completed');
-  const pendingMatches = matches.filter(m => m.status === 'pending');
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -104,26 +103,10 @@ export default function HistoryPage() {
             <div className="flex flex-wrap gap-4 mb-6">
               <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-6 border border-slate-200 dark:border-slate-700">
                 <p className="text-slate-800 dark:text-slate-300 text-base font-medium leading-normal">
-                  Total Matches
-                </p>
-                <p className="text-slate-900 dark:text-slate-50 tracking-tight text-3xl font-bold leading-tight">
-                  {session.totalMatches}
-                </p>
-              </div>
-              <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-6 border border-slate-200 dark:border-slate-700">
-                <p className="text-slate-800 dark:text-slate-300 text-base font-medium leading-normal">
-                  Completed
+                  Completed Matches
                 </p>
                 <p className="text-slate-900 dark:text-slate-50 tracking-tight text-3xl font-bold leading-tight">
                   {session.completedMatches}
-                </p>
-              </div>
-              <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-6 border border-slate-200 dark:border-slate-700">
-                <p className="text-slate-800 dark:text-slate-300 text-base font-medium leading-normal">
-                  Pending
-                </p>
-                <p className="text-slate-900 dark:text-slate-50 tracking-tight text-3xl font-bold leading-tight">
-                  {session.pendingMatches}
                 </p>
               </div>
             </div>
@@ -132,7 +115,7 @@ export default function HistoryPage() {
             {completedMatches.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-slate-900 dark:text-slate-50 text-lg font-bold leading-tight tracking-[-0.015em] px-0 pb-2 pt-4">
-                  Completed
+                  Match Results
                 </h3>
                 <div className="flex flex-col gap-2">
                   {completedMatches.map(match => {
@@ -202,45 +185,6 @@ export default function HistoryPage() {
                       </Card>
                     );
                   })}
-                </div>
-              </div>
-            )}
-
-            {/* Pending Matches */}
-            {pendingMatches.length > 0 && (
-              <div>
-                <h3 className="text-slate-900 dark:text-slate-50 text-lg font-bold leading-tight tracking-[-0.015em] px-0 pb-2 pt-4">
-                  Pending
-                </h3>
-                <div className="flex flex-col gap-2">
-                  {pendingMatches.map(match => (
-                    <Card
-                      key={match.id}
-                      className="flex items-center gap-4 bg-white dark:bg-slate-800 px-4 py-3 min-h-[72px] justify-between rounded-xl border border-dashed border-slate-300 dark:border-slate-600 opacity-70"
-                    >
-                        <div className="flex items-center gap-4">
-                          <PlayerAvatar
-                            avatar={match.player1.avatar}
-                            name={match.player1.name}
-                            size="sm"
-                            className="shrink-0"
-                          />
-                          <div className="flex flex-col justify-center">
-                            <p className="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal line-clamp-1">
-                              {match.player1.name} vs. {match.player2.name}
-                            </p>
-                            <p className="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">
-                              Points: {match.player1.eloBefore} vs {match.player2.eloBefore}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="shrink-0 rounded-full bg-amber-500/10 px-3 py-1">
-                          <p className="text-amber-600 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider">
-                            Pending
-                          </p>
-                        </div>
-                      </Card>
-                  ))}
                 </div>
               </div>
             )}
