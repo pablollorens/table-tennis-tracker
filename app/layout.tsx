@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { AnalyticsProvider } from "./analytics-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -39,6 +40,21 @@ export default function RootLayout({
         </AnalyticsProvider>
         <Toaster />
         <HotToaster />
+
+        {/* Service Worker Registration */}
+        <Script id="register-sw" strategy="afterInteractive">
+          {`
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/firebase-messaging-sw.js')
+              .then((registration) => {
+                console.log('Service Worker registered:', registration);
+              })
+              .catch((error) => {
+                console.error('Service Worker registration failed:', error);
+              });
+          }
+        `}
+        </Script>
       </body>
     </html>
   );
