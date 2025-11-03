@@ -4,6 +4,7 @@ import "./globals.css";
 import { AnalyticsProvider } from "./analytics-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as HotToaster } from "react-hot-toast";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Table Tennis Tracker",
@@ -40,6 +41,7 @@ export default function RootLayout({
         </AnalyticsProvider>
         <Toaster />
         <HotToaster />
+        <SpeedInsights />
 
         {/* Service Worker Registration */}
         <Script id="register-sw" strategy="afterInteractive">
