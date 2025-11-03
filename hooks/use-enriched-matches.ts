@@ -79,12 +79,14 @@ export function useEnrichedMatches(date?: string) {
             avatar: player1Data?.avatar || match.player1.avatar || '',
             currentElo: player1Data?.currentElo,
             winProbability: winProbabilities?.player1Probability,
+            expectedPoints: winProbabilities?.player1ExpectedPoints,
           },
           player2: {
             ...match.player2,
             avatar: player2Data?.avatar || match.player2.avatar || '',
             currentElo: player2Data?.currentElo,
             winProbability: winProbabilities?.player2Probability,
+            expectedPoints: winProbabilities?.player2ExpectedPoints,
           },
         };
       });

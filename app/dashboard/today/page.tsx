@@ -115,8 +115,11 @@ export default function TodayMatchesPage() {
                       <p className="text-base font-bold leading-tight">
                         {match.player1.name}
                       </p>
-                      {match.player1.winProbability !== undefined ? (
-                        <WinProbabilityBadge probability={match.player1.winProbability} />
+                      {match.player1.winProbability !== undefined && match.player1.expectedPoints !== undefined ? (
+                        <WinProbabilityBadge
+                          probability={match.player1.winProbability}
+                          expectedPoints={match.player1.expectedPoints}
+                        />
                       ) : (
                         <p className="text-sm font-normal leading-normal text-slate-600">
                           Points: {match.player1.eloBefore}
@@ -133,8 +136,11 @@ export default function TodayMatchesPage() {
                       <p className="text-base font-bold leading-tight">
                         {match.player2.name}
                       </p>
-                      {match.player2.winProbability !== undefined ? (
-                        <WinProbabilityBadge probability={match.player2.winProbability} />
+                      {match.player2.winProbability !== undefined && match.player2.expectedPoints !== undefined ? (
+                        <WinProbabilityBadge
+                          probability={match.player2.winProbability}
+                          expectedPoints={match.player2.expectedPoints}
+                        />
                       ) : (
                         <p className="text-sm font-normal leading-normal text-slate-600">
                           Points: {match.player2.eloBefore}

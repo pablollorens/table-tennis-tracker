@@ -8,26 +8,36 @@
 export interface WinProbability {
   player1Probability: number;
   player2Probability: number;
+  player1ExpectedPoints: number;
+  player2ExpectedPoints: number;
 }
 
 /**
- * Calculate win probabilities for two players based on their current ELO ratings
+ * Calculate win probabilities and expected point changes for two players
  * @param player1Elo Current ELO rating of player 1
  * @param player2Elo Current ELO rating of player 2
- * @returns Object containing win probabilities for both players (as percentages 0-100)
+ * @param kFactor K-factor for ELO calculation (default: 32)
+ * @returns Object containing win probabilities and expected points for both players
  */
 export function calculateWinProbability(
   player1Elo: number,
-  player2Elo: number
+  player2Elo: number,
+  kFactor: number = 32
 ): WinProbability {
   // Calculate expected win probability using standard ELO formula
   const player1Expected = 1 / (1 + Math.pow(10, (player2Elo - player1Elo) / 400));
   const player2Expected = 1 / (1 + Math.pow(10, (player1Elo - player2Elo) / 400));
 
+  // Calculate expected points if each player wins
+  const player1ExpectedPoints = Math.round(kFactor * (1 - player1Expected));
+  const player2ExpectedPoints = Math.round(kFactor * (1 - player2Expected));
+
   // Convert to percentages and round to whole numbers
   return {
     player1Probability: Math.round(player1Expected * 100),
     player2Probability: Math.round(player2Expected * 100),
+    player1ExpectedPoints,
+    player2ExpectedPoints,
   };
 }
 

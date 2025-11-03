@@ -52,7 +52,8 @@ export interface MatchPlayer {
   eloChange: number | null;
   avatar?: string; // Optional - enriched by useEnrichedMatches hook
   currentElo?: number; // Optional - current live ELO rating from player document
-  winProbability?: number; // Optional - calculated win probability for pending matches
+  winProbability?: number; // Optional - calculated win probability for pending matches (0-100)
+  expectedPoints?: number; // Optional - expected points to gain if they win
 }
 
 export type MatchStatus = 'pending' | 'completed' | 'skipped';
