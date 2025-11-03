@@ -5,6 +5,11 @@ importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js'
 importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
 
 // Initialize Firebase in the service worker
+// WARNING: Firebase configuration is hardcoded here because service workers
+// cannot access process.env. This config must be kept in sync with the
+// environment variables in .env files and lib/firebase/config.ts.
+// If Firebase config changes, update both locations.
+// TODO: Consider generating this file at build time to eliminate duplication.
 firebase.initializeApp({
   apiKey: "AIzaSyBqYFq9_x8xI0YFmB7J6N8qH5K8b1Z7wQw",
   authDomain: "table-tennis-tracker-edd77.firebaseapp.com",
