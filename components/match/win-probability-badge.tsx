@@ -6,7 +6,7 @@ interface WinProbabilityBadgeProps {
 
 /**
  * Display win probability and expected points gain
- * Shows: "55% 🪙+12"
+ * Shows: "55% 💰+12"
  */
 export function WinProbabilityBadge({
   probability,
@@ -15,7 +15,7 @@ export function WinProbabilityBadge({
 }: WinProbabilityBadgeProps) {
   return (
     <p className={`text-sm font-normal leading-normal text-slate-600 ${className}`}>
-      {probability}% 🪙+{expectedPoints}
+      {probability}% 💰+{expectedPoints}
     </p>
   );
 }
