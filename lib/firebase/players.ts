@@ -261,3 +261,60 @@ export async function updatePlayerStats(
 
   await updateDoc(playerRef, updates);
 }
+
+/**
+ * Enable notifications for a player and save FCM token
+ */
+export async function enablePlayerNotifications(
+  playerId: string,
+  fcmToken: string
+): Promise<void> {
+  try {
+    const playerRef = doc(db, 'players', playerId);
+    await updateDoc(playerRef, {
+      notificationEnabled: true,
+      fcmToken: fcmToken,
+      fcmTokenUpdatedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    console.log(`[Players] Notifications enabled for player ${playerId}`);
+  } catch (error) {
+    console.error(`[Players] Error enabling notifications:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Disable notifications for a player
+ */
+export async function disablePlayerNotifications(playerId: string): Promise<void> {
+  try {
+    const playerRef = doc(db, 'players', playerId);
+    await updateDoc(playerRef, {
+      notificationEnabled: false,
+      updatedAt: serverTimestamp(),
+    });
+    console.log(`[Players] Notifications disabled for player ${playerId}`);
+  } catch (error) {
+    console.error(`[Players] Error disabling notifications:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Clear FCM token for a player (when token becomes invalid)
+ */
+export async function clearPlayerFcmToken(playerId: string): Promise<void> {
+  try {
+    const playerRef = doc(db, 'players', playerId);
+    await updateDoc(playerRef, {
+      fcmToken: null,
+      fcmTokenUpdatedAt: null,
+      updatedAt: serverTimestamp(),
+    });
+    console.log(`[Players] FCM token cleared for player ${playerId}`);
+  } catch (error) {
+    console.error(`[Players] Error clearing FCM token:`, error);
+    throw error;
+  }
+}
