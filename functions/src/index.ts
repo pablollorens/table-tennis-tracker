@@ -158,3 +158,156 @@ async function deletePlayerAvatars(playerId: string): Promise<void> {
     throw error;
   }
 }
+
+/**
+ * HTTP-triggered Cloud Function to send daily match notifications.
+ *
+ * Triggered by GitHub Actions daily at 12:40 Amsterdam time.
+ *
+ * Authentication: Checks for NOTIFICATION_SECRET in request header.
+ *
+ * Sends FCM push notifications to all users with notificationEnabled=true.
+ */
+export const sendDailyNotification = onRequest(
+  {
+    region: "us-central1",
+    cors: true,
+    secrets: ["NOTIFICATION_SECRET"],
+    invoker: "public",
+    timeoutSeconds: 60,
+    memory: "256MiB",
+  },
+  async (req, res) => {
+    // Authentication
+    const secret = req.headers.authorization?.replace("Bearer ", "") ||
+                   req.query.secret as string;
+    const expectedSecret = process.env.NOTIFICATION_SECRET;
+
+    logger.info(`Notification request received. Has secret: ${!!secret}`);
+
+    if (!expectedSecret || secret !== expectedSecret) {
+      logger.warn("Unauthorized notification request");
+      res.status(401).json({error: "Unauthorized"});
+      return;
+    }
+
+    try {
+      logger.info("Starting daily notification send...");
+
+      // Query users with notifications enabled and valid FCM token
+      const usersSnapshot = await db
+        .collection("players")
+        .where("notificationEnabled", "==", true)
+        .get();
+
+      if (usersSnapshot.empty) {
+        logger.info("No users opted in for notifications");
+        res.status(200).json({
+          success: true,
+          sent: 0,
+          failed: 0,
+          cleaned: 0,
+          message: "No users opted in",
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      // Extract FCM tokens
+      const tokensWithUsers: Array<{token: string; userId: string}> = [];
+      usersSnapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        if (data.fcmToken) {
+          tokensWithUsers.push({
+            token: data.fcmToken,
+            userId: doc.id,
+          });
+        }
+      });
+
+      if (tokensWithUsers.length === 0) {
+        logger.info("No valid FCM tokens found");
+        res.status(200).json({
+          success: true,
+          sent: 0,
+          failed: 0,
+          cleaned: 0,
+          message: "No valid FCM tokens",
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      logger.info(`Sending notifications to ${tokensWithUsers.length} users`);
+
+      // Build FCM message
+      const tokens = tokensWithUsers.map((t) => t.token);
+      const message = {
+        notification: {
+          title: "Time for Table Tennis! 🏓",
+          body: "Ready for your daily match?",
+        },
+        webpush: {
+          fcmOptions: {
+            link: "/",
+          },
+          notification: {
+            icon: "/icon-192x192.png",
+            badge: "/favicon-32x32.png",
+          },
+        },
+        tokens: tokens,
+      };
+
+      // Send multicast message
+      const response = await admin.messaging().sendEachForMulticast(message);
+
+      logger.info(`Sent: ${response.successCount}, Failed: ${response.failureCount}`);
+
+      // Clean up invalid tokens
+      let cleanedCount = 0;
+      if (response.failureCount > 0) {
+        const invalidTokenPromises: Promise<FirebaseFirestore.WriteResult>[] = [];
+
+        response.responses.forEach((resp, idx) => {
+          if (!resp.success) {
+            const errorCode = resp.error?.code;
+            if (
+              errorCode === "messaging/invalid-registration-token" ||
+              errorCode === "messaging/registration-token-not-registered"
+            ) {
+              const userId = tokensWithUsers[idx].userId;
+              logger.info(`Cleaning invalid token for user: ${userId}`);
+
+              invalidTokenPromises.push(
+                db.collection("players").doc(userId).update({
+                  fcmToken: null,
+                  fcmTokenUpdatedAt: null,
+                  updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+                })
+              );
+              cleanedCount++;
+            }
+          }
+        });
+
+        await Promise.all(invalidTokenPromises);
+      }
+
+      res.status(200).json({
+        success: true,
+        sent: response.successCount,
+        failed: response.failureCount,
+        cleaned: cleanedCount,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      logger.error("Error sending notifications:", error);
+      res.status(500).json({
+        success: false,
+        error: "Notification send failed",
+        timestamp: new Date().toISOString(),
+      });
+    }
+  }
+);
