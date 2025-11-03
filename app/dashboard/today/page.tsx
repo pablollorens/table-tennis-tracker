@@ -105,14 +105,14 @@ export default function TodayMatchesPage() {
               <Card key={match.id} className="flex flex-col gap-4 rounded-xl bg-white p-4 shadow-sm mb-4">
                 <div className="flex items-center justify-between gap-4">
                   {/* Player 1 */}
-                  <div className="flex flex-1 items-center gap-3">
+                  <div className="flex flex-1 items-start gap-3">
                     <PlayerAvatar
                       avatar={match.player1.avatar}
                       name={match.player1.name}
                       size="sm"
                     />
-                    <div className="flex flex-col gap-1 min-h-[52px] justify-center">
-                      <p className="text-sm sm:text-base font-bold leading-tight">
+                    <div className="flex flex-col gap-1 min-h-[52px]">
+                      <p className="text-base font-bold leading-tight">
                         {match.player1.name}
                       </p>
                       {match.player1.winProbability !== undefined && match.player1.expectedPoints !== undefined ? (
@@ -131,9 +131,9 @@ export default function TodayMatchesPage() {
                   <p className="text-sm font-bold text-slate-500">vs</p>
 
                   {/* Player 2 */}
-                  <div className="flex flex-1 items-center justify-end gap-3 text-right">
-                    <div className="flex flex-col gap-1 min-h-[52px] justify-center">
-                      <p className="text-sm sm:text-base font-bold leading-tight">
+                  <div className="flex flex-1 items-start justify-end gap-3 text-right">
+                    <div className="flex flex-col gap-1 min-h-[52px]">
+                      <p className="text-base font-bold leading-tight">
                         {match.player2.name}
                       </p>
                       {match.player2.winProbability !== undefined && match.player2.expectedPoints !== undefined ? (
