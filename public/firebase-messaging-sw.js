@@ -1,8 +1,8 @@
 // Firebase Cloud Messaging Service Worker
 // This file must be in the /public directory and served from the root path
 
-importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/12.5.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/12.5.0/firebase-messaging-compat.js');
 
 // Initialize Firebase in the service worker
 // WARNING: Firebase configuration is hardcoded here because service workers
