@@ -111,8 +111,8 @@ export default function TodayMatchesPage() {
                       name={match.player1.name}
                       size="sm"
                     />
-                    <div className="flex flex-col gap-1">
-                      <p className="text-base font-bold leading-tight">
+                    <div className="flex flex-col gap-1 min-h-[52px] justify-center">
+                      <p className="text-sm sm:text-base font-bold leading-tight">
                         {match.player1.name}
                       </p>
                       {match.player1.winProbability !== undefined && match.player1.expectedPoints !== undefined ? (
@@ -132,8 +132,8 @@ export default function TodayMatchesPage() {
 
                   {/* Player 2 */}
                   <div className="flex flex-1 items-center justify-end gap-3 text-right">
-                    <div className="flex flex-col gap-1">
-                      <p className="text-base font-bold leading-tight">
+                    <div className="flex flex-col gap-1 min-h-[52px] justify-center">
+                      <p className="text-sm sm:text-base font-bold leading-tight">
                         {match.player2.name}
                       </p>
                       {match.player2.winProbability !== undefined && match.player2.expectedPoints !== undefined ? (
