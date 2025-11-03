@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Player } from '@/types';
 import { updatePlayerProfile, updatePlayerAvatar } from '@/lib/firebase/players';
 import { ImageUpload } from '@/components/ui/image-upload';
+import { NotificationToggle } from '@/components/profile/notification-toggle';
 import toast from 'react-hot-toast';
 
 interface ProfileFormProps {
@@ -125,6 +126,15 @@ export function ProfileForm({ player, onSuccess }: ProfileFormProps) {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter player's email"
           required
+        />
+      </div>
+
+      {/* Notifications Section */}
+      <div className="pt-6 border-t border-gray-200">
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Notifications</h3>
+        <NotificationToggle
+          playerId={player.id}
+          initialEnabled={player.notificationEnabled ?? false}
         />
       </div>
 
