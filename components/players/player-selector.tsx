@@ -11,6 +11,7 @@ import { calculateTotalMatches } from '@/lib/utils/round-robin';
 import { createDailySession, addMoreMatches } from '@/lib/firebase/sessions';
 import { Search, ArrowLeft } from 'lucide-react';
 import { PlayerAvatar } from '@/components/ui/player-avatar';
+import { useToast } from '@/hooks/use-toast';
 
 interface PlayerSelectorProps {
   mode?: 'create' | 'add';
@@ -22,6 +23,7 @@ export function PlayerSelector({ mode = 'create' }: PlayerSelectorProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [creating, setCreating] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const filteredPlayers = players.filter(player =>
     player.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -46,7 +48,11 @@ export function PlayerSelector({ mode = 'create' }: PlayerSelectorProps) {
 
   const handleCreateSession = async () => {
     if (selectedPlayers.length < 2) {
-      alert('Please select at least 2 players');
+      toast({
+        title: 'Not enough players',
+        description: 'Please select at least 2 players',
+        variant: 'destructive',
+      });
       return;
     }
 
@@ -57,9 +63,17 @@ export function PlayerSelector({ mode = 'create' }: PlayerSelectorProps) {
       } else {
         await createDailySession(selectedPlayers);
       }
+
+      // Success - silently skip any duplicates that were filtered out
       router.push('/dashboard');
     } catch (error) {
-      alert('Error creating session: ' + (error as Error).message);
+      const errorMessage = (error as Error).message;
+
+      toast({
+        title: mode === 'add' ? 'Cannot add matches' : 'Error creating session',
+        description: errorMessage,
+        variant: 'destructive',
+      });
     } finally {
       setCreating(false);
     }

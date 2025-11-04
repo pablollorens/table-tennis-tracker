@@ -17,6 +17,33 @@ import { trackRoundRobinGenerated } from './analytics';
 import { format } from 'date-fns';
 
 /**
+ * Check if a pending match already exists for the given player pair
+ */
+async function hasDuplicatePendingMatch(
+  sessionDate: string,
+  player1Id: string,
+  player2Id: string
+): Promise<boolean> {
+  const matchesRef = collection(db, `sessions/${sessionDate}/matches`);
+  const q = query(matchesRef, where('status', '==', 'pending'));
+
+  const snapshot = await getDocs(q);
+
+  // Check if any pending match has the same player combination (bidirectional)
+  return snapshot.docs.some(doc => {
+    const match = doc.data();
+    const matchPlayer1Id = match.player1.id;
+    const matchPlayer2Id = match.player2.id;
+
+    // Check both directions: A vs B or B vs A
+    return (
+      (matchPlayer1Id === player1Id && matchPlayer2Id === player2Id) ||
+      (matchPlayer1Id === player2Id && matchPlayer2Id === player1Id)
+    );
+  });
+}
+
+/**
  * Create a daily session with all round-robin matches
  */
 export async function createDailySession(playerIds: string[]): Promise<void> {
@@ -25,10 +52,26 @@ export async function createDailySession(playerIds: string[]): Promise<void> {
   }
 
   const today = format(new Date(), 'yyyy-MM-dd');
-  const batch = writeBatch(db);
 
   // Generate all match pairings
-  const matchPairings = generateRoundRobin(playerIds);
+  const allMatchPairings = generateRoundRobin(playerIds);
+
+  // Check for duplicate pending matches and filter them out silently
+  const duplicateChecks = await Promise.all(
+    allMatchPairings.map(pairing =>
+      hasDuplicatePendingMatch(today, pairing.player1Id, pairing.player2Id)
+    )
+  );
+
+  // Only create matches that are not duplicates
+  const matchPairings = allMatchPairings.filter((_, index) => !duplicateChecks[index]);
+
+  // If no matches to create, return early without error
+  if (matchPairings.length === 0) {
+    return;
+  }
+
+  const batch = writeBatch(db);
 
   // Create session document
   const sessionRef = doc(db, 'sessions', today);
@@ -101,10 +144,26 @@ export async function addMoreMatches(playerIds: string[]): Promise<void> {
   }
 
   const today = format(new Date(), 'yyyy-MM-dd');
-  const batch = writeBatch(db);
 
   // Generate all match pairings
-  const matchPairings = generateRoundRobin(playerIds);
+  const allMatchPairings = generateRoundRobin(playerIds);
+
+  // Check for duplicate pending matches and filter them out silently
+  const duplicateChecks = await Promise.all(
+    allMatchPairings.map(pairing =>
+      hasDuplicatePendingMatch(today, pairing.player1Id, pairing.player2Id)
+    )
+  );
+
+  // Only create matches that are not duplicates
+  const matchPairings = allMatchPairings.filter((_, index) => !duplicateChecks[index]);
+
+  // If no matches to create, return early without error
+  if (matchPairings.length === 0) {
+    return;
+  }
+
+  const batch = writeBatch(db);
 
   // Update session document counters
   const sessionRef = doc(db, 'sessions', today);
