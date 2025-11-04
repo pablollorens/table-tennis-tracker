@@ -64,11 +64,7 @@ export function PlayerSelector({ mode = 'create' }: PlayerSelectorProps) {
         await createDailySession(selectedPlayers);
       }
 
-      toast({
-        title: 'Success',
-        description: mode === 'add' ? 'Matches added successfully' : 'Session created successfully',
-      });
-
+      // Success - silently skip any duplicates that were filtered out
       router.push('/dashboard');
     } catch (error) {
       const errorMessage = (error as Error).message;
