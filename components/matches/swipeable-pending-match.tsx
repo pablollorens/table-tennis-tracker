@@ -58,11 +58,10 @@ export function SwipeablePendingMatch({ match, onRecordResult, onDelete }: Swipe
       >
         <button
           onClick={handleDelete}
-          className="flex items-center gap-2 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+          className="flex items-center text-white font-bold px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
           aria-label="Delete match"
         >
           <Trash2 className="w-5 h-5" />
-          <span>Delete</span>
         </button>
       </motion.div>
 
