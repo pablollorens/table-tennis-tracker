@@ -3,6 +3,7 @@ import {
   getDoc,
   updateDoc,
   setDoc,
+  deleteDoc,
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './config';
@@ -112,4 +113,48 @@ export async function recordMatchResult(
 
   // Update session counters
   await updateSessionCounters(sessionDate, 1);
+}
+
+/**
+ * Delete a pending match
+ * Only allows deletion of matches with status 'pending' and no recorded result
+ */
+export async function deletePendingMatch(
+  sessionDate: string,
+  matchId: string
+): Promise<void> {
+  const matchRef = doc(db, `sessions/${sessionDate}/matches`, matchId);
+  const matchSnap = await getDoc(matchRef);
+
+  if (!matchSnap.exists()) {
+    throw new Error('Match not found');
+  }
+
+  const match = matchSnap.data();
+
+  // Validate match is pending
+  if (match.status !== 'pending') {
+    throw new Error('Cannot delete a match that has been completed or skipped');
+  }
+
+  // Validate match has no result
+  if (match.winnerId !== null) {
+    throw new Error('Cannot delete a match with a recorded result');
+  }
+
+  // Delete the match document
+  await deleteDoc(matchRef);
+
+  // Update session counters (decrease total and pending by 1)
+  const sessionRef = doc(db, 'sessions', sessionDate);
+  const sessionSnap = await getDoc(sessionRef);
+
+  if (sessionSnap.exists()) {
+    const session = sessionSnap.data();
+    await updateDoc(sessionRef, {
+      totalMatches: Math.max(0, session.totalMatches - 1),
+      pendingMatches: Math.max(0, session.pendingMatches - 1),
+      updatedAt: serverTimestamp()
+    });
+  }
 }

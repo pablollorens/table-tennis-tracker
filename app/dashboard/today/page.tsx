@@ -10,12 +10,14 @@ import { Button } from '@/components/ui/button';
 import { MatchResultModal } from '@/components/matches/match-result-modal';
 import { DateSelector } from '@/components/calendar/date-selector';
 import { SessionCalendarModal } from '@/components/calendar/session-calendar-modal';
-import { recordMatchResult } from '@/lib/firebase/matches';
+import { SwipeablePendingMatch } from '@/components/matches/swipeable-pending-match';
+import { recordMatchResult, deletePendingMatch } from '@/lib/firebase/matches';
 import { Match } from '@/types';
 import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
 import { PlayerAvatar } from '@/components/ui/player-avatar';
 import { WinProbabilityBadge } from '@/components/match/win-probability-badge';
+import toast from 'react-hot-toast';
 
 export default function TodayMatchesPage() {
   const router = useRouter();
@@ -63,6 +65,17 @@ export default function TodayMatchesPage() {
     });
   };
 
+  const handleDeleteMatch = async (matchId: string) => {
+    try {
+      const sessionDate = format(new Date(), 'yyyy-MM-dd');
+      await deletePendingMatch(sessionDate, matchId);
+      toast.success('Match deleted successfully');
+    } catch (error) {
+      console.error('Error deleting match:', error);
+      toast.error('Failed to delete match');
+    }
+  };
+
   if (playerLoading || matchesLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -101,67 +114,16 @@ export default function TodayMatchesPage() {
             <h2 className="text-lg font-bold leading-tight tracking-tight pb-3 pt-4">
               Pending
             </h2>
+            <p className="text-sm text-slate-500 pb-3">
+              Swipe left to delete a match
+            </p>
             {pendingMatches.map(match => (
-              <Card key={match.id} className="flex flex-col gap-4 rounded-xl bg-white p-4 shadow-sm mb-4">
-                <div className="flex items-center justify-between gap-4">
-                  {/* Player 1 */}
-                  <div className="flex flex-1 items-start gap-3">
-                    <PlayerAvatar
-                      avatar={match.player1.avatar}
-                      name={match.player1.name}
-                      size="sm"
-                    />
-                    <div className="flex flex-col justify-between min-h-[52px]">
-                      <p className="text-base font-bold leading-tight">
-                        {match.player1.name}
-                      </p>
-                      {match.player1.winProbability !== undefined && match.player1.expectedPoints !== undefined ? (
-                        <WinProbabilityBadge
-                          probability={match.player1.winProbability}
-                          expectedPoints={match.player1.expectedPoints}
-                        />
-                      ) : (
-                        <p className="text-sm font-normal leading-normal text-slate-600">
-                          Points: {match.player1.eloBefore}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <p className="text-sm font-bold text-slate-500">vs</p>
-
-                  {/* Player 2 */}
-                  <div className="flex flex-1 items-start justify-end gap-3 text-right">
-                    <div className="flex flex-col justify-between min-h-[52px]">
-                      <p className="text-base font-bold leading-tight">
-                        {match.player2.name}
-                      </p>
-                      {match.player2.winProbability !== undefined && match.player2.expectedPoints !== undefined ? (
-                        <WinProbabilityBadge
-                          probability={match.player2.winProbability}
-                          expectedPoints={match.player2.expectedPoints}
-                        />
-                      ) : (
-                        <p className="text-sm font-normal leading-normal text-slate-600">
-                          Points: {match.player2.eloBefore}
-                        </p>
-                      )}
-                    </div>
-                    <PlayerAvatar
-                      avatar={match.player2.avatar}
-                      name={match.player2.name}
-                      size="sm"
-                    />
-                  </div>
-                </div>
-
-                <Button
-                  onClick={() => handleRecordResult(match)}
-                  className="w-full h-10 text-sm font-medium bg-blue-600 hover:bg-blue-700"
-                >
-                  Record Result
-                </Button>
-              </Card>
+              <SwipeablePendingMatch
+                key={match.id}
+                match={match}
+                onRecordResult={handleRecordResult}
+                onDelete={handleDeleteMatch}
+              />
             ))}
           </div>
         )}
