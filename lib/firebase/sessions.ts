@@ -17,6 +17,33 @@ import { trackRoundRobinGenerated } from './analytics';
 import { format } from 'date-fns';
 
 /**
+ * Check if a pending match already exists for the given player pair
+ */
+async function hasDuplicatePendingMatch(
+  sessionDate: string,
+  player1Id: string,
+  player2Id: string
+): Promise<boolean> {
+  const matchesRef = collection(db, `sessions/${sessionDate}/matches`);
+  const q = query(matchesRef, where('status', '==', 'pending'));
+
+  const snapshot = await getDocs(q);
+
+  // Check if any pending match has the same player combination (bidirectional)
+  return snapshot.docs.some(doc => {
+    const match = doc.data();
+    const matchPlayer1Id = match.player1.id;
+    const matchPlayer2Id = match.player2.id;
+
+    // Check both directions: A vs B or B vs A
+    return (
+      (matchPlayer1Id === player1Id && matchPlayer2Id === player2Id) ||
+      (matchPlayer1Id === player2Id && matchPlayer2Id === player1Id)
+    );
+  });
+}
+
+/**
  * Create a daily session with all round-robin matches
  */
 export async function createDailySession(playerIds: string[]): Promise<void> {
@@ -25,10 +52,36 @@ export async function createDailySession(playerIds: string[]): Promise<void> {
   }
 
   const today = format(new Date(), 'yyyy-MM-dd');
-  const batch = writeBatch(db);
 
   // Generate all match pairings
   const matchPairings = generateRoundRobin(playerIds);
+
+  // Check for duplicate pending matches (in case session already partially exists)
+  const duplicateChecks = await Promise.all(
+    matchPairings.map(pairing =>
+      hasDuplicatePendingMatch(today, pairing.player1Id, pairing.player2Id)
+    )
+  );
+
+  const duplicates = matchPairings.filter((_, index) => duplicateChecks[index]);
+
+  if (duplicates.length > 0) {
+    // Fetch player data to show meaningful error messages
+    const allPlayerIds = [...new Set([...playerIds])];
+    const playerDataPromises = allPlayerIds.map(id => getPlayerData(id));
+    const playersData = await Promise.all(playerDataPromises);
+    const playerMap = new Map(playersData.map(p => [p.id, p]));
+
+    const duplicateMessages = duplicates.map(dup => {
+      const p1 = playerMap.get(dup.player1Id);
+      const p2 = playerMap.get(dup.player2Id);
+      return `${p1?.name || 'Unknown'} vs ${p2?.name || 'Unknown'}`;
+    }).join(', ');
+
+    throw new Error(`Pending matches already exist for: ${duplicateMessages}`);
+  }
+
+  const batch = writeBatch(db);
 
   // Create session document
   const sessionRef = doc(db, 'sessions', today);
@@ -101,10 +154,36 @@ export async function addMoreMatches(playerIds: string[]): Promise<void> {
   }
 
   const today = format(new Date(), 'yyyy-MM-dd');
-  const batch = writeBatch(db);
 
   // Generate all match pairings
   const matchPairings = generateRoundRobin(playerIds);
+
+  // Check for duplicate pending matches
+  const duplicateChecks = await Promise.all(
+    matchPairings.map(pairing =>
+      hasDuplicatePendingMatch(today, pairing.player1Id, pairing.player2Id)
+    )
+  );
+
+  const duplicates = matchPairings.filter((_, index) => duplicateChecks[index]);
+
+  if (duplicates.length > 0) {
+    // Fetch player data to show meaningful error messages
+    const allPlayerIds = [...new Set([...playerIds])];
+    const playerDataPromises = allPlayerIds.map(id => getPlayerData(id));
+    const playersData = await Promise.all(playerDataPromises);
+    const playerMap = new Map(playersData.map(p => [p.id, p]));
+
+    const duplicateMessages = duplicates.map(dup => {
+      const p1 = playerMap.get(dup.player1Id);
+      const p2 = playerMap.get(dup.player2Id);
+      return `${p1?.name || 'Unknown'} vs ${p2?.name || 'Unknown'}`;
+    }).join(', ');
+
+    throw new Error(`Pending matches already exist for: ${duplicateMessages}`);
+  }
+
+  const batch = writeBatch(db);
 
   // Update session document counters
   const sessionRef = doc(db, 'sessions', today);
