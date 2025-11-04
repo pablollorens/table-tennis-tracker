@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Player Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light overflow-x-hidden">
+<div class="flex items-center p-4 pb-2 justify-between bg-background-light sticky top-0 z-10 border-b border-gray-200/50">
+<div class="text-gray-800 flex size-12 shrink-0 items-center justify-center -ml-3">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</div>
+<h2 class="text-gray-900 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Alex Morgan</h2>
+<div class="flex size-12 shrink-0 items-center justify-center -mr-3">
+<span class="material-symbols-outlined text-2xl">more_horiz</span>
+</div>
+</div>
+<div class="flex flex-col p-4 pt-6 gap-4 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-28 h-28" data-alt="Player avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAw1NIwIRK5IkOjK_z_fEC35jGQCY_Hduxsj9fVX6m5-m1hdFAnfUklxCWulbdthgn2jnDAIKJDoE5bbPK9agokMlbgxr4fhVQFarQKJhXsyAKnEPJVjAW1KtZR4_3ZfQziryL1UAwfjoMG2hMAHKj1TH0dckHjb9v-1_G_lYeOW2EGBLAEd9AYsVvozs_FjooqEqsWbLrrWIevwRsDEDMHnEyOqWzp_I_hCa1r3rGdBfp7mJqD-fH5X8HUIGGHEi4bGP1Kq_N0BZU");'></div>
+<div class="flex flex-col items-center justify-center gap-1">
+<p class="text-gray-900 text-[28px] font-bold leading-tight tracking-[-0.015em] text-center">Alex Morgan</p>
+<p class="text-gray-500 text-base font-normal leading-normal text-center">Current ELO: 1450</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 px-4 pt-4">
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white border border-gray-200/80 items-center text-center">
+<p class="text-gray-600 text-sm font-medium leading-normal">Total Games</p>
+<p class="text-gray-900 tracking-light text-2xl font-bold leading-tight">88</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white border border-gray-200/80 items-center text-center">
+<p class="text-gray-600 text-sm font-medium leading-normal">Win Rate</p>
+<p class="text-gray-900 tracking-light text-2xl font-bold leading-tight">68%</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white border border-gray-200/80 items-center text-center">
+<p class="text-gray-600 text-sm font-medium leading-normal">Current ELO</p>
+<p class="text-primary tracking-light text-2xl font-bold leading-tight">1450</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white border border-gray-200/80 items-center text-center">
+<p class="text-gray-600 text-sm font-medium leading-normal">Streak</p>
+<p class="text-green-500 tracking-light text-2xl font-bold leading-tight">W3</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white border border-gray-200/80 items-center text-center">
+<p class="text-gray-600 text-sm font-medium leading-normal">Highest ELO</p>
+<p class="text-gray-900 tracking-light text-2xl font-bold leading-tight">1512</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white border border-gray-200/80 items-center text-center">
+<p class="text-gray-600 text-sm font-medium leading-normal">Lowest ELO</p>
+<p class="text-gray-900 tracking-light text-2xl font-bold leading-tight">1180</p>
+</div>
+</div>
+<div class="px-4 pt-6">
+<div class="flex w-full flex-col gap-2 rounded-xl p-4 bg-white border border-gray-200/80">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-gray-600 text-base font-medium leading-normal">ELO History</p>
+<p class="text-gray-900 tracking-light text-2xl font-bold leading-tight truncate">1450</p>
+</div>
+<div class="flex gap-1 items-baseline">
+<p class="text-green-500 text-sm font-medium leading-normal">+250 ELO</p>
+<p class="text-gray-500 text-sm font-normal leading-normal">all time</p>
+</div>
+</div>
+<div class="flex min-h-[180px] flex-1 flex-col gap-4 pt-4">
+<canvas id="eloChart"></canvas>
+</div>
+</div>
+</div>
+<div class="px-4 py-6">
+<h2 class="text-gray-900 text-lg font-bold leading-tight tracking-[-0.015em] pb-3">Recent Matches</h2>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-4 rounded-xl p-4 bg-white border border-gray-200/80">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" data-alt="Opponent avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCirQT6EIww3QkOYyljlbM7-cvGLjgEwBa5mef2EaEmGCmm65OiuXuXMtJhXjMUQhE4-6Nw6Afoj9Dc7OeFfnN7QVpGrXHhT8xr8ckebvlp4st8EW5ZASuGYc7jye5Ii6b_tQJGgQaC9y8Q4fK3IHQmLU3W8pJJdrgkl-JfeEZhBp5UNuSo6E10uxd_o4xNkxXEXFdkuhI8yaax6Q_FDQBLafc4QmkA6OHMcfU-afoxdDw40xdwHbaZDAZbPZz57UVYBYgO_S-yYlc");'></div>
+<div class="flex-1">
+<p class="font-semibold text-gray-900">vs. Jane Doe</p>
+<p class="text-sm text-gray-600">Score: 21-18</p>
+</div>
+<div class="text-right">
+<div class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700 inline-block">Win</div>
+<p class="text-sm text-green-600">+12 ELO</p>
+</div>
+</div>
+<div class="flex items-center gap-4 rounded-xl p-4 bg-white border border-gray-200/80">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" data-alt="Opponent avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBzjy2G75omffsVGV8WJSiBd1YUzmaD_H1tfSYctI7MKyCXk5WvNOq-IqG3F80fv7nzP5Z-UM-pMY5y24_k6OF9PqkL0UI_e3CM7GOca7yIGp94ZvhH-jkMPLDKCDM2KXnNnDN7fodtmVvzOqoalxyknnRiNZZfTl8V30qaFDrUlPPM27jWNaoFT43VrT8ydsYbqml3i3tcVUclu4By4Cnp5MuS6xszJ02UMwMCKflVJ0UANQYdq6Hdq9RFIoBZmbeZdwoAk7_r7WM");'></div>
+<div class="flex-1">
+<p class="font-semibold text-gray-900">vs. John Smith</p>
+<p class="text-sm text-gray-600">Score: 15-21</p>
+</div>
+<div class="text-right">
+<div class="rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700 inline-block">Loss</div>
+<p class="text-sm text-red-600">-10 ELO</p>
+</div>
+</div>
+<div class="flex items-center gap-4 rounded-xl p-4 bg-white border border-gray-200/80">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" data-alt="Opponent avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCKNb1jKBYyi0t4pZf4-FupeHr-et0wDKrCG0AfcgFXTDYKOTGyVkN3oPnZBIQgAM6MBkVsEHSY4FtEqU6CHlT-1aPCmI31OTB90kgzY5SzR8HQOBPM7QZOK2CBR9o9ijP1u3H2UlPoHFjiyrFmvyUABaJdpt0O4vk6tYuytolhZ5WMggVyxOptYdqPTyTF1A-5GtkjBi0_T7Z0sbMELqt93em8IyE8NgiBFGRm44nxuqpaJhdaJ541apRxSrwakWe1O0sMBKWOkTU");'></div>
+<div class="flex-1">
+<p class="font-semibold text-gray-900">vs. Emily White</p>
+<p class="text-sm text-gray-600">Score: 21-20</p>
+</div>
+<div class="text-right">
+<div class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700 inline-block">Win</div>
+<p class="text-sm text-green-600">+8 ELO</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sticky bottom-0 left-0 right-0 z-10 border-t border-gray-200 bg-background-light py-2 px-4 flex justify-around mt-auto">
+<a class="flex flex-col items-center justify-center text-gray-500 gap-1 w-1/4" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-xs font-medium">Ranking</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 gap-1 w-1/4" href="#">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-xs font-medium">New Match</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 gap-1 w-1/4" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-xs font-medium">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary gap-1 w-1/4" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-xs font-medium">Profile</span>
+</a>
+</div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('eloChart').getContext('2d');
+        const eloData = {
+            labels: ['Jan 01', 'Jan 08', 'Jan 15', 'Jan 22', 'Jan 29', 'Feb 05', 'Feb 12'],
+            datasets: [{
+                label: 'ELO',
+                data: [1200, 1250, 1310, 1180, 1350, 1420, 1512, 1450],
+                fill: true,
+                backgroundColor: 'rgba(19, 127, 236, 0.05)',
+                borderColor: '#137fec',
+                borderWidth: 2,
+                tension: 0.4,
+                pointBackgroundColor: '#137fec',
+                pointRadius: (context) => {
+                    const index = context.dataIndex;
+                    const data = context.dataset.data;
+                    const value = data[index];
+                    const highest = 1512;
+                    const lowest = 1180;
+                    return value === highest || value === lowest ? 5 : 0;
+                },
+                pointHoverRadius: 6,
+                pointHoverBackgroundColor: '#137fec'
+            }]
+        };
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: false,
+                    backgroundColor: '#ffffff',
+                    titleColor: '#1f2937',
+                    bodyColor: '#1f2937',
+                    borderColor: '#e5e7eb',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    padding: 12,
+                    displayColors: false,
+                    callbacks: {
+                        label: function (context) {
+                            return `ELO: ${context.parsed.y}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#6b7280',
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                y: {
+                    grid: {
+                        color: '#e5e7eb',
+                        borderDash: [5, 5]
+                    },
+                    ticks: {
+                        color: '#6b7280',
+                        font: {
+                            size: 12
+                        },
+                        stepSize: 100,
+                    },
+                    beginAtZero: false,
+                }
+            }
+        };
+        new Chart(ctx, {
+            type: 'line',
+            data: eloData,
+            options: chartOptions
+        });
+    });
+</script>
+
+</body></html>

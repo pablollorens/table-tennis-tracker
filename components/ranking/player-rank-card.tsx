@@ -1,3 +1,6 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { Player } from '@/types';
 import { cn } from '@/lib/utils';
 import { Flame, Snowflake, Medal } from 'lucide-react';
@@ -47,14 +50,20 @@ function getStreakDisplay(streak: number) {
 }
 
 export function PlayerRankCard({ player, rank, isCurrentUser }: PlayerRankCardProps) {
+  const router = useRouter();
   const winRate = player.stats.totalMatches > 0
     ? Math.round((player.stats.wins / player.stats.totalMatches) * 100)
     : 0;
 
+  const handleClick = () => {
+    router.push(`/dashboard/players/${player.id}`);
+  };
+
   return (
-    <div
+    <button
+      onClick={handleClick}
       className={cn(
-        'relative overflow-hidden rounded-xl border-2 bg-white shadow-sm',
+        'relative overflow-hidden rounded-xl border-2 bg-white shadow-sm w-full text-left transition-all hover:shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer',
         getRankColor(rank),
         isCurrentUser && 'border-blue-500 bg-blue-50/50'
       )}
@@ -107,6 +116,6 @@ export function PlayerRankCard({ player, rank, isCurrentUser }: PlayerRankCardPr
           <p className="text-xs text-gray-400">Points</p>
         </div>
       </div>
-    </div>
+    </button>
   );
 }

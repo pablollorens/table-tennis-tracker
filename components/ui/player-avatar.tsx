@@ -10,7 +10,7 @@ interface PlayerAvatarProps {
 const sizeClasses = {
   sm: 'w-10 h-10 text-sm',
   md: 'w-14 h-14 text-lg',
-  lg: 'w-20 h-20 text-xl',
+  lg: 'w-28 h-28 text-2xl',  // 112px for player stats page
   xl: 'w-32 h-32 text-3xl',
 };
 

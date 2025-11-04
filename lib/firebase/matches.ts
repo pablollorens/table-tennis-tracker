@@ -2,6 +2,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  setDoc,
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './config';
@@ -77,6 +78,24 @@ export async function recordMatchResult(
   };
 
   await updateDoc(matchRef, updates);
+
+  // Create matchHistory document for player stats and historical tracking
+  const matchHistoryRef = doc(db, 'matchHistory', matchId);
+  await setDoc(matchHistoryRef, {
+    sessionDate,
+    player1Id: match.player1.id,
+    player1Name: match.player1.name,
+    player1Score: result.player1Score,
+    player1EloChange: isPlayer1Winner ? eloResult.winnerChange : eloResult.loserChange,
+    player2Id: match.player2.id,
+    player2Name: match.player2.name,
+    player2Score: result.player2Score,
+    player2EloChange: isPlayer1Winner ? eloResult.loserChange : eloResult.winnerChange,
+    winnerId: result.winnerId,
+    winnerName: isPlayer1Winner ? match.player1.name : match.player2.name,
+    playedAt: serverTimestamp(),
+    createdAt: serverTimestamp()
+  });
 
   // Update player statistics
   await updatePlayerStats(
