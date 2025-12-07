@@ -2,61 +2,95 @@ const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 
-// Create a fun ping pong racket SVG
-const createPingPongRacketSVG = (size) => {
-  const scale = size / 512;
+// Brand colors
+const BRAND_PRIMARY = '#2563eb';   // blue-600
+const BRAND_SECONDARY = '#1d4ed8'; // blue-700
 
-  return `
-    <svg width="${size}" height="${size}" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-      <!-- Background circle -->
-      <circle cx="256" cy="256" r="256" fill="#2563eb"/>
+/**
+ * Create a premium favicon SVG with minimalist ping pong paddle design
+ * Professional, clean, and modern look
+ */
+const createPremiumIconSVG = (size) => {
+  const radius = Math.round(size * 0.22); // iOS-style rounded corners
 
-      <!-- Ping pong ball with motion lines -->
-      <circle cx="140" cy="120" r="35" fill="#ffffff" opacity="0.9"/>
-      <circle cx="140" cy="120" r="35" fill="none" stroke="#f59e0b" stroke-width="3" opacity="0.7"/>
+  // Scale factor for 100x100 base design
+  const scale = size / 100;
 
-      <!-- Motion lines -->
-      <line x1="100" y1="110" x2="70" y2="100" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
-      <line x1="105" y1="125" x2="75" y2="135" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
-      <line x1="110" y1="95" x2="85" y2="75" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Premium gradient background -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${BRAND_PRIMARY}"/>
+      <stop offset="100%" stop-color="${BRAND_SECONDARY}"/>
+    </linearGradient>
 
-      <!-- Racket handle -->
-      <rect x="230" y="340" width="52" height="140" rx="26" fill="#d97706" stroke="#92400e" stroke-width="3"/>
-      <rect x="235" y="345" width="42" height="130" rx="21" fill="#f59e0b"/>
+    <!-- Subtle top highlight for depth -->
+    <linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+      <stop offset="40%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
 
-      <!-- Grip lines on handle -->
-      <line x1="238" y1="360" x2="274" y2="360" stroke="#d97706" stroke-width="2" opacity="0.5"/>
-      <line x1="238" y1="380" x2="274" y2="380" stroke="#d97706" stroke-width="2" opacity="0.5"/>
-      <line x1="238" y1="400" x2="274" y2="400" stroke="#d97706" stroke-width="2" opacity="0.5"/>
-      <line x1="238" y1="420" x2="274" y2="420" stroke="#d97706" stroke-width="2" opacity="0.5"/>
-      <line x1="238" y1="440" x2="274" y2="440" stroke="#d97706" stroke-width="2" opacity="0.5"/>
+    <!-- Paddle gradient - rich red -->
+    <linearGradient id="paddleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
 
-      <!-- Racket head (paddle) - outer circle -->
-      <circle cx="256" cy="220" r="110" fill="#dc2626" stroke="#7f1d1d" stroke-width="4"/>
+    <!-- Handle gradient - warm brown -->
+    <linearGradient id="handleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
 
-      <!-- Inner playing surface -->
-      <circle cx="256" cy="220" r="95" fill="#ef4444"/>
+    <!-- Drop shadow filter -->
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
 
-      <!-- Rubber dimples/texture on paddle -->
-      <circle cx="230" cy="195" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="260" cy="185" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="285" cy="205" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="245" cy="220" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="275" cy="215" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="235" cy="245" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="270" cy="240" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="255" cy="255" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="215" cy="220" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="290" cy="230" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="240" cy="210" r="6" fill="#dc2626" opacity="0.4"/>
-      <circle cx="272" cy="228" r="6" fill="#dc2626" opacity="0.4"/>
+    <!-- Ball shadow -->
+    <filter id="ballShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0.5" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
 
-      <!-- Sparkle effects -->
-      <path d="M 380 150 L 385 160 L 395 165 L 385 170 L 380 180 L 375 170 L 365 165 L 375 160 Z" fill="#fbbf24" opacity="0.8"/>
-      <path d="M 420 280 L 423 286 L 429 289 L 423 292 L 420 298 L 417 292 L 411 289 L 417 286 Z" fill="#fbbf24" opacity="0.8"/>
-      <path d="M 90 260 L 94 268 L 102 272 L 94 276 L 90 284 L 86 276 L 78 272 L 86 268 Z" fill="#fbbf24" opacity="0.8"/>
-    </svg>
-  `;
+  <!-- Background with rounded corners (22% radius) -->
+  <rect width="100" height="100" rx="22" fill="url(#bg)"/>
+
+  <!-- Highlight overlay -->
+  <rect width="100" height="50" rx="22" fill="url(#highlight)"/>
+
+  <!-- Paddle group with shadow -->
+  <g filter="url(#shadow)">
+    <!-- Handle -->
+    <rect x="43" y="62" width="14" height="26" rx="4" fill="url(#handleGrad)"/>
+    <rect x="45" y="64" width="10" height="22" rx="3" fill="#fbbf24" opacity="0.3"/>
+
+    <!-- Paddle face (ellipse for perspective) -->
+    <ellipse cx="50" cy="42" rx="26" ry="24" fill="url(#paddleGrad)"/>
+
+    <!-- Inner rubber surface -->
+    <ellipse cx="50" cy="42" rx="22" ry="20" fill="#f87171" opacity="0.6"/>
+
+    <!-- Subtle shine on paddle -->
+    <ellipse cx="44" cy="36" rx="8" ry="6" fill="white" opacity="0.15"/>
+  </g>
+
+  <!-- Ping pong ball with motion effect -->
+  <g filter="url(#ballShadow)">
+    <circle cx="26" cy="24" r="9" fill="white"/>
+    <circle cx="26" cy="24" r="9" fill="none" stroke="#e5e7eb" stroke-width="0.5"/>
+    <!-- Subtle highlight on ball -->
+    <circle cx="24" cy="22" r="3" fill="white" opacity="0.8"/>
+  </g>
+
+  <!-- Motion lines -->
+  <g stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.7">
+    <line x1="14" y1="18" x2="8" y2="14"/>
+    <line x1="13" y1="24" x2="6" y2="24"/>
+    <line x1="14" y1="30" x2="8" y2="34"/>
+  </g>
+</svg>`;
 };
 
 async function generateIcons() {
@@ -67,16 +101,25 @@ async function generateIcons() {
     fs.mkdirSync(publicDir, { recursive: true });
   }
 
+  console.log('\n🏓 Premium PWA Icon Generator');
+  console.log('='.repeat(40));
+  console.log(`Brand: ${BRAND_PRIMARY} → ${BRAND_SECONDARY}`);
+  console.log(`Output: ${publicDir}`);
+  console.log('='.repeat(40) + '\n');
+
   const iconSizes = [
     { size: 16, name: 'favicon-16x16.png' },
     { size: 32, name: 'favicon-32x32.png' },
+    { size: 48, name: 'favicon-48x48.png' },
+    { size: 64, name: 'favicon-64x64.png' },
+    { size: 128, name: 'favicon-128x128.png' },
     { size: 180, name: 'apple-touch-icon.png' },
     { size: 192, name: 'icon-192x192.png' },
     { size: 512, name: 'icon-512x512.png' }
   ];
 
   for (const { size, name } of iconSizes) {
-    const svg = createPingPongRacketSVG(size);
+    const svg = createPremiumIconSVG(size);
     const outputPath = path.join(publicDir, name);
 
     try {
@@ -85,15 +128,15 @@ async function generateIcons() {
         .png()
         .toFile(outputPath);
 
-      console.log(`✓ Generated ${name}`);
+      console.log(`  ✓ Generated ${name}`);
     } catch (error) {
-      console.error(`✗ Failed to generate ${name}:`, error.message);
+      console.error(`  ✗ Failed to generate ${name}:`, error.message);
     }
   }
 
-  // Generate favicon.ico (32x32 is standard)
+  // Generate favicon.ico (32x32)
   try {
-    const svg = createPingPongRacketSVG(32);
+    const svg = createPremiumIconSVG(32);
     const icoPath = path.join(publicDir, 'favicon.ico');
 
     await sharp(Buffer.from(svg))
@@ -101,15 +144,25 @@ async function generateIcons() {
       .png()
       .toFile(icoPath);
 
-    console.log(`✓ Generated favicon.ico`);
+    console.log(`  ✓ Generated favicon.ico`);
   } catch (error) {
-    console.error(`✗ Failed to generate favicon.ico:`, error.message);
+    console.error(`  ✗ Failed to generate favicon.ico:`, error.message);
   }
 
-  console.log('\n🎉 All icons generated successfully!');
-  console.log('📍 PWA icons: public/icon-192x192.png and public/icon-512x512.png');
-  console.log('📍 Favicons: public/favicon.ico, favicon-16x16.png, favicon-32x32.png');
-  console.log('📍 Apple icon: public/apple-touch-icon.png');
+  // Generate favicon.svg for modern browsers
+  try {
+    const svg = createPremiumIconSVG(32);
+    fs.writeFileSync(path.join(publicDir, 'favicon.svg'), svg);
+    console.log(`  ✓ Generated favicon.svg`);
+  } catch (error) {
+    console.error(`  ✗ Failed to generate favicon.svg:`, error.message);
+  }
+
+  console.log('\n✅ All icons generated successfully!');
+  console.log('\nFiles created:');
+  console.log('  📱 PWA icons: icon-192x192.png, icon-512x512.png');
+  console.log('  🍎 Apple icon: apple-touch-icon.png');
+  console.log('  🌐 Favicons: favicon.ico, favicon.svg, favicon-*.png');
 }
 
 generateIcons().catch(console.error);

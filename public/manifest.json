@@ -1,25 +1,49 @@
 {
-  "name": "Office Ping Pong Tracker",
-  "short_name": "Ping Pong",
-  "description": "Track your office ping pong matches and rankings",
+  "name": "Office Pong - Track Matches & Rankings",
+  "short_name": "Office Pong",
+  "description": "Track your office ping pong matches, view ELO rankings, and analyze your game statistics",
   "theme_color": "#2563eb",
-  "background_color": "#f3f4f6",
+  "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/dashboard",
+  "id": "/dashboard",
   "icons": [
+    {
+      "src": "/favicon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-64x64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
     {
       "src": "/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "apple touch icon"
     }
-  ]
+  ],
+  "screenshots": [],
+  "categories": ["sports", "games", "productivity"]
 }

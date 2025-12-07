@@ -7,18 +7,57 @@ import { Toaster as HotToaster } from "react-hot-toast";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
-  title: "Table Tennis Tracker",
-  description: "Track ping pong matches and rankings",
+  title: "Office Pong - Track Matches & Rankings",
+  description: "Track your office ping pong matches, view ELO rankings, and analyze your game statistics. The ultimate table tennis tracker for competitive office play.",
+  keywords: ["ping pong", "table tennis", "office games", "ELO ranking", "match tracker", "sports tracker"],
+  authors: [{ name: "Office Pong Team" }],
+  creator: "Office Pong",
+  publisher: "Office Pong",
+  metadataBase: new URL("https://table-tennis-tracker.web.app"),
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' }
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
     ],
     apple: [
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
-    ]
-  }
+    ],
+  },
+  manifest: '/manifest.json',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://table-tennis-tracker.web.app',
+    siteName: 'Office Pong',
+    title: 'Office Pong - Track Matches & Rankings',
+    description: 'Track your office ping pong matches, view ELO rankings, and analyze your game statistics.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Office Pong - Table Tennis Tracker',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Office Pong - Track Matches & Rankings',
+    description: 'Track your office ping pong matches, view ELO rankings, and analyze your game statistics.',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Office Pong',
+  },
 };
 
 export default function RootLayout({
@@ -29,11 +68,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#2563eb" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Ping Pong" />
       </head>
       <body>
         <AnalyticsProvider>
