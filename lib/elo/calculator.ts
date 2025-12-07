@@ -9,15 +9,25 @@ import { EloCalculationResult, EloCalculationParams } from '@/types';
 export function calculateEloChange({
   winnerElo,
   loserElo,
-  kFactor = 32
+  kFactor = 32,
+  winnerScore,
+  loserScore
 }: EloCalculationParams): EloCalculationResult {
   // Calculate expected win probability for each player
   const expectedWinner = 1 / (1 + Math.pow(10, (loserElo - winnerElo) / 400));
   const expectedLoser = 1 / (1 + Math.pow(10, (winnerElo - loserElo) / 400));
 
-  // Calculate ELO changes (winner gets S=1, loser gets S=0)
-  const winnerChange = Math.round(kFactor * (1 - expectedWinner));
-  const loserChange = Math.round(kFactor * (0 - expectedLoser));
+  // Calculate base ELO changes (winner gets S=1, loser gets S=0)
+  const baseWinnerChange = Math.round(kFactor * (1 - expectedWinner));
+  const baseLoserChange = Math.round(kFactor * (0 - expectedLoser));
+
+  // Check for shutout bonus (5-0)
+  const isShutout = winnerScore === 5 && loserScore === 0;
+  const shutoutBonus = isShutout ? 10 : undefined;
+
+  // Apply bonus if shutout
+  const winnerChange = baseWinnerChange + (shutoutBonus || 0);
+  const loserChange = baseLoserChange - (shutoutBonus || 0);
 
   // Calculate new ratings
   const winnerNewElo = Math.round(winnerElo + winnerChange);
@@ -28,7 +38,8 @@ export function calculateEloChange({
     loserNewElo,
     winnerChange,
     loserChange,
-    expectedWinProbability: expectedWinner
+    expectedWinProbability: expectedWinner,
+    shutoutBonus
   };
 }
 

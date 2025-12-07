@@ -55,11 +55,18 @@ export async function recordMatchResult(
   const winnerCurrentElo = winnerPlayerSnap.data().eloRating || 1200;
   const loserCurrentElo = loserPlayerSnap.data().eloRating || 1200;
 
+  // Determine scores for winner/loser
+  const winnerScore = isPlayer1Winner ? result.player1Score : result.player2Score;
+  const loserScore = isPlayer1Winner ? result.player2Score : result.player1Score;
+
   // Calculate ELO changes using CURRENT ratings, not stale eloBefore values
+  // Includes +10/-10 shutout bonus for 5-0 victories
   const eloResult = calculateEloChange({
     winnerElo: winnerCurrentElo,
     loserElo: loserCurrentElo,
-    kFactor: 32
+    kFactor: 32,
+    winnerScore,
+    loserScore
   });
 
   // Update match document with actual ELO values used

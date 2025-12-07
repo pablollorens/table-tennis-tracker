@@ -37,6 +37,41 @@ describe('ELO Calculator', () => {
       expect(Math.abs(result.winnerChange)).toBeLessThan(20);
       expect(result.winnerChange).toBe(-result.loserChange);
     });
+
+    it('should apply +10/-10 shutout bonus for 5-0 victories', () => {
+      const withBonus = calculateEloChange({
+        winnerElo: 1200,
+        loserElo: 1200,
+        kFactor: 32,
+        winnerScore: 5,
+        loserScore: 0
+      });
+
+      const withoutBonus = calculateEloChange({
+        winnerElo: 1200,
+        loserElo: 1200,
+        kFactor: 32,
+        winnerScore: 5,
+        loserScore: 3
+      });
+
+      expect(withBonus.shutoutBonus).toBe(10);
+      expect(withoutBonus.shutoutBonus).toBeUndefined();
+      expect(withBonus.winnerChange).toBe(withoutBonus.winnerChange + 10);
+      expect(withBonus.loserChange).toBe(withoutBonus.loserChange - 10);
+    });
+
+    it('should not apply shutout bonus for close games', () => {
+      const result = calculateEloChange({
+        winnerElo: 1200,
+        loserElo: 1200,
+        kFactor: 32,
+        winnerScore: 5,
+        loserScore: 4
+      });
+
+      expect(result.shutoutBonus).toBeUndefined();
+    });
   });
 
   describe('predictMatchOutcome', () => {

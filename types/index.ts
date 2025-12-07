@@ -120,10 +120,13 @@ export interface EloCalculationResult {
   winnerChange: number;
   loserChange: number;
   expectedWinProbability: number;
+  shutoutBonus?: number;
 }
 
 export interface EloCalculationParams {
   winnerElo: number;
   loserElo: number;
   kFactor?: number;
+  winnerScore?: number;
+  loserScore?: number;
 }
