@@ -72,6 +72,8 @@ export function RecentMatchesList({ matches, playerId }: RecentMatchesListProps)
                 avatar={opponentAvatar}
                 name={opponentName}
                 size="md"
+                playerId={opponentId}
+                linkToProfile
               />
 
               {/* Match Info */}

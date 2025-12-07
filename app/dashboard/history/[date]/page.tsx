@@ -134,6 +134,8 @@ export default function HistoryPage() {
                               avatar={match.player1.avatar}
                               name={match.player1.name}
                               size="sm"
+                              playerId={match.player1.id}
+                              linkToProfile
                             />
                             <div className="flex flex-col">
                               <p className={`text-base font-bold leading-tight ${player1Won ? 'text-green-600' : ''}`}>
@@ -162,6 +164,8 @@ export default function HistoryPage() {
                               avatar={match.player2.avatar}
                               name={match.player2.name}
                               size="sm"
+                              playerId={match.player2.id}
+                              linkToProfile
                             />
                             <div className="flex flex-col">
                               <p className={`text-base font-bold leading-tight ${player2Won ? 'text-green-600' : ''}`}>

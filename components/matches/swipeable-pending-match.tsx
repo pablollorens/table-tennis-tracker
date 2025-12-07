@@ -81,11 +81,15 @@ export function SwipeablePendingMatch({ match, onRecordResult, onDelete }: Swipe
           <div className="flex items-center justify-between gap-4">
             {/* Player 1 */}
             <div className="flex flex-1 items-start gap-3">
-              <PlayerAvatar
-                avatar={match.player1.avatar}
-                name={match.player1.name}
-                size="sm"
-              />
+              <div onClick={(e) => e.stopPropagation()}>
+                <PlayerAvatar
+                  avatar={match.player1.avatar}
+                  name={match.player1.name}
+                  size="sm"
+                  playerId={match.player1.id}
+                  linkToProfile
+                />
+              </div>
               <div className="flex flex-col justify-between min-h-[52px]">
                 <p className="text-base font-bold leading-tight">
                   {match.player1.name}
@@ -122,11 +126,15 @@ export function SwipeablePendingMatch({ match, onRecordResult, onDelete }: Swipe
                   </p>
                 )}
               </div>
-              <PlayerAvatar
-                avatar={match.player2.avatar}
-                name={match.player2.name}
-                size="sm"
-              />
+              <div onClick={(e) => e.stopPropagation()}>
+                <PlayerAvatar
+                  avatar={match.player2.avatar}
+                  name={match.player2.name}
+                  size="sm"
+                  playerId={match.player2.id}
+                  linkToProfile
+                />
+              </div>
             </div>
           </div>
 
