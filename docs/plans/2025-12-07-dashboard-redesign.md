@@ -1,3 +1,106 @@
+# Dashboard Redesign Implementation Plan
+
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+
+**Goal:** Consolidate dashboard and today's matches into one screen with player avatar filters.
+
+**Architecture:** Add `PlayerAvatarFilter` component for multi-select filtering (max 2). Refactor dashboard page to embed matches directly, reusing existing `SwipeablePendingMatch` and match card components. Filter state managed locally.
+
+**Tech Stack:** Next.js, React, TypeScript, Tailwind CSS, existing hooks (`useEnrichedMatches`, `usePlayersByIds`, `useCurrentSession`)
+
+---
+
+## Task 1: Create PlayerAvatarFilter Component
+
+**Files:**
+- Create: `components/filters/player-avatar-filter.tsx`
+
+**Step 1: Create the component file**
+
+```tsx
+'use client';
+
+import { Player } from '@/types';
+import { PlayerAvatar } from '@/components/ui/player-avatar';
+import { cn } from '@/lib/utils';
+
+interface PlayerAvatarFilterProps {
+  players: Player[];
+  selectedIds: string[];
+  onSelectionChange: (ids: string[]) => void;
+  maxSelections?: number;
+}
+
+export function PlayerAvatarFilter({
+  players,
+  selectedIds,
+  onSelectionChange,
+  maxSelections = 2,
+}: PlayerAvatarFilterProps) {
+  const handleToggle = (playerId: string) => {
+    if (selectedIds.includes(playerId)) {
+      // Deselect
+      onSelectionChange(selectedIds.filter(id => id !== playerId));
+    } else if (selectedIds.length < maxSelections) {
+      // Select (if under max)
+      onSelectionChange([...selectedIds, playerId]);
+    }
+  };
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {players.map(player => {
+        const isSelected = selectedIds.includes(player.id);
+        return (
+          <button
+            key={player.id}
+            onClick={() => handleToggle(player.id)}
+            className={cn(
+              'rounded-full transition-all',
+              isSelected
+                ? 'ring-2 ring-blue-500 ring-offset-2 bg-blue-50'
+                : 'ring-1 ring-gray-200 hover:ring-gray-300'
+            )}
+            aria-label={`Filter by ${player.name}`}
+            aria-pressed={isSelected}
+          >
+            <PlayerAvatar
+              avatar={player.avatar}
+              name={player.name || player.nickname}
+              size="sm"
+            />
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+```
+
+**Step 2: Verify file created**
+
+Run: `cat components/filters/player-avatar-filter.tsx | head -5`
+Expected: Shows the 'use client' and imports
+
+**Step 3: Commit**
+
+```bash
+git add components/filters/player-avatar-filter.tsx
+git commit -m "feat: add PlayerAvatarFilter component for match filtering"
+```
+
+---
+
+## Task 2: Refactor Dashboard - Add Imports and State
+
+**Files:**
+- Modify: `app/dashboard/page.tsx`
+
+**Step 1: Update imports**
+
+Replace lines 1-15 with:
+
+```tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -21,35 +124,46 @@ import { Match } from '@/types';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
+```
 
-export default function DashboardPage() {
-  const router = useRouter();
-  const { player, loading: playerLoading } = useCurrentPlayer();
-  const { session, loading: sessionLoading } = useCurrentSession();
-  const [calendarOpen, setCalendarOpen] = useState(false);
+**Step 2: Verify imports compile**
+
+Run: `npx tsc --noEmit 2>&1 | head -20`
+Expected: No errors related to imports (or no output)
+
+**Step 3: Commit**
+
+```bash
+git add app/dashboard/page.tsx
+git commit -m "refactor: update dashboard imports for inline matches"
+```
+
+---
+
+## Task 3: Add Hooks and State to Dashboard
+
+**Files:**
+- Modify: `app/dashboard/page.tsx`
+
+**Step 1: Update component state**
+
+Inside `DashboardPage` function, after line `const [calendarOpen, setCalendarOpen] = useState(false);`, add:
+
+```tsx
   const { matches, loading: matchesLoading } = useEnrichedMatches();
-
-  // Derive player IDs from matches (not session) to catch newly added players
-  const matchPlayerIds = Array.from(
-    new Set(matches.flatMap(m => [m.player1.id, m.player2.id]))
+  const { players: sessionPlayers, loading: playersLoading } = usePlayersByIds(
+    session?.players || []
   );
-  const { players: sessionPlayers, loading: playersLoading } = usePlayersByIds(matchPlayerIds);
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>([]);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+```
 
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/');
-      return;
-    }
+**Step 2: Add handler functions**
 
-    // Redirect inactive users to profile
-    if (!playerLoading && player && !player.isActive) {
-      router.push('/profile');
-    }
-  }, [router, playerLoading, player]);
+After the `useEffect` block, add:
 
+```tsx
   const handleRecordResult = (match: Match) => {
     setSelectedMatch(match);
     setModalOpen(true);
@@ -86,20 +200,43 @@ export default function DashboardPage() {
       toast.error('Failed to delete match');
     }
   };
+```
 
+**Step 3: Update loading check**
+
+Change the loading condition from:
+```tsx
+  if (playerLoading || sessionLoading) {
+```
+to:
+```tsx
   if (playerLoading || sessionLoading || matchesLoading || playersLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-gray-500">Loading...</div>
-      </div>
-    );
-  }
+```
 
-  const today = format(new Date(), 'EEEE, MMM d');
-  const completionPercent = session
-    ? Math.round((session.completedMatches / session.totalMatches) * 100)
-    : 0;
+**Step 4: Verify compiles**
 
+Run: `npx tsc --noEmit 2>&1 | head -20`
+Expected: No errors
+
+**Step 5: Commit**
+
+```bash
+git add app/dashboard/page.tsx
+git commit -m "feat: add match hooks and handlers to dashboard"
+```
+
+---
+
+## Task 4: Add Filter Logic and Derived State
+
+**Files:**
+- Modify: `app/dashboard/page.tsx`
+
+**Step 1: Add derived state calculations**
+
+After the handler functions, before `return`, add:
+
+```tsx
   // Derive filtered matches and player list
   const playersArray = Array.from(sessionPlayers.values());
   const pendingMatches = matches.filter(m => m.status === 'pending');
@@ -124,67 +261,33 @@ export default function DashboardPage() {
       .map(id => sessionPlayers.get(id)?.name || sessionPlayers.get(id)?.nickname || 'Unknown')
       .join(' & ');
   };
+```
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 pt-6 pb-4">
-        <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
-          <h1 className="text-xl font-bold text-slate-900 flex-1 flex items-center gap-2">
-            <span className="text-2xl">🏓</span>
-            Office Pong
-          </h1>
-          <DateSelector onClick={() => setCalendarOpen(true)} />
-        </div>
-      </header>
+**Step 2: Verify compiles**
 
-      {/* Main Content */}
-      <main className="max-w-2xl mx-auto px-4 py-6 pb-24">
-        {!session ? (
-          // No Session State
-          <div>
-            <Card className="flex flex-col items-center gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-center">
-              {/* Icon */}
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-                <span className="text-4xl">🏓</span>
-              </div>
-              {/* Text */}
-              <div className="flex flex-col gap-1">
-                <h2 className="text-slate-900 text-2xl font-bold">Ready to Play?</h2>
-                <p className="text-slate-600">No session has been created for today.</p>
-              </div>
-              {/* Button */}
-              <div className="flex w-full pt-2">
-                <Link href="/dashboard/player-selection" className="w-full">
-                  <Button className="w-full h-12 text-base bg-blue-600 hover:bg-blue-700 font-bold">
-                    Create Today&apos;s Session
-                  </Button>
-                </Link>
-              </div>
-            </Card>
-          </div>
-        ) : matches.length === 0 ? (
-          // Session exists but no matches
-          <div>
-            <Card className="flex flex-col items-center gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-                <span className="text-4xl">🏓</span>
-              </div>
-              <div className="flex flex-col gap-1">
-                <h2 className="text-slate-900 text-2xl font-bold">No Matches Yet</h2>
-                <p className="text-slate-600">Add some matches to get started.</p>
-              </div>
-              <div className="flex w-full pt-2">
-                <Link href="/dashboard/add-matches" className="w-full">
-                  <Button className="w-full h-12 text-base bg-blue-600 hover:bg-blue-700 font-bold">
-                    + Add Matches
-                  </Button>
-                </Link>
-              </div>
-            </Card>
-          </div>
-        ) : (
-          // Session Active State with matches
+Run: `npx tsc --noEmit 2>&1 | head -20`
+Expected: No errors
+
+**Step 3: Commit**
+
+```bash
+git add app/dashboard/page.tsx
+git commit -m "feat: add filter logic for pending matches"
+```
+
+---
+
+## Task 5: Rewrite Session Active UI
+
+**Files:**
+- Modify: `app/dashboard/page.tsx`
+
+**Step 1: Replace the session active JSX**
+
+Replace the entire `{/* Session Active State */}` block (lines 85-146 approximately, the `<div>` after `: (`) with:
+
+```tsx
+          // Session Active State
           <div className="flex flex-col gap-4">
             {/* Add More Matches Button */}
             <Link href="/dashboard/add-matches" className="w-full">
@@ -346,9 +449,32 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
-        )}
-      </main>
+```
 
+**Step 2: Verify compiles**
+
+Run: `npx tsc --noEmit 2>&1 | head -20`
+Expected: No errors
+
+**Step 3: Commit**
+
+```bash
+git add app/dashboard/page.tsx
+git commit -m "feat: inline matches display with filter in dashboard"
+```
+
+---
+
+## Task 6: Add Match Result Modal
+
+**Files:**
+- Modify: `app/dashboard/page.tsx`
+
+**Step 1: Add modal before closing tags**
+
+Before the final `</div>` (before `{/* Bottom Navigation */}`), add:
+
+```tsx
       {/* Match Result Modal */}
       <MatchResultModal
         match={selectedMatch}
@@ -356,15 +482,54 @@ export default function DashboardPage() {
         onClose={() => setModalOpen(false)}
         onSubmit={handleSubmitResult}
       />
+```
 
-      {/* Bottom Navigation */}
-      <BottomNav />
+**Step 2: Verify compiles**
 
-      {/* Calendar Modal */}
-      <SessionCalendarModal
-        open={calendarOpen}
-        onClose={() => setCalendarOpen(false)}
-      />
-    </div>
-  );
-}
+Run: `npx tsc --noEmit 2>&1 | head -20`
+Expected: No errors
+
+**Step 3: Commit**
+
+```bash
+git add app/dashboard/page.tsx
+git commit -m "feat: add match result modal to dashboard"
+```
+
+---
+
+## Task 7: Final Verification
+
+**Step 1: Run type check**
+
+Run: `npx tsc --noEmit`
+Expected: No errors
+
+**Step 2: Run lint**
+
+Run: `npm run lint`
+Expected: No errors (or only warnings)
+
+**Step 3: Run build**
+
+Run: `npm run build`
+Expected: Build succeeds
+
+**Step 4: Manual test**
+
+Run: `npm run dev`
+Test:
+1. Open dashboard - should show "Ready to Play" if no session
+2. Create session - should show matches inline with filter avatars
+3. Click avatar to filter - pending matches filter
+4. Click two avatars - filters to exact combination
+5. Click avatar again to deselect - returns to full list
+6. Record a result - modal opens, submit works
+7. Swipe to delete - works
+
+**Step 5: Final commit**
+
+```bash
+git add -A
+git commit -m "feat: complete dashboard redesign with inline matches and player filters"
+```
