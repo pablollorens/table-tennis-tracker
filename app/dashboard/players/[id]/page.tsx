@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, MoreHorizontal } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { isAuthenticated } from '@/lib/firebase/auth';
 import { usePlayerById } from '@/hooks/use-player-by-id';
 import { usePlayerMatchHistory } from '@/hooks/use-player-match-history';
@@ -69,10 +69,8 @@ export default function PlayerStatsPage() {
             {player.name || player.nickname}
           </h2>
 
-          {/* More Options (placeholder for future) */}
-          <div className="flex size-12 shrink-0 items-center justify-center -mr-3">
-            <MoreHorizontal className="w-6 h-6 text-gray-800" />
-          </div>
+          {/* Spacer for header balance */}
+          <div className="size-12 shrink-0" />
         </div>
       </header>
 

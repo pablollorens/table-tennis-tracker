@@ -38,7 +38,7 @@ describe('ELO Calculator', () => {
       expect(result.winnerChange).toBe(-result.loserChange);
     });
 
-    it('should apply +10/-10 shutout bonus for 5-0 victories', () => {
+    it('should apply +50% shutout bonus for 5-0 victories', () => {
       const withBonus = calculateEloChange({
         winnerElo: 1200,
         loserElo: 1200,
@@ -55,10 +55,12 @@ describe('ELO Calculator', () => {
         loserScore: 3
       });
 
-      expect(withBonus.shutoutBonus).toBe(10);
+      // For equal ratings, base change is 16, so 50% bonus = 8
+      const expectedBonus = Math.round(Math.abs(withoutBonus.winnerChange) * 0.5);
+      expect(withBonus.shutoutBonus).toBe(expectedBonus);
       expect(withoutBonus.shutoutBonus).toBeUndefined();
-      expect(withBonus.winnerChange).toBe(withoutBonus.winnerChange + 10);
-      expect(withBonus.loserChange).toBe(withoutBonus.loserChange - 10);
+      expect(withBonus.winnerChange).toBe(withoutBonus.winnerChange + expectedBonus);
+      expect(withBonus.loserChange).toBe(withoutBonus.loserChange - expectedBonus);
     });
 
     it('should not apply shutout bonus for close games', () => {

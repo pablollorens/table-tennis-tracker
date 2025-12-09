@@ -21,9 +21,9 @@ export function calculateEloChange({
   const baseWinnerChange = Math.round(kFactor * (1 - expectedWinner));
   const baseLoserChange = Math.round(kFactor * (0 - expectedLoser));
 
-  // Check for shutout bonus (5-0)
+  // Check for shutout bonus (5-0): +50% of base change for both winner and loser
   const isShutout = winnerScore === 5 && loserScore === 0;
-  const shutoutBonus = isShutout ? 10 : undefined;
+  const shutoutBonus = isShutout ? Math.round(Math.abs(baseWinnerChange) * 0.5) : undefined;
 
   // Apply bonus if shutout
   const winnerChange = baseWinnerChange + (shutoutBonus || 0);
