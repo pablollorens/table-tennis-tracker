@@ -7,9 +7,12 @@ import { isAuthenticated } from '@/lib/firebase/auth';
 import { usePlayerById } from '@/hooks/use-player-by-id';
 import { usePlayerMatchHistory } from '@/hooks/use-player-match-history';
 import { useEloHistoryData } from '@/hooks/use-elo-history-data';
+import { usePlayers } from '@/hooks/use-players';
+import { useHeadToHeadStats } from '@/hooks/use-head-to-head-stats';
 import { PlayerAvatar } from '@/components/ui/player-avatar';
 import { StatsGrid } from '@/components/player/stats-grid';
 import { EloHistoryChart } from '@/components/player/elo-history-chart';
+import { WinningProbabilities } from '@/components/player/winning-probabilities';
 import { RecentMatchesList } from '@/components/player/recent-matches-list';
 
 export default function PlayerStatsPage() {
@@ -19,7 +22,9 @@ export default function PlayerStatsPage() {
 
   const { player, loading: playerLoading, error: playerError } = usePlayerById(playerId);
   const { matches, loading: matchesLoading } = usePlayerMatchHistory(playerId);
+  const { players: allPlayers, loading: playersLoading } = usePlayers();
   const eloHistory = useEloHistoryData(matches, player);
+  const headToHeadStats = useHeadToHeadStats(matches, playerId, allPlayers);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -99,6 +104,9 @@ export default function PlayerStatsPage() {
 
       {/* ELO History Chart */}
       <EloHistoryChart eloHistory={eloHistory} />
+
+      {/* Winning Probabilities */}
+      <WinningProbabilities stats={headToHeadStats} loading={playersLoading} />
 
       {/* Recent Matches */}
       <RecentMatchesList matches={matches} playerId={playerId} />
