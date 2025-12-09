@@ -5,6 +5,7 @@ import { AnalyticsProvider } from "./analytics-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as HotToaster } from "react-hot-toast";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Office Pong - Track Matches & Rankings",
@@ -77,6 +78,7 @@ export default function RootLayout({
         <Toaster />
         <HotToaster />
         <SpeedInsights />
+        <Analytics />
 
         {/* Service Worker Registration */}
         <Script id="register-sw" strategy="afterInteractive">
