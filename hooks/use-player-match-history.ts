@@ -3,7 +3,7 @@ import { collection, query, where, orderBy, limit, onSnapshot } from 'firebase/f
 import { db } from '@/lib/firebase/config';
 import { MatchHistory } from '@/types';
 
-export function usePlayerMatchHistory(playerId: string | null, limitCount: number = 50) {
+export function usePlayerMatchHistory(playerId: string | null, limitCount?: number) {
   const [matches, setMatches] = useState<MatchHistory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -44,12 +44,13 @@ export function usePlayerMatchHistory(playerId: string | null, limitCount: numbe
         new Map(allMatches.map(m => [m.id, m])).values()
       );
 
-      // Sort by playedAt descending and limit
+      // Sort by playedAt descending and optionally limit
       const sortedMatches = uniqueMatches
-        .sort((a, b) => b.playedAt.toMillis() - a.playedAt.toMillis())
-        .slice(0, limitCount);
+        .sort((a, b) => b.playedAt.toMillis() - a.playedAt.toMillis());
 
-      setMatches(sortedMatches);
+      const limitedMatches = limitCount ? sortedMatches.slice(0, limitCount) : sortedMatches;
+
+      setMatches(limitedMatches);
 
       if (loadedCount >= 2) {
         setLoading(false);
