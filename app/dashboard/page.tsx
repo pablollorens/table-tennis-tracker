@@ -211,8 +211,8 @@ export default function DashboardPage() {
               </div>
             </Card>
 
-            {/* Player Filter */}
-            {playersArray.length > 0 && (
+            {/* Player Filter - only show when there are pending matches */}
+            {playersArray.length > 0 && pendingMatches.length > 0 && (
               <div className="py-2">
                 <PlayerAvatarFilter
                   players={playersArray}
