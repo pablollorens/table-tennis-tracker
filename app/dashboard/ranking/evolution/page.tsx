@@ -38,17 +38,17 @@ export default function EvolutionPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 pt-6 pb-4">
-        <div className="flex items-center gap-2">
-          {/* Back Button */}
-          <button
-            onClick={() => router.push('/dashboard/ranking')}
-            className="text-gray-800 flex size-10 shrink-0 items-center justify-center -ml-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
+      <header className="relative sticky top-0 z-10 bg-white border-b border-gray-200 px-4 pt-6 pb-4">
+        {/* Back Button - positioned absolutely */}
+        <button
+          onClick={() => router.push('/dashboard/ranking')}
+          className="absolute left-2 top-5 text-gray-800 flex size-10 items-center justify-center hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
 
-          {/* Title */}
+        {/* Title - same alignment as Ranking page */}
+        <div className="max-w-2xl mx-auto flex items-center gap-2">
           <TrendingUp className="w-6 h-6 text-blue-600" />
           <h1 className="text-xl font-bold">Points Evolution</h1>
         </div>
