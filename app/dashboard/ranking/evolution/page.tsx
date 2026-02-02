@@ -62,7 +62,7 @@ export default function EvolutionPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-2xl mx-auto px-4 py-6">
+      <main className="px-4 py-6">
         {error ? (
           <div className="flex flex-col items-center justify-center py-12 gap-4">
             <div className="text-gray-900 text-lg font-semibold">Error loading data</div>

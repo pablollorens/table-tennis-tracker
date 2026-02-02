@@ -54,12 +54,9 @@ export function MonthlyEloChart({ data }: MonthlyEloChartProps) {
       return point ? point.elo : null;
     });
 
-    // Find index where data starts (first non-null value)
-    const firstDataIndex = playerData.findIndex((v) => v !== null);
-
-    // Find last non-partial point for dashed line effect
-    const lastClosedIndex = player.data.findIndex((p) => p.isPartial) - 1;
+    // Check if player has data in the current (partial) month
     const hasPartialData = player.data.some((p) => p.isPartial);
+    const lastMonthIndex = data.months.length - 1;
 
     return {
       label: player.playerName,
@@ -71,13 +68,13 @@ export function MonthlyEloChart({ data }: MonthlyEloChartProps) {
       pointRadius: 3,
       pointHoverRadius: 5,
       spanGaps: true,
-      // Dashed line for partial month segment
+      // Dashed line ONLY for the segment going to the partial (current) month
       segment: hasPartialData
         ? {
             borderDash: (ctx: any) => {
-              const index = ctx.p1DataIndex;
-              const lastFullIndex = data.months.length - 2;
-              return index >= lastFullIndex ? [5, 5] : undefined;
+              // p1DataIndex is the index of the end point of the segment
+              // Only dash the very last segment (the one ending at current month)
+              return ctx.p1DataIndex === lastMonthIndex ? [5, 5] : undefined;
             },
           }
         : undefined,
