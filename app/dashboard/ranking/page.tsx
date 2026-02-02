@@ -42,10 +42,10 @@ export default function RankingPage() {
           </div>
           <button
             onClick={() => router.push('/dashboard/ranking/evolution')}
-            className="flex items-center gap-1.5 text-gray-600 hover:text-blue-600 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium"
+            className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-100 pl-4 pr-4 active:bg-slate-200"
           >
-            <TrendingUp className="w-4 h-4" />
-            <span>Evolution</span>
+            <TrendingUp className="w-4 h-4 text-slate-700" />
+            <span className="text-slate-900 text-sm font-medium leading-normal">Evolution</span>
           </button>
         </div>
       </header>
