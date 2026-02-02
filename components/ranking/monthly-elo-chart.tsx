@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +12,7 @@ import {
   Legend,
   ChartOptions,
   ChartData,
+  Plugin,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { MonthlyEloData } from '@/lib/elo/reconstruct-monthly-history';
@@ -26,11 +28,56 @@ ChartJS.register(
   Legend
 );
 
+// Custom plugin to draw player names above last point
+const createEndLabelsPlugin = (): Plugin<'line'> => ({
+  id: 'endLabels',
+  afterDatasetsDraw(chart) {
+    const { ctx } = chart;
+
+    chart.data.datasets.forEach((dataset, datasetIndex) => {
+      const meta = chart.getDatasetMeta(datasetIndex);
+      if (meta.hidden) return;
+
+      // Find the last non-null data point
+      const data = dataset.data as (number | null)[];
+      let lastIndex = -1;
+      for (let i = data.length - 1; i >= 0; i--) {
+        if (data[i] !== null) {
+          lastIndex = i;
+          break;
+        }
+      }
+
+      if (lastIndex === -1) return;
+
+      const lastPoint = meta.data[lastIndex];
+      if (!lastPoint) return;
+
+      const x = lastPoint.x;
+      const y = lastPoint.y;
+
+      // Draw player name
+      ctx.save();
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillStyle = dataset.borderColor as string;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+
+      // Position slightly to the right of the last point
+      ctx.fillText(dataset.label || '', x + 8, y);
+      ctx.restore();
+    });
+  },
+});
+
 interface MonthlyEloChartProps {
   data: MonthlyEloData;
 }
 
 export function MonthlyEloChart({ data }: MonthlyEloChartProps) {
+  // Memoize the plugin to avoid recreating on every render
+  const endLabelsPlugin = useMemo(() => createEndLabelsPlugin(), []);
+
   if (!data || data.players.length === 0) {
     return (
       <div className="flex w-full flex-col gap-2 rounded-xl p-4 bg-white border border-gray-200/80">
@@ -89,6 +136,11 @@ export function MonthlyEloChart({ data }: MonthlyEloChartProps) {
   const chartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        right: 80, // Space for player names on the right
+      },
+    },
     interaction: {
       mode: 'index',
       intersect: false,
@@ -167,7 +219,7 @@ export function MonthlyEloChart({ data }: MonthlyEloChartProps) {
 
       {/* Chart */}
       <div className="flex min-h-[350px] flex-1 flex-col gap-4 pt-4">
-        <Line data={chartData} options={chartOptions} />
+        <Line data={chartData} options={chartOptions} plugins={[endLabelsPlugin]} />
       </div>
     </div>
   );
